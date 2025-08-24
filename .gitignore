@@ -1,0 +1,44 @@
+# Logs & system files
+*.log
+.DS_Store
+Thumbs.db
+npm-debug.log
+yarn-error.log
+
+# Environment files
+.env
+.env.backup
+.env.production
+
+# IDE / Editor directories
+/.idea
+/.vscode
+/.phpactor.json
+/.phpunit.cache
+/.phpunit.result.cache
+/.fleet
+/.zed
+
+# Laravel-specific
+/vendor
+/node_modules
+/stubs
+/auth.json
+Homestead.json
+Homestead.yaml
+
+# Nova (if using Laravel Nova)
+/.nova
+
+# Bootstrap cache files only
+/bootstrap/cache/*
+!bootstrap/cache/.gitignore
+
+# Storage - keep only top-level folders, ignore their contents
+storage/**
+!storage/*/
+storage/*/**
+!storage/*/.gitignore
+
+# Test results
+.phpunit.result.cache
