@@ -1,0 +1,207 @@
+body {
+    background-color: #f8f9fa;
+    
+  }
+  .pos{
+    max-height: 100vh;
+    
+  }
+
+  .search-wrapper {
+    position: relative;
+    /* max-width: 400px; */
+    margin: 0 auto;
+  }
+
+  .search-wrapper .fa-search {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: #007bff;
+    font-size: 16px;
+  }
+
+  .search-wrapper input {
+    padding-left: 40px; /* space for the icon */
+    border-radius: 25px;
+    border-color: #007bff !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+  }
+
+  .search-wrapper input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0,123,255,0.25);
+  }
+
+
+  .products{
+    height: 86vh;
+  }
+  .product-card {
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    padding: 10px;
+    text-align: center;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+  .product-card:hover {
+    /* transform: scale(1.02); */
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  }
+  .product-img {
+    width: 120px;
+    text-align: center;
+  }
+  .category {
+    background-color: #fff;
+    border-right: 1px solid #ddd;
+    padding: 1rem;
+    height: 86vh;
+
+  }
+  .category-btn {
+    text-align: left;
+    width: 100%;
+    padding: 10px;
+    font-weight: 500;
+    border: 1px solid #f1f1f1;
+    background: none;
+    margin-bottom: 7px;
+    transition: .4s;
+  }
+  .category-btn:hover, .category-btn.active{
+    background: #f1f1f1;
+  }
+
+  .topbar {
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+  }
+
+  /* Scoped styles for POS footer */
+  .pos-action-footer {
+    z-index: 1050;
+    background-color: #fff;
+    border-top: 1px solid #dee2e6;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
+  }
+
+  .pos-action-footer .btn-outline-pink {
+    color: #d63384;
+    border-color: #d63384;
+  }
+
+  .pos-action-footer .btn-outline-pink:hover {
+    background-color: #d63384;
+    color: #fff;
+  }
+
+  .pos-action-footer .total-payable {
+    font-weight: 600;
+    font-size: 1rem;
+    white-space: nowrap;
+  }
+
+  .pos-action-footer .total-payable .amount {
+    color: #198754;
+    font-size: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .pos-action-footer .total-payable {
+      display: block;
+      width: 100%;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+  }
+
+
+  .order-summary {
+    background-color: #fff;
+    padding: 1rem;
+    border-left: 1px solid #ddd;
+
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .order-summary-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  .order-summary-header button {
+    width: 100%;
+  }
+  
+  .order-summary-table td,
+  .order-summary-table th {
+    vertical-align: middle;
+  }
+  
+/* Hide number input arrows in all browsers */
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.qty-input {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+/* Styling the quantity box layout */
+.order-summary-qty-box {
+  gap: 5px;
+}
+
+/* Buttons and input same height */
+.qty-btn,
+.qty-input {
+  height: 36px;
+}
+
+/* Optional: Set consistent width */
+.qty-input {
+  width: 50px;
+  padding: 0;
+  font-size: 16px;
+}
+.qty-btn {
+  width: 36px;
+  padding: 0;
+  font-size: 18px;
+  line-height: 1;
+}
+
+  
+  
+  .order-summary-total-bar {
+    background: #fff;
+    padding: 15px;
+    font-weight: bold;
+  }
+  
+  .order-summary-actions button {
+    width: 100%;
+  }
+  
+  .order-summary-scroll {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  
+  .order-summary-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+  }
+  

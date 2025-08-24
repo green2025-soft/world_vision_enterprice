@@ -1,0 +1,28 @@
+import Index from "./pages/Index.vue";
+import Page404 from "@/components/Page404.vue"; // You can replace if module specific 404
+
+ const lazy = (view) => () => import(`./pages/${view}.vue`);
+
+const defaultAuth = true;
+const defaultMeta = { requiresAuth: defaultAuth };
+
+const makeRoute = (path, component, title) => ({
+  path,
+  component,
+  meta: { title, ...defaultMeta },
+});
+
+const routes = {
+  path: "/{{kebabCase name}}",
+  component: Index,
+  redirect: "/{{kebabCase name}}/dashboard",
+  children: [
+   makeRoute("dashboard", lazy("Dashboard"), "{{properCase name}} Dashboard"),
+    {
+      path: ":catchAll(.*)",
+      component: Page404
+    }
+  ]
+};
+
+export default routes;
