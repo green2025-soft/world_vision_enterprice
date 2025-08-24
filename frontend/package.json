@@ -1,0 +1,34 @@
+{
+  "name": "vue-project",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 5175",
+    "serve": "vite --port 5175",
+    "build": "vite build",
+    "preview": "vite preview",
+    "make:module": "plop module"
+  },
+  "dependencies": {
+    "@vuepic/vue-datepicker": "^9.0.1",
+    "axios": "^1.9.0",
+    "bootstrap": "^5.3.3",
+    "bootstrap-vue-next": "^0.24.2",
+    "lodash": "^4.17.21",
+    "nprogress": "^0.2.0",
+    "pinia": "^3.0.2",
+    "pinia-plugin-persistedstate": "^4.4.1",
+    "select2": "4.1.0-rc.0",
+    "vue": "^3.5.13",
+    "vue-draggable-plus": "^0.6.0",
+    "vue-router": "^4.5.1",
+    "vue3-toastify": "^0.2.8"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.3",
+    "plop": "^4.0.1",
+    "vite": "^6.2.4",
+    "vite-plugin-vue-devtools": "^7.7.2"
+  }
+}
