@@ -1,6 +1,8 @@
 <?php
 
 namespace Modules\Core\Http\Controllers\Api;
+
+use Illuminate\Support\Facades\Log;
 use Modules\Core\Http\Controllers\Api\BaseApiController;
 
 use Modules\Core\Models\Branch;
@@ -23,8 +25,8 @@ class BranchController extends BaseApiController
     public function store(BranchRequest $request)
     {
         $request->validated();
-         if ($request->hasFile('logo')) {
-            $imageUrl = uploadImage($request->file('logo'), 'core/branch');
+         if ($request->hasFile('fileLogo')) {
+            $imageUrl = uploadImage($request->file('fileLogo'), 'core/branch');
             $request['logo'] = $imageUrl;
         }
         return $this->saveData($request);
@@ -38,9 +40,10 @@ class BranchController extends BaseApiController
     public function update(BranchRequest $request, $id)
     {
         $request->validated();
-        if ($request->hasFile('logo')) {
+    
+        if ($request->hasFile('fileLogo')) {
              $data = $this->model::findOrFail($id);
-            $imageUrl = uploadImage($request->file('logo'), 'core/branch', $data->logo);
+             $imageUrl = uploadImage($request->file('fileLogo'), 'core/branch', $data->logo);
              $request['logo'] = $imageUrl;
         }
         return $this->updateData($request, $id);

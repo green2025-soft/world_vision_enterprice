@@ -40,7 +40,9 @@ import ConfirmDelete from "@/components/ConfirmDelete.vue"
 import FormModal from "@/components/FormModal.vue"
 import StatusSelect from "@/components/StatusSelect.vue"
 import StatusDisplay from "@/components/StatusDisplay.vue"
+import GlobalImage from '@/components/GlobalImage.vue';
 import Select2Dropdown from '@/components/Select2Dropdown.vue';
+
 
 export default {
   install: (app /*, options*/) => {
@@ -95,6 +97,8 @@ export default {
     app.component('FormModal', FormModal)
     app.component('StatusSelect', StatusSelect)
     app.component('StatusDisplay', StatusDisplay)
+    app.component('GlobalImage', GlobalImage)
     app.component('Select2Dropdown', Select2Dropdown)
+    
   },
 };

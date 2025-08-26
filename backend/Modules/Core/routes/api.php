@@ -24,7 +24,7 @@ Route::prefix('v1/core')->group(function () {
 
         Route::get('user-menus', [UserMenuController::class, 'userMenus'])->name('user-menus');
 
-        // Route::middleware(['admin'])->group(function () {
+        Route::middleware(['admin'])->group(function () {
             Route::post('settings/update', [SettingController::class, 'update'])->name('settings.update');
             Route::apiResource('users', UserController::class);
             Route::apiResource('roles', RoleController::class);
@@ -50,7 +50,7 @@ Route::prefix('v1/core')->group(function () {
             Route::get('branches/lists', [BranchController::class, 'branchList'])->name('.food-lists');
             Route::apiResource('branches', BranchController::class);
 
-        // });
+        });
 
 
         Route::get('/refresh-session', function () {

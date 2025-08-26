@@ -1,89 +1,97 @@
 <template>
-
-     <div class="container-fluid">
-                <div class="row g-3">
-                    <!-- Card 1 -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="dashboard-card bg-success">
-                            <i class="fas fa-chart-pie"></i>
-                            <small>Today</small>
-                            <h2>10</h2>
-                            <div class="card-footer">
-                                <a href="#">Number of Order <i class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card 2 -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="dashboard-card bg-primary">
-                            <i class="fas fa-chart-bar"></i>
-                            <small>Last 7 Day</small>
-                            <h2>1</h2>
-                            <div class="card-footer">
-                                <a href="#">Number of Order <i class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card 3 -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="dashboard-card bg-danger">
-                            <i class="fas fa-shopping-bag"></i>
-                            <small>Total</small>
-                            <h2>30</h2>
-                            <div class="card-footer">
-                                <a href="#">Number of Order <i class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Card 4 -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="dashboard-card bg-info">
-                            <i class="fas fa-user-plus"></i>
-                            <small>Total</small>
-                            <h2>2286</h2>
-                            <div class="card-footer">
-                                <a href="#">Number of Product <i class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- end row -->
-
-                <div class="row mt-3 dashboard-collapse-card">
-                   
-                    <div class="col-lg-6 mb-4">
-                        <!-- Card with Custom Checkbox and Radio -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title">Preferences</h5>
-                            </div>
-                            <div class="card-body">
-                                <p class="card-text">Select your preferences below:</p>
-
-                                <!-- Custom Checkbox Group -->
-                                <div class="custom-checkbox mb-3">
-                                    <input type="checkbox" id="checkbox1">
-                                    <label for="checkbox1">Receive Email Notifications</label>
-                                </div>
-                                <div class="custom-checkbox mb-3">
-                                    <input type="checkbox" id="checkbox2">
-                                    <label for="checkbox2">Subscribe to Newsletter</label>
-                                </div>
-
-                                <!-- Custom Radio Group -->
-                                <p class="mt-4">Choose your account type:</p>
-                                <div class="custom-radio mb-3">
-                                    <input type="radio" id="radio1" name="accountType">
-                                    <label for="radio1">Personal Account</label>
-                                </div>
-                                <div class="custom-radio mb-3">
-                                    <input type="radio" id="radio2" name="accountType">
-                                    <label for="radio2">Business Account</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
+  <div class="row g-4">
+    <div
+      class="col-12 col-sm-6 col-md-4 col-lg-3"
+      v-for="(module, index) in modules"
+      :key="module.id"
+    >
+      <a
+        :href="module.link"
+        class="text-decoration-none text-white"
+      >
+        <div
+          class="module-card d-flex flex-column align-items-center justify-content-center text-center"
+          :style="{ background: module.bg }"
+        >
+          <div class="module-icon">
+            <i :class="['fas', module.icon]"></i>
+          </div>
+          <div class="module-name">{{ module.name }}</div>
+        </div>
+      </a>
+    </div>
+  </div>
 </template>
+
+<script setup>
+const modules = [
+  {
+    id: 1,
+    name: 'Sales',
+    icon: 'fa-shopping-cart',
+    link: '/sales',
+    bg: 'linear-gradient(135deg, #ff7e5f, #feb47b)'
+  },
+  {
+    id: 2,
+    name: 'Inventory',
+    icon: 'fa-boxes',
+    link: '/inventory',
+    bg: 'linear-gradient(135deg, #6a11cb, #2575fc)'
+  },
+  {
+    id: 3,
+    name: 'HRM',
+    icon: 'fa-users',
+    link: '/hrm',
+    bg: 'linear-gradient(135deg, #43cea2, #185a9d)'
+  },
+  {
+    id: 4,
+    name: 'Accounts',
+    icon: 'fa-wallet',
+    link: '/accounts',
+    bg: 'linear-gradient(135deg, #f7971e, #ffd200)'
+  },
+   {
+    id: 5,
+    name: 'Core',
+    icon: 'fa-cogs',
+    link: '/core',
+    bg: 'linear-gradient(135deg, #ede7f6, #185a9d)' // soft lavender
+  },
+  {
+    id: 6,
+    name: 'Attendance',
+    icon: 'fa-calendar-check',
+    link: '/attendance',
+    bg: 'linear-gradient(135deg, #d38e0c, #185a9d)' // light lime
+  }
+]
+</script>
+
+<style scoped>
+.module-card {
+  min-height: 180px;
+  border-radius: 14px;
+  padding: 20px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  color: #fff;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+}
+
+.module-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.module-icon {
+  font-size: 36px;
+  margin-bottom: 15px;
+}
+
+.module-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+</style>

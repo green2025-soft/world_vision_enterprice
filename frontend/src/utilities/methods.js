@@ -416,6 +416,32 @@ export function getNestedValue(obj, path, fallback = '') {
 }
 
 
+export function objectToFormData(obj) {
+  const formData = new FormData()
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key) && obj[key] !== undefined && obj[key] !== null) {
+      formData.append(key, obj[key])
+    }
+  }
+  return formData
+}
+
+export function prepareFormData(data, method = 'PUT') {
+  const formData = new FormData()
+
+  for (const key in data) {
+    if (data.hasOwnProperty(key) && data[key] !== undefined && data[key] !== null) {
+      formData.append(key, data[key])
+    }
+  }
+
+  if (method) {
+    formData.append('_method', method)
+  }
+
+  return formData
+}
+
 
 
 

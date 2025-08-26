@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import NProgress from "nprogress";
 import { authenticate } from "../store/authenticate.js";
 import coreRoutes from "../modules/core/router";
+import { useBranchStore } from '@/store/branch-store'
 
 
 // import Logout from "@/views/Logout.vue";
@@ -39,11 +40,20 @@ router.beforeEach((to, from, next) => {
   document.title = to.meta.title || "GST ERP";
   NProgress.start();
 
-  if (to.meta.requiresAuth && !authenticate.isAuthenticated) {
+  const isLoggedIn = authenticate.isAuthenticated
+  if (to.meta.requiresAuth && !isLoggedIn) {
     next("login");
-  } else {
-    next();
   }
+
+  const branchStore = useBranchStore()
+  const needsBranch = to.meta.requiresBranch === true
+  console.log('Branch '+branchStore.selectedBranchId);
+  
+
+  if (needsBranch && !branchStore.selectedBranchId) {
+    return next("/core/branch-dashboard")
+  }
+  next()
 });
 
 router.afterEach(() => {

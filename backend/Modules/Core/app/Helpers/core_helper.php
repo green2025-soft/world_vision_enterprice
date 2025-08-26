@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Storage;
 
+use function Illuminate\Log\log;
+
 if (!function_exists('uploadImage')) {
     /**
      * Upload image to given folder, delete old image if exists.
@@ -23,7 +25,7 @@ if (!function_exists('uploadImage')) {
 
         // Store new file
         $path = $file->store($folder, 'public');
-
+        
         // Return public url
         return Storage::url($path);
     }

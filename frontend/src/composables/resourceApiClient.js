@@ -1,5 +1,7 @@
 import { useApiClient } from '@/composables/useApiClient'
-    import { ref } from 'vue'
+import { ref } from 'vue'
+import { prepareFormData } from '@/utilities/methods'
+
 
 export function useResourceApiClient(baseUrl, title = 'Resource') {
   const api = useApiClient()
@@ -51,12 +53,13 @@ export function useResourceApiClient(baseUrl, title = 'Resource') {
   }
 
 
- const create = async (data, $message = `${title} created successfully`, multipart=false ) => {
+ const create = async (data, $message = '', multipart=false ) => {
     formErrors.value = {}
     isSubmitting.value = true
+    const message = $message==''?`${title} created successfully`:$message
     try {
       const res = await api.post(baseUrl, data, {
-        notifyOptions: { message: $message },
+        notifyOptions: { message: message },
          requiresAuth: true, 
          multipart:multipart
       })
@@ -71,26 +74,54 @@ export function useResourceApiClient(baseUrl, title = 'Resource') {
     }
   }
 
-  const update = async (id, data, multipart=false) => {
-    formErrors.value = {}
-    isSubmitting.value = true
-    
-    try {
-      const res = await api.put(`${baseUrl}/${id}`, data, {
-        notifyOptions: { message: `${title} updated successfully`},
+const update = async (id, data,  $message = '') => {
+  formErrors.value = {}
+  isSubmitting.value = true
+  const message = $message==''?`${title}  updated successfully`:$message
+  try {
+    // If not multipart, use regular PUT
+    const res = await api.put(`${baseUrl}/${id}`, data, {
+      notifyOptions: { message: message },
+      requiresAuth: true
+    })
+    return res
+  } catch (err) {
+    if (err.response?.status === 422) {
+      formErrors.value = err.response.data.errors
+    }
+    throw err
+  } finally {
+    isSubmitting.value = false
+  }
+}
+
+
+
+
+const updateWithFile = async (id, data, $message = '') => {
+  formErrors.value = {}
+  isSubmitting.value = true
+  const message = $message==''?`${title}  updated successfully`:$message
+  const formData = data instanceof FormData ? data : prepareFormData(data)
+   try {
+  const res = await api.post(`${baseUrl}/${id}`, formData, {
+        notifyOptions: { message: message },
         requiresAuth: true,
-        multipart:multipart
+        multipart: true,
       })
-      return res.data
-    } catch (err) {
+    return res
+     } catch (err) {
+
       if (err.response?.status === 422) {
         formErrors.value = err.response.data.errors
       }
       throw err
-    } finally {
-      isSubmitting.value = false
-    }
+    }finally {
+    isSubmitting.value = false
   }
+
+}
+
 
  const remove = async (id) => {
     isLoading.value = true
@@ -170,6 +201,7 @@ const customPost = async (customUrl, data = {}, message=false) => {
     remove,
     customGet,
     customPost,
+    updateWithFile,
     formErrors,
     isLoading,
     isSubmitting,

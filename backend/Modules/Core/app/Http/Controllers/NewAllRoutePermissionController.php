@@ -8,7 +8,7 @@ use Modules\Core\Models\PermissionGroup;
 
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Permission;
-use DB;
+
 use Spatie\Permission\Models\Role;
 
 class NewAllRoutePermissionController extends Controller
@@ -22,7 +22,7 @@ class NewAllRoutePermissionController extends Controller
 
     public function store()
     {
-        $roleId = 2; // default role (e.g., Super Admin)
+        $roleId = 1; // default role (e.g., Super Admin)
         $modules = $this->getModuleSlugIdMap();
         $routes = $this->getFilteredRoutes();
 

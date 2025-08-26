@@ -8,7 +8,8 @@ class BranchRequest extends BaseRequest
 {
     protected array $rules = [
         'name' => ['required', 'string', 'max:255'],
+        // 'name' => ['nullable', 'string', 'max:255'],
         'contact_no' => ['nullable', 'string', 'max:20'],
-        'logo' => ['nullable', 'string', 'max:255'], // Image path string
+       'fileLogo' => ['nullable'],// Image path string
     ];
 }

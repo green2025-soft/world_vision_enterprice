@@ -19,9 +19,10 @@ onMounted(async () => {
 // ✅ Filtered & Transformed Nav Items (module_slug = 'core')
 const navItems = computed(() => {
   const core = menuStore.menus.find(m => m.module_slug === 'core')
+
   if (!core || !core.menus) return []
 
-  return core.menus.map(menu => {
+  const dynamicMenus = core.menus.map(menu => {
     const hasChildren = Array.isArray(menu.children) && menu.children.length > 0
 
     if (hasChildren) {
@@ -39,7 +40,7 @@ const navItems = computed(() => {
       }
     }
 
-    if (!menu.route) return null // Skip empty route items
+    if (!menu.route) return null
 
     return {
       type: 'link',
@@ -47,12 +48,26 @@ const navItems = computed(() => {
       to: `/${menu.route.replace(/^\/+/, '')}`,
       icon: menu.icon || 'fas fa-circle'
     }
-  }).filter(Boolean) // remove null entries
+  }).filter(Boolean)
+
+  // ✅ Static menu item added at the beginning
+  const staticMenu = {
+    type: 'link',
+    text: 'Branch Dashboard',
+    to: '/core/branch-dashboard',
+    icon: 'fas fa-chart-line'
+  }
+
+  return [staticMenu, ...dynamicMenus]
 })
+
+
+
 </script>
 
 
 <template>
+  
   <DashboardLayout v-model="sidenavCollapsed">
     <template #sideNav>
       <SideNav :items="navItems" @itemClick="sidenavCollapsed = true" />
