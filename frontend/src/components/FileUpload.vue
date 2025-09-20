@@ -34,6 +34,10 @@ const props = defineProps({
     type: String,
     default: ''
   },
+  dbImage: {
+    type: String,
+    default: ''
+  },
   preview: {
     type: Boolean,
     default: false
@@ -55,10 +59,9 @@ function handleChange(event) {
     fileUrl.value = URL.createObjectURL(file)
   }
 }
-
 // Watch modelValue to show initial preview if it's a string URL
 watch(
-  () => props.modelValue,
+  () => props.dbImage,
   (newVal) => {
     if (!newVal) {
       fileUrl.value = null

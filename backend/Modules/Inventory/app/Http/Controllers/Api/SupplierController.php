@@ -27,6 +27,7 @@ class SupplierController extends BaseApiController
     public function store(SupplierRequest $request)
     {
         $request->validated();
+        $request['previous_due'] = $request['previous_due']?$request['previous_due']:0.00;
         return $this->saveData($request);
     }
 

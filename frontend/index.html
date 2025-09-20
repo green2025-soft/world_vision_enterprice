@@ -12,12 +12,24 @@
       rel="stylesheet"
       href="/backend/css/style.css?v=23"
     />
+      <link
+      rel="stylesheet"
+      href="/backend/css/print.css?v=23"
+    />
     <title>Vite App</title>
 	<link href="/logo.png" rel="shortcut icon" />
+      <style type="text/css">
+     
+     
+
+     
+       
+    </style>
   </head>
-  <body>
+  <body style="--print-size: A4; --print-margin: 0.15in">
+    
+    <div id="print-el" style="margin-left: auto; margin-right: auto"></div>
     <div id="app"></div>
-      <div id="print-el" style="margin-left: auto; margin-right: auto"></div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

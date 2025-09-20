@@ -28,5 +28,18 @@ const formattedErrors = computed(() => {
   return output
 })
 
-const fieldLabel = (field) => props.labels[field] || field
+const fieldLabel = (field) => {
+  if (props.labels[field]) {
+    return props.labels[field]
+  }
+
+  // Remove `_id` suffix
+  let label = field.replace(/_id$/, '')
+
+  // Replace underscores with spaces and capitalize words
+  label = label.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+
+  return label
+}
+
 </script>

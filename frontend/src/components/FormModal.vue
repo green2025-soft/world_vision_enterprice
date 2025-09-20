@@ -6,6 +6,8 @@
     :title="title"
     :size="size"
     :hide-footer="true"
+    :scrollable="scrollable"
+
   >
     <!-- Main form inputs from parent -->
     <slot />
@@ -49,7 +51,11 @@ defineProps({
     type: String,
     default: 'success',
   },
+  scrollable:{
+    type:Boolean, default:false
+  }
 })
 
 defineEmits(['update:modelValue', 'submit'])
 </script>
+

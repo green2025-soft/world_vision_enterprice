@@ -9,3 +9,4 @@ Route::apiResource('brand', \Modules\Inventory\Controllers\Api\BrandController::
 Route::apiResource('product', \Modules\Inventory\Controllers\Api\ProductController::class);
 Route::apiResource('supplier', \Modules\Inventory\Controllers\Api\SupplierController::class);
 Route::apiResource('customer', \Modules\Inventory\Controllers\Api\CustomerController::class);
+Route::apiResource('product-set', \Modules\Inventory\Controllers\Api\ProductSetController::class);

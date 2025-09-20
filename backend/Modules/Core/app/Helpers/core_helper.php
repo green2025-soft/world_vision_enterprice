@@ -29,4 +29,28 @@ if (!function_exists('uploadImage')) {
         // Return public url
         return Storage::url($path);
     }
+
+
+
+}
+
+
+if (!function_exists('dbDateFormat')) {
+    function dbDateFormat($date){
+        $date = str_replace(['/','.'],['-'], $date);
+        $dateCheck = validateDate($date);
+        if ($dateCheck) {
+            return date('Y-m-d', strtotime($date));
+        }
+    }
+}
+
+
+
+if (!function_exists('validateDate')) {
+    function validateDate($date)
+    {
+        $timestamp = strtotime($date);
+        return $timestamp ? $date : null;
+    }
 }

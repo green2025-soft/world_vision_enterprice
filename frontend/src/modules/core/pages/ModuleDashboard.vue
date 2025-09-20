@@ -36,7 +36,7 @@ const modules = [
     id: 2,
     name: 'Inventory',
     icon: 'fa-boxes',
-    link: '/inventory',
+    link: '/inventory/dashboard',
     bg: 'linear-gradient(135deg, #6a11cb, #2575fc)'
   },
   {
@@ -50,7 +50,7 @@ const modules = [
     id: 4,
     name: 'Accounts',
     icon: 'fa-wallet',
-    link: '/accounts',
+    link: '/accounting/dashboard',
     bg: 'linear-gradient(135deg, #f7971e, #ffd200)'
   },
    {

@@ -5,7 +5,7 @@ import { ref, computed  } from 'vue'
 /*
   String Casing methods
 */
-const userDFormet = "d/m/Y";
+const userDFormet = "d-m-Y";
 
 export const convertSnakeToCamel = (snake) =>
   snake.replace(/([_][a-z])/g, (group) => group.toUpperCase().replace("_", ""));
@@ -67,6 +67,15 @@ export const userDateFormat = (date = "") => {
   }
   return date;
 };
+
+export const formatDate =(date ='') => {
+   if (date) {
+    const dateStr = userDateFormat(date);
+    return new Date(date).toLocaleString();
+  }
+  return date;
+  
+}
 
 export const pickerDateFormat = (date = "") => {
   if (!date) {
@@ -260,27 +269,15 @@ export function printADiv(divId, orientation = "portrait") {
     return;
   }
 
-  // Prepare print CSS based on orientation
-  let printCSS = `
+  const printCSS = `
     @media print {
       @page {
         size: A4 ${orientation};
-        margin: 0.4in !important;
-      }
-      /* Hide last column and SVG icons in the print */
-      #${divId} th:last-child,
-      #${divId} td:last-child,
-      #${divId} th svg {
-        display: none !important;
-      }
-      #${divId} th, #${divId} td {
-        font-size: 12px;
-        vertical-align: middle !important;
+        margin: 0.5in;
       }
     }
   `;
 
-  // Insert or update print style tag
   let styleTag = document.getElementById("dynamic-print-style");
   if (!styleTag) {
     styleTag = document.createElement("style");
@@ -289,28 +286,21 @@ export function printADiv(divId, orientation = "portrait") {
   }
   styleTag.innerHTML = printCSS;
 
-  // Hide the main app content, show the print wrapper
+  // Step 1: Copy content
+  printEl.innerHTML = divToPrintEl.outerHTML;
+
+  // Step 2: Hide app, show print
   appEl.style.display = "none";
   printEl.style.display = "block";
 
-  // Copy the HTML content for printing
-  printEl.innerHTML = divToPrintEl.outerHTML;
-
-  // Fix inputs if any inside the print element (optional)
-  const originalInputs = divToPrintEl.querySelectorAll("input");
-  const printInputs = printEl.querySelectorAll("input");
-  printInputs.forEach((input, i) => {
-    input.value = originalInputs[i]?.value || "";
-  });
-
-  // Trigger print after a very short delay
+  // Step 3: Print with delay (allow reflow)
   setTimeout(() => {
     window.print();
 
-    // Restore UI after printing
+    // Step 4: Restore UI
     printEl.style.display = "none";
     appEl.style.display = "block";
-  }, 50);
+  }, 100);
 }
 
 
@@ -441,6 +431,63 @@ export function prepareFormData(data, method = 'PUT') {
 
   return formData
 }
+
+export function numberToWords(amount) {
+  const ones = [
+    '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six',
+    'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve',
+    'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen',
+    'Seventeen', 'Eighteen', 'Nineteen',
+  ];
+
+  const tens = [
+    '', '', 'Twenty', 'Thirty', 'Forty', 'Fifty',
+    'Sixty', 'Seventy', 'Eighty', 'Ninety',
+  ];
+
+  function convert_hundred(n) {
+    let str = '';
+    if (n > 99) {
+      str += ones[Math.floor(n / 100)] + ' Hundred ';
+      n = n % 100;
+    }
+    if (n > 19) {
+      str += tens[Math.floor(n / 10)] + ' ';
+      n = n % 10;
+    }
+    if (n > 0) {
+      str += ones[n] + ' ';
+    }
+    return str.trim();
+  }
+
+  function convert(num) {
+    if (num === 0) return 'Zero';
+
+    let billion = Math.floor(num / 1_000_000_000);
+    let million = Math.floor((num % 1_000_000_000) / 1_000_000);
+    let thousand = Math.floor((num % 1_000_000) / 1000);
+    let rest = num % 1000;
+
+    let result = '';
+    if (billion) result += convert_hundred(billion) + ' Billion ';
+    if (million) result += convert_hundred(million) + ' Million ';
+    if (thousand) result += convert_hundred(thousand) + ' Thousand ';
+    if (rest) result += convert_hundred(rest);
+
+    return result.trim();
+  }
+
+  const [taka, poisha] = parseFloat(amount).toFixed(2).split('.');
+  let words = convert(parseInt(taka)) + ' Taka';
+  if (parseInt(poisha) > 0) {
+    words += ' and ' + convert(parseInt(poisha)) + ' Poisha';
+  }
+
+  return words + ' Only';
+}
+
+
 
 
 

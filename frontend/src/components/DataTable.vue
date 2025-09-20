@@ -9,7 +9,8 @@ const props = defineProps({
   fields: { type: Array, required: true },
   bUrl: { type: String, required: true },
   paginationLimit: { type: Number, default: 5 },
-  hidePrint: { type: Boolean, default: false }
+  hidePrint: { type: Boolean, default: false },
+  isBranch: { type: Boolean, default: false }
 });
 
 const filterText = shallowRef('');
@@ -32,7 +33,7 @@ const tableData = ref([]);
 const pagination = ref({ total: 0, per_page: 10, current_page: 1 });
 
 // Composable for API calls
-const { gePaginationList} = useResourceApiClient(props.bUrl);
+const { gePaginationList} = useResourceApiClient(props.bUrl, '', props.isBranch);
 
 // Fetch data from API
 const isLoading = ref(false);
@@ -172,7 +173,7 @@ defineExpose({
 :deep(#dataTablePrint th),
 :deep(#dataTablePrint td) {
   vertical-align: middle !important;
-  white-space: nowrap;
+  /* white-space: nowrap; */
 }
 
 @media (max-width: 576px) {

@@ -41,7 +41,9 @@ import FormModal from "@/components/FormModal.vue"
 import StatusSelect from "@/components/StatusSelect.vue"
 import StatusDisplay from "@/components/StatusDisplay.vue"
 import GlobalImage from '@/components/GlobalImage.vue';
-import Select2Dropdown from '@/components/Select2Dropdown.vue';
+import ResourceSelect from '@/components/ResourceSelect.vue';
+import PriceInput from '@/components/PriceInput.vue';
+import TableRow from '@/components/TableRow.vue';
 
 
 export default {
@@ -98,7 +100,10 @@ export default {
     app.component('StatusSelect', StatusSelect)
     app.component('StatusDisplay', StatusDisplay)
     app.component('GlobalImage', GlobalImage)
-    app.component('Select2Dropdown', Select2Dropdown)
+    
+    app.component('ResourceSelect', ResourceSelect)
+    app.component('PriceInput', PriceInput)
+    app.component('TableRow', TableRow)
     
   },
 };

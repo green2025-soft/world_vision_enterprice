@@ -1,10 +1,13 @@
 import { useApiClient } from '@/composables/useApiClient'
-import { ref } from 'vue'
+import { ref, computed, isRef } from 'vue'
 import { prepareFormData } from '@/utilities/methods'
+import { useBranchStore } from '@/store/branch-store'
 
 
-export function useResourceApiClient(baseUrl, title = 'Resource') {
+export function useResourceApiClient(baseUrl, title = 'Resource', isBranch = false) {
+  
   const api = useApiClient()
+   const branchStore = useBranchStore()
 
    const formErrors = ref({})
    const isLoading = ref(false)
@@ -12,12 +15,20 @@ export function useResourceApiClient(baseUrl, title = 'Resource') {
 
   const confirmDeleteModal = ref(null)
   const itemToDeleteId = ref(null)
+  const branchId = computed(() => branchStore.selectedBranchId)
+  
+  
+
    
+  const fullBaseUrl = isBranch ? `${baseUrl}?branch_id=${branchId.value}` : baseUrl
 
   const getList = async (params = {}) => {
     isLoading.value = true
+
+    
+  
     try {
-      const res = await api.get(baseUrl, { requiresAuth: true, params, tosterMessage: false })
+      const res = await api.get(fullBaseUrl, { requiresAuth: true, params, tosterMessage: false })
       return res.data
     } catch (err) {
       throw err
@@ -29,8 +40,10 @@ export function useResourceApiClient(baseUrl, title = 'Resource') {
 
   const gePaginationList = async (params = {}) => {
     isLoading.value = true
+     
+
     try {
-      const res = await api.get(baseUrl, { requiresAuth: true, params, tosterMessage: false })
+      const res = await api.get(fullBaseUrl, { requiresAuth: true, params, tosterMessage: false })
       return res
     } catch (err) {
       throw err
@@ -57,6 +70,10 @@ export function useResourceApiClient(baseUrl, title = 'Resource') {
     formErrors.value = {}
     isSubmitting.value = true
     const message = $message==''?`${title} created successfully`:$message
+    
+      if(isBranch){
+        data.branch_id = branchId
+      }
     try {
       const res = await api.post(baseUrl, data, {
         notifyOptions: { message: message },
@@ -78,6 +95,9 @@ const update = async (id, data,  $message = '') => {
   formErrors.value = {}
   isSubmitting.value = true
   const message = $message==''?`${title}  updated successfully`:$message
+   if(isBranch){
+      data.branch_id = branchId
+    }
   try {
     // If not multipart, use regular PUT
     const res = await api.put(`${baseUrl}/${id}`, data, {
@@ -102,7 +122,7 @@ const updateWithFile = async (id, data, $message = '') => {
   formErrors.value = {}
   isSubmitting.value = true
   const message = $message==''?`${title}  updated successfully`:$message
-  const formData = data instanceof FormData ? data : prepareFormData(data)
+  let formData = data instanceof FormData ? data : prepareFormData(data)
    try {
   const res = await api.post(`${baseUrl}/${id}`, formData, {
         notifyOptions: { message: message },
@@ -138,8 +158,10 @@ const updateWithFile = async (id, data, $message = '') => {
     }
   }
 
-const customGet = async (customUrl, params = {} ) => {
+const customGet = async (customUrl, params = {}, isCBranchId=true ) => {
   isLoading.value = true
+
+  customUrl = isCBranchId?customUrl+`?branch_id=${branchId}`:customUrl
   try {
     const res = await api.get(customUrl, {
       requiresAuth: true,
@@ -154,9 +176,12 @@ const customGet = async (customUrl, params = {} ) => {
   }
 }
 
-const customPost = async (customUrl, data = {}, message=false) => {
+const customPost = async (customUrl, data = {}, message=false, isCBranchId=true) => {
   
-  
+    if(isCBranchId){
+      data.branch_id = isRef(branchId) ? branchId.value : branchId
+    }
+
   isLoading.value = true
  const showNotification = message?true:false
   try {

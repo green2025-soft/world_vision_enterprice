@@ -1,8 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 import NProgress from "nprogress";
 import { authenticate } from "../store/authenticate.js";
-import coreRoutes from "../modules/core/router";
 import { useBranchStore } from '@/store/branch-store'
+
+import coreRoutes from "../modules/core/router";
+import inventoryRoutes from "../modules/inventory/router";
+import accountingRoutes from "../modules/accounting/router";
 
 
 // import Logout from "@/views/Logout.vue";
@@ -28,7 +31,9 @@ const routes = [
   //   path: "/reset-password",
   //   component: ResetPassword
   // },
-  coreRoutes
+  coreRoutes,
+  inventoryRoutes,
+  accountingRoutes
 ];
 
 const router = createRouter({
@@ -41,20 +46,26 @@ router.beforeEach((to, from, next) => {
   NProgress.start();
 
   const isLoggedIn = authenticate.isAuthenticated
-  if (to.meta.requiresAuth && !isLoggedIn) {
-    next("login");
-  }
-
-  const branchStore = useBranchStore()
+  const needsAuth = to.meta.requiresAuth !== false
   const needsBranch = to.meta.requiresBranch === true
-  console.log('Branch '+branchStore.selectedBranchId);
-  
 
-  if (needsBranch && !branchStore.selectedBranchId) {
-    return next("/core/branch-dashboard")
+  // Redirect to login if not authenticated
+  if (needsAuth && !isLoggedIn) {
+    return next("/login");
   }
-  next()
+
+  // Branch check only after login
+  if (needsBranch) {
+    const branchStore = useBranchStore()
+
+    if (!branchStore.selectedBranchId) {
+      return next("/core/branch-dashboard");
+    }
+  }
+
+  return next(); // ✅ always call next() once
 });
+
 
 router.afterEach(() => {
   NProgress.done();

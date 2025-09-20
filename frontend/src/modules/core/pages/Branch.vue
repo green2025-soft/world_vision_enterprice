@@ -116,7 +116,7 @@ function openModal(item = null) {
   </BaseFormGroup>
 
   <BaseFormGroup label="Logo" labelCols="3"  >
-      <FileUpload v-model="form.fileLogo"  preview />
+      <FileUpload v-model="form.fileLogo" :dbImage="form.logo"  preview />
   </BaseFormGroup>
 
 </FormModal>

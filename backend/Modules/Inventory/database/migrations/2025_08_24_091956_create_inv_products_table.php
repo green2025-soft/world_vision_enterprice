@@ -18,8 +18,8 @@ return new class extends Migration
             $table->foreignId('category_id')->nullable()->constrained('inv_categories')->onDelete('set null');
             $table->foreignId('unit_id')->nullable()->constrained('inv_units')->onDelete('set null');
             $table->foreignId('brand_id')->nullable()->constrained('inv_brands')->onDelete('set null');
-            $table->decimal('purchase_price', 12, 2)->default(0);
-            $table->decimal('selling_price', 12, 2)->default(0);
+            $table->decimal('purchase_price', 12, 2)->default(0)->nullable();
+            $table->decimal('selling_price', 12, 2)->default(0)->nullable();
             $table->integer('stock_quantity')->default(0);
             $table->boolean('status')->default(1);
             $table->foreignId('branch_id')->constrained('branches')->onDelete('cascade');

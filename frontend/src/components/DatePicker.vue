@@ -15,6 +15,7 @@
 </template>
 
 <script setup>
+import '@vuepic/vue-datepicker/dist/main.css';
 import { ref, defineEmits, watch } from "vue";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import { dbDataFormat, pickerDateFormat } from "@/utilities/methods";

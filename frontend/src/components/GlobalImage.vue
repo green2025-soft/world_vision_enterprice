@@ -11,7 +11,7 @@ const props = defineProps({
   },
   size: {
     type: [Number, String],
-    default: 60
+    default: '100%'
   },
   radius: {
     type: [String, Number],
