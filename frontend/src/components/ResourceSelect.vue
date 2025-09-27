@@ -1,15 +1,15 @@
 <template>
   <v-select
     v-model="selected"
-  :options="options"
-  :get-option-label="getOptionLabel"
-  :filterable="false"
-  :loading="loading"
-  placeholder="Select..."
-  @search="onSearch"
-  @open="onOpen"
-  @close="onClose"
-  :multiple="multiple"
+    :options="options"
+    :get-option-label="getOptionLabel"
+    :filterable="false"
+    :loading="loading"
+    placeholder="Select..."
+    @search="onSearch"
+    @open="onOpen"
+    @close="onClose"
+    :multiple="multiple"
   >
     <template #list-footer>
       <li
@@ -57,6 +57,15 @@ let observer = null
 const { gePaginationList, getOne } = useResourceApiClient(props.bUrl, 'Resource', props.isBranch)
 
 const hasNextPage = computed(() => page.value < lastPage.value)
+
+// ✅ Debounce utility
+function debounce(fn, delay = 300) {
+  let timer
+  return (...args) => {
+    clearTimeout(timer)
+    timer = setTimeout(() => fn(...args), delay)
+  }
+}
 
 // ✅ Fetch paginated list with deduplication
 const fetchData = async () => {
@@ -133,52 +142,95 @@ const onSearch = async (val) => {
   }
 }
 
-// ✅ Load selected item by ID (for edit)
+// ✅ Load selected item by ID (with cache)
+const itemCache = new Map()
+
 const loadSelectedItem = async (id) => {
-  if (!id) return
-  const exists = options.value.some(opt => opt[props.valueField] === id)
-  if (exists) return
+  if (!id) return null
+
+  if (itemCache.has(id)) {
+    return itemCache.get(id)
+  }
+
+  const cacheKey = `${props.bUrl}-item-${id}`
+  const cached = sessionStorage.getItem(cacheKey)
+  if (cached) {
+    const parsed = JSON.parse(cached)
+    itemCache.set(id, parsed)
+    return parsed
+  }
 
   try {
     const item = await getOne(id)
     if (item) {
-      options.value.unshift(item)
-      // Vue-select uses full object match, so update selected object
-      if (!props.multiple) {
-        selected.value = item
-      } else {
-        selected.value = [...selected.value, item]
-      }
+      itemCache.set(id, item)
+      sessionStorage.setItem(cacheKey, JSON.stringify(item))
+      return item
     }
   } catch (e) {
     console.error('Failed to load selected item:', e)
   }
+
+  return null
 }
 
-// ✅ Watch for edit mode and modelValue to load selected item
-watch(
-  () => [props.modelValue, props.isEdit],
-  async ([val, isEdit]) => {
-    if (!isEdit || !val) return
+// ✅ Process modelValue on edit
+const processModelValue = async (val, isEdit) => {
+  if (!isEdit || !val) return
 
-    if (props.multiple && Array.isArray(val)) {
-      selected.value = []
-      for (const id of val) {
-        const match = options.value.find(opt => opt[props.valueField] === id)
-        if (match) {
-          selected.value.push(match)
-        } else {
-          await loadSelectedItem(id)
-        }
-      }
-    } else {
-      const match = options.value.find(opt => opt[props.valueField] === val)
-      if (match) {
-        selected.value = match
-      } else {
-        await loadSelectedItem(val)
+  // Skip if already selected
+  const currentIds = new Set(
+    (Array.isArray(selected.value) ? selected.value : [selected.value])
+      .map(i => i?.[props.valueField])
+  )
+  const incomingIds = props.multiple && Array.isArray(val) ? val : [val]
+  const isSame = incomingIds.every(id => currentIds.has(id))
+  if (isSame) return
+
+  if (props.multiple && Array.isArray(val)) {
+    const matched = options.value.filter(opt => val.includes(opt[props.valueField]))
+    const matchedIds = matched.map(opt => opt[props.valueField])
+    const missingIds = val.filter(id => !matchedIds.includes(id))
+
+    const fetched = await Promise.all(missingIds.map(id => loadSelectedItem(id)))
+    const allSelected = [...matched, ...fetched.filter(Boolean)]
+
+    const seen = new Set()
+    selected.value = allSelected.filter(item => {
+      const id = item?.[props.valueField]
+      if (!id || seen.has(id)) return false
+      seen.add(id)
+      return true
+    })
+
+    for (const item of fetched) {
+      if (item && !options.value.find(opt => opt[props.valueField] === item[props.valueField])) {
+        options.value.unshift(item)
       }
     }
+  } else {
+    const match = options.value.find(opt => opt[props.valueField] === val)
+    if (match) {
+      selected.value = match
+    } else {
+      const item = await loadSelectedItem(val)
+      if (item) {
+        selected.value = item
+        if (!options.value.find(opt => opt[props.valueField] === item[props.valueField])) {
+          options.value.unshift(item)
+        }
+      }
+    }
+  }
+}
+
+// ✅ Debounced version
+const debouncedProcessModelValue = debounce(processModelValue, 300)
+
+watch(
+  () => [props.modelValue, props.isEdit],
+  ([val, isEdit]) => {
+    debouncedProcessModelValue(val, isEdit)
   },
   { immediate: true }
 )
@@ -202,7 +254,15 @@ watch(() => props.modelValue, (val) => {
   }
 })
 
-onMounted(fetchData)
+onMounted(async () => {
+  await fetchData()
+
+  if (props.isEdit && props.modelValue) {
+    const ids = props.multiple ? props.modelValue : [props.modelValue]
+    await Promise.all(ids.map(id => loadSelectedItem(id)))
+  }
+})
+
 onBeforeUnmount(() => observer?.disconnect())
 
 const getOptionLabel = (option) => {
@@ -212,7 +272,6 @@ const getOptionLabel = (option) => {
   }
   return option[props.labelField] || ''
 }
-
 </script>
 
 <style scoped>
@@ -221,5 +280,4 @@ const getOptionLabel = (option) => {
   font-style: italic;
   padding: 8px;
 }
-
 </style>

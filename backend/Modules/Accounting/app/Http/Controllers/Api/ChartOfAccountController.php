@@ -135,10 +135,15 @@ class ChartOfAccountController extends BaseApiController
 
 
 
-    public function accountHeads(){
+    public function accountHeads($id=''){
         $query = $this->indexQuery()->whereNotNull('parent_id')->where('status',1);
+        if ($id){
+              return $this->showData($id);
+        }
         return $this->listResponse($query->smartPaginate());
     }
+
+    
 
     public function voucherTypes(){
         $query = VoucherType::whereNotNull('is_manual');

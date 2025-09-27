@@ -6,13 +6,18 @@ use Modules\Core\Http\Controllers\Api\BaseApiController;
 use Modules\Inventory\Models\Supplier;
 use Modules\Inventory\Http\Requests\SupplierRequest;
 use Illuminate\Http\Request;
+use Modules\Inventory\Models\SupplierLedger;
+use Modules\Inventory\Services\SupplierPreviousDueService;
 
 class SupplierController extends BaseApiController
 {
+
+     protected SupplierPreviousDueService $supplierPreviousDueService;
     protected string $title = 'Supplier';
 
-    public function __construct()
+    public function __construct(SupplierPreviousDueService $supplierPreviousDueService)
     {
+        $this->supplierPreviousDueService = $supplierPreviousDueService;
         $this->model = Supplier::class;
     }
 
@@ -28,7 +33,8 @@ class SupplierController extends BaseApiController
     {
         $request->validated();
         $request['previous_due'] = $request['previous_due']?$request['previous_due']:0.00;
-        return $this->saveData($request);
+        $createData = $this->supplierPreviousDueService->createWithAccounting($request->all());
+        return $this->createdResponse($createData);
     }
 
     public function show($id)
@@ -36,14 +42,19 @@ class SupplierController extends BaseApiController
         return $this->showData($id);
     }
 
-    public function update(SupplierRequest $request, $id)
+    public function update(SupplierRequest $request, Supplier $supplier)
     {
         $request->validated();
-        return $this->updateData($request, $id);
+        
+        $updated = $this->supplierPreviousDueService->updateWithAccounting($supplier, $request->all());
+        return $this->updatedResponse($updated);
     }
 
-    public function destroy($id)
+    public function destroy(Supplier $supplier)
     {
-        return $this->destroyData($id);
+        $this->supplierPreviousDueService->deleteWithAccounting($supplier);
+        return $this->deletedResponse();
     }
+
+ 
 }

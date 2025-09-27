@@ -32,7 +32,7 @@ const { form, reset } = useForm({
   description: '',
   status:1,
   accounts: [
-    { account_head_id: null, component: '', description: '' }
+    { account_head_id: null, component: '', description: '', is_debit:null }
   ]
 })
 
@@ -215,7 +215,7 @@ async function openViewModal(id) {
       <tr>
         <th width="25%">Component</th>
         <th>Account Head</th>
-        <!-- <th style="width: 100px;" class="text-center">Is Debit</th> -->
+        <th style="width: 100px;" class="text-center">Is Debit</th>
         <th  width="25%">Description</th>
         <th style="width: 50px;">Actions</th>
       </tr>
@@ -236,10 +236,10 @@ async function openViewModal(id) {
               :isEdit="isEdit"
           />
         </td>
-        <!-- <td class="text-center">
+        <td class="text-center">
           
-          <BFormCheckbox v-model="acc.is_debit"    switch />
-        </td> -->
+          <BFormCheckbox v-model="acc.is_debit" value="1"  switch />
+        </td>
         <td>
           <BFormInput v-model="acc.description" placeholder="Line description" />
         </td>

@@ -22,6 +22,7 @@ const routes = {
    makeRoute("units", lazy("Unit"), "Unit"),
    makeRoute("brands", lazy("Brand"), "Brand"),
    makeRoute("suppliers", lazy("Supplier"), "Supplier"),
+   makeRoute("supplier-advance", lazy("SupplierAdvance"), "Supplier Advance"),
    makeRoute("customers", lazy("Customer"), "Customer"),
    makeRoute("products", lazy("Product"), "Product"),
    makeRoute("product-sets", lazy("ProductSet"), "Product Set"),

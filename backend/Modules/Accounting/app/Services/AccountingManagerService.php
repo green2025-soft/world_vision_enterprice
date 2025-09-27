@@ -29,16 +29,19 @@ class AccountingManagerService
         foreach ($map->accounts as $account) {
             $component = $account['component'];
             $amountKey = $account['amount_source_key'] ?? strtolower(str_replace(' ', '_', $component));
-            $amount = floatval($data[$amountKey] ?? 0);
+       
+            if ($amountKey && isset($data[$amountKey])) {
+                $amount = floatval($data[$amountKey]);
+            } else {
+                $amount = floatval($data['amount'] ?? 0);
+            }
 
             if ($amount <= 0) continue;
 
             // ✅ Account from user input
-            $accountHeadId = $data['user_selected_accounts'][$component] ?? null;
+            $accountHeadId = $account->account_head_id;
+            
 
-            if (!$accountHeadId) {
-                throw new \Exception("Account not selected for: {$component}");
-            }
 
             $lines[] = [
                 'account_head_id' => $accountHeadId,
@@ -53,11 +56,11 @@ class AccountingManagerService
 
         $this->entryService->createEntry([
             'date'         => now(),
-            'voucher_type' => strtolower(str_replace(' ', '_', $moduleName)),
+            'voucher_type' => $moduleName,
             'module'       => $moduleName,
             'source_type'  => $sourceType,
             'source_id'    => $sourceId,
-            'narration'    => $moduleName . ' Accounting Entry',
+            'narration'    => $moduleName,
             'lines'        => $lines,
             'branch_id'    => $data['branch_id'] ?? null,
         ]);

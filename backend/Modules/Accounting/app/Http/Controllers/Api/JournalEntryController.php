@@ -38,6 +38,14 @@ class JournalEntryController extends BaseApiController
 
     public function update(JournalEntryRequest $request, $id)
     {
+        $entry = $this->model::findOrFail($id);
+
+        if (!is_null($entry->source_id)) {
+            return response()->json([
+                'message' => 'This journal entry is auto-generated and cannot be edited.',
+            ], 403);
+        }
+
         
         $entry = $this->service->updateEntry($id, $request->validated());
         return $this->updatedResponse($entry->load('details.accountHead'));
@@ -45,6 +53,13 @@ class JournalEntryController extends BaseApiController
 
     public function destroy($id)
     {
+        $entry = $this->model::findOrFail($id);
+
+        if (!is_null($entry->source_id)) {
+            return response()->json([
+                'message' => 'This journal entry is auto-generated and cannot be edited.',
+            ], 403);
+        }
         $this->service->deleteEntry($id);
         return $this->deletedResponse();
     }

@@ -21,6 +21,7 @@
         :text="buttonText"
         :variant="buttonVariant"
         :loading="loading"
+        :disabled="buttonDisabled"
         @click.prevent="$emit('submit')"
       />
     </div>
@@ -53,7 +54,11 @@ defineProps({
   },
   scrollable:{
     type:Boolean, default:false
-  }
+  },
+    buttonDisabled: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 defineEmits(['update:modelValue', 'submit'])

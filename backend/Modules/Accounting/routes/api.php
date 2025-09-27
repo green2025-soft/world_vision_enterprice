@@ -11,7 +11,7 @@ Route::middleware(['auth:sanctum'])->prefix('v1/accounting')->name('accounting.'
     Route::apiResource('chart-of-accounts', ChartOfAccountController::class);
 
     Route::controller(ChartOfAccountController::class)->group(function(){
-        Route::get('account-heads','accountHeads')->name('account-heads');
+        Route::get('account-heads/{id?}','accountHeads')->name('account-heads');
         Route::get('voucher-types','voucherTypes')->name('voucher-types');
     });
 
