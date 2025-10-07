@@ -16,5 +16,15 @@ class StockBalanceService {
             );
         }
     }
+
+    public function rollbackFromPurchase(array $items, $branchId): void
+{
+    foreach ($items as $item) {
+        StockBalance::where('product_id', $item['product_id'])
+            ->where('branch_id', $branchId)
+            ->decrement('quantity', $item['quantity']);
+    }
+}
+
     
 }

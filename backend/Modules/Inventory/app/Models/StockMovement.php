@@ -6,7 +6,7 @@ use Modules\Core\Models\Branch;
 
 class StockMovement extends InvBaseModel
 {
-    protected $fillable = ['product_id', 'movement_type', 'quantity', 'unit_price', 'sales_price', 'purchase_item_id', 'reference_id', 'branch_id'];
+    protected $fillable = ['product_id', 'movement_type', 'quantity', 'consumed_quantity', 'unit_price', 'sales_price', 'purchase_item_id', 'reference_id', 'branch_id', 'strategy'];
 
 
     public function product(){

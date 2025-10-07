@@ -6,13 +6,17 @@ use Modules\Core\Http\Controllers\Api\BaseApiController;
 use Modules\Inventory\Models\Purchase;
 use Modules\Inventory\Http\Requests\PurchaseRequest;
 use Illuminate\Http\Request;
+use Modules\Inventory\Services\PurchaseService;
 
 class PurchaseController extends BaseApiController
 {
     protected string $title = 'Purchase';
 
-    public function __construct()
+     protected PurchaseService $purchaseService;
+
+    public function __construct(PurchaseService $purchaseService)
     {
+        $this->purchaseService = $purchaseService;
         $this->model = Purchase::class;
     }
 
@@ -27,7 +31,32 @@ class PurchaseController extends BaseApiController
     public function store(PurchaseRequest $request)
     {
         $request->validated();
-        return $this->saveData($request);
+        if (empty($validated['invoice_no'])) {
+            $validated['invoice_no'] = $this->generateInvoiceNo();
+        }
+        $createData = $this->purchaseService->storeOrUpdate($request->all());
+        return $this->createdResponse($createData);
+        
+    }
+
+    protected function generateInvoiceNo(): string
+    {
+        // Example: INV-2025-10-0001 (date + increment)
+        $prefix = 'INV-' . date('Y-m-d') . '-';
+
+        // Get last invoice_no for today, extract last number, increment
+        $lastInvoice = $this->model::where('invoice_no', 'like', $prefix . '%')
+            ->orderBy('invoice_no', 'desc')
+            ->first();
+
+        if (!$lastInvoice) {
+            return $prefix . '0001';
+        }
+
+        $lastNumber = (int)substr($lastInvoice->invoice_no, strlen($prefix));
+        $newNumber = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
+
+        return $prefix . $newNumber;
     }
 
     public function show($id)
@@ -38,11 +67,15 @@ class PurchaseController extends BaseApiController
     public function update(PurchaseRequest $request, $id)
     {
         $request->validated();
-        return $this->updateData($request, $id);
+        $updated = $this->purchaseService->storeOrUpdate($request->all(), $id);
+        return $this->updatedResponse($updated);
+        
+
     }
 
     public function destroy($id)
     {
-        return $this->destroyData($id);
+        $this->purchaseService->delete($id);
+        return $this->deletedResponse();
     }
 }

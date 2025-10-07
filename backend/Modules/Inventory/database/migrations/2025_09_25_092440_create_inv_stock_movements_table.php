@@ -27,6 +27,7 @@ return new class extends Migration
             ]);
 
             $table->integer('quantity');
+            $table->float('consumed_quantity')->nullable()->default(0)->after('quantity');
             $table->decimal('unit_price', 10, 2);
             $table->decimal('sales_price', 10, 2)->nullable();
 
@@ -34,6 +35,7 @@ return new class extends Migration
             $table->unsignedBigInteger('reference_id')->nullable();
 
             $table->foreignId('branch_id')->constrained('branches')->onDelete('cascade');
+            $table->enum('strategy',['fifo', 'lifo'])->default('fifo');
             
             $table->timestamps();
         });

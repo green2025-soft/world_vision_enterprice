@@ -18,4 +18,11 @@ class Purchase extends InvBaseModel
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    public function items()
+    {
+        return $this->hasMany(PurchaseItem::class, 'purchase_id');
+    }
+
+
+
 }
