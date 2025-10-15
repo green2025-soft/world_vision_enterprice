@@ -9,6 +9,7 @@ use Modules\Inventory\Http\Controllers\Api\ProductSetController;
 use Modules\Inventory\Http\Controllers\Api\SupplierController;
 use Modules\Inventory\Http\Controllers\Api\UnitController;
 use Modules\Inventory\Http\Controllers\Api\SupplierAdvanceController;
+use Modules\Inventory\Http\Controllers\Api\PurchaseController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1/inventory')->name('inventory.')->group(function () {
 // Route::middleware(['auth:sanctum', 'admin'])->prefix('v1/inventory')->name('inventory')->group(function () {
@@ -16,10 +17,14 @@ Route::middleware(['auth:sanctum'])->prefix('v1/inventory')->name('inventory.')-
     Route::apiResource('units', UnitController::class);
     Route::apiResource('brands', BrandController::class);
     Route::apiResource('products', ProductController::class);
+    Route::get('products-overview/{id?}', [ProductController::class, 'getInventoryProducts'])->name('products-overview');
     Route::apiResource('product-sets', ProductSetController::class);
+    Route::get('suppliers/balances/{id?}', [SupplierController::class, 'getSupplierBalances'])->name('suppliers.balances');
     Route::apiResource('suppliers', SupplierController::class);
+ 
     Route::apiResource('supplier-advance', SupplierAdvanceController::class);
     Route::get('supplier-advance/{id}/balance', [SupplierAdvanceController::class, 'supplierBalance']);
     Route::apiResource('customers', CustomerController::class);
+    Route::apiResource('purchases', PurchaseController::class);
 
 });

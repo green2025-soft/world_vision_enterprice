@@ -18,7 +18,7 @@ class UserLog extends InvBaseModel
         return $this->belongsTo(Branch::class, 'branch_id');
     }
 
-     public static function record($action, $details = null, $referenceId =null, $oldData = null, $newData = null, $branchId = null, $userId = null)
+     public static function record($action, $details = null, $referenceId =null, $oldData = null, $newData = null, $branchId = null, $module=null, $userId = null)
     {
         
         if ($details instanceof \Illuminate\Database\Eloquent\Model) {
@@ -42,6 +42,7 @@ class UserLog extends InvBaseModel
             'old_data'      => $oldData ? json_encode($oldData) : null,
             'new_data'      => $newData ? json_encode($newData) : null,
             'branch_id'     => $branchId,
+            'module'        => $module,
         ]);
     }
 }

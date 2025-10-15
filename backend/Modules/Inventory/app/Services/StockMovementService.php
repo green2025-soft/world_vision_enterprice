@@ -170,7 +170,7 @@ class StockMovementService
      */
     public function validateEdit(string $movementType, object $source, array $items): void
     {
-        $existingMovements = StockMovement::where('reference_type', class_basename($source))
+        $existingMovements = StockMovement::where('movement_type', class_basename($source))
             ->where('reference_id', $source->id)
             ->get()
             ->keyBy('product_id');

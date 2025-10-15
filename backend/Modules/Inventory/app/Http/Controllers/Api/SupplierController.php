@@ -56,5 +56,47 @@ class SupplierController extends BaseApiController
         return $this->deletedResponse();
     }
 
+    public function supplier(Request $request){
+        $branchId = $request['branch_id'];
+
+         $query = $this->indexQuery()
+            ->where('branch_id', $branchId);
+
+        $products = $query->smartPaginate();
+
+    }
+
+    public function getSupplierBalances(Request $request, $id=null){
+         $branchId = $request->input('branch_id');
+          $query = $this->indexQuery()
+            ->where('branch_id', $branchId);
+        if ($id){
+            $query->where('id',$id); 
+        }else{
+          $query->where('status',1);  
+        }
+        $suppliers = $query->smartPaginate();
+            // ✅ Get supplier IDs for current page
+        $supplierIds = $suppliers->pluck('id')->toArray();
+
+        // ✅ Query 2: Fetch balances for only current page suppliers
+        $balances = SupplierLedger::whereIn('supplier_id', $supplierIds)
+        ->where('branch_id', $branchId)
+        ->selectRaw('supplier_id, SUM(debit - credit) as balance')
+        ->groupBy('supplier_id')
+        ->get()
+        ->keyBy('supplier_id');
+
+        // ✅ Attach balance to each supplier
+        $suppliers->getCollection()->transform(function ($supplier) use ($balances) {
+            $supplier->balance = $balances[$supplier->id]->balance ?? 0;
+            return $supplier;
+        });
+
+     return $this->listResponse($suppliers);
+
+
+    }
+
  
 }

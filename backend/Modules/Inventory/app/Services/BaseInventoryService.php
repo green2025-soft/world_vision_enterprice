@@ -19,8 +19,10 @@ abstract class BaseInventoryService
 
     public function storeOrUpdate(array $validated, ?int $id = null)
     {
+        
         return DB::transaction(function () use ($validated, $id) {
-            $itemsData = $this->calculateItems($validated['items']);
+            $itemsData = $this->calculateItems($validated['items'], $validated);
+            
             $totals = $this->calculateTotals($itemsData, $validated);
 
             $model = $id
@@ -40,57 +42,129 @@ abstract class BaseInventoryService
         });
     }
 
-    protected function calculateItems(array $items): array
+   protected function calculateItems(array $items, $validated): array
     {
         $itemsData = [];
+
         foreach ($items as $item) {
-            $subtotal = $item['unit_price'] * $item['quantity'];
-            $discount = ($item['discount_percent'] ?? 0) * $subtotal / 100;
-            $taxable = $subtotal - $discount;
-            $tax = ($item['tax_percent'] ?? 0) * $taxable / 100;
-            $total = $taxable + $tax;
+            $quantity   = $item['quantity'];
+            $unitPrice  = $item['unit_price'];
+            $costPrice  = $item['cost_price'] ?? $unitPrice;
+
+            // Subtotal (unit price × qty)
+            $subtotal = $unitPrice * $quantity;
+
+            // Discount handling
+            $discountAmount = 0;
+            $discountPercent = 0;
+
+            if (!empty($item['discount_amount'])) {
+                $discountAmount = floatval($item['discount_amount']);
+                // Calculate percent from amount
+                $discountPercent = $subtotal > 0 ? ($discountAmount / $subtotal) * 100 : 0;
+            } elseif (!empty($item['discount_percent'])) {
+                $discountPercent = floatval($item['discount_percent']);
+                // Calculate amount from percent
+                $discountAmount = ($discountPercent / 100) * $subtotal;
+            }
+
+            // Tax
+            $taxable   = $subtotal - $discountAmount;
+            $taxPercent = $item['tax_percent'] ?? 0;
+            $taxAmount = ($taxPercent / 100) * $taxable;
+
+            $total = $taxable + $taxAmount;
+
+            // Inventory subtotal (based on cost price)
+            $inventorySubtotal = $costPrice * $quantity;
 
             $itemsData[] = [
-                'product_id'       => $item['product_id'],
-                'quantity'         => $item['quantity'],
-                'unit_price'       => $item['unit_price'],
-                'sale_price'       => $item['sale_price'] ?? null,
-                'discount_percent' => $item['discount_percent'] ?? 0,
-                'tax_percent'      => $item['tax_percent'] ?? 0,
-                'subtotal'         => $subtotal,
-                'discount_amount'  => $discount,
-                'tax_amount'       => $tax,
-                'total'            => $total,
+                'product_id'         => $item['product_id'],
+                'quantity'           => $quantity,
+                'unit_price'         => $unitPrice,
+                'cost_price'         => $costPrice,
+                'sale_price'         => $item['sale_price'] ?? null,
+
+                // Sales account
+                'net_price'          => $subtotal,
+                'discount_percent'   => $discountPercent,
+                'discount_amount'    => $discountAmount,
+                'tax_percent'        => $taxPercent,
+                'tax_amount'         => $taxAmount,
+                'total_price'        => $total,
+
+                // Inventory account
+                'inventory_subtotal' => $inventorySubtotal,
+
+                'invoice_date'       => $validated['invoice_date'],
+                'branch_id'          => $validated['branch_id'],
+                
             ];
         }
+
         return $itemsData;
     }
 
+
+
+
+
     protected function calculateTotals(array $itemsData, array $validated): array
     {
-        $totalAmount = array_sum(array_column($itemsData, 'total'));
-        $discountPercent = $validated['discount_percent'] ?? 0;
-        $discountAmount = ($discountPercent / 100) * $totalAmount;
+        // Inventory cost-based
+        $inventoryAmount = array_sum(array_column($itemsData, 'inventory_subtotal'));
 
+        // Sales price-based
+        $salesAmount = array_sum(array_column($itemsData, 'net_price'));
+
+        // 🔁 Discount: amount > percent > none
+        $discountAmount = 0;
+        $discountPercent = 0;
+
+        if (!empty($validated['discount_amount'])) {
+            $discountAmount = floatval($validated['discount_amount']);
+            $discountPercent = $salesAmount > 0 ? ($discountAmount / $salesAmount) * 100 : 0;
+        } elseif (!empty($validated['discount_percent'])) {
+            $discountPercent = floatval($validated['discount_percent']);
+            $discountAmount = ($discountPercent / 100) * $salesAmount;
+        }
+
+        // Tax calculation
         $taxPercent = $validated['tax_percent'] ?? 0;
-        $taxAmount = ($taxPercent / 100) * ($totalAmount - $discountAmount);
+        $taxAmount = ($taxPercent / 100) * ($salesAmount - $discountAmount);
 
-        $adjust = $validated['adjustment'] ?? 0; 
+        // Adjustment
+        $adjust = $validated['adjustment'] ?? 0;
 
-        $netTotal = $totalAmount - $discountAmount + $taxAmount - $adjust;
+        // Net Total
+        $netTotal = $salesAmount - $discountAmount + $taxAmount - $adjust;
+
+        // Payments
+        $paidAmount = $validated['paid_amount'] ?? 0;
+        $advanceAdjusted = $validated['advance_adjusted'] ?? 0;
+        $dueAmount = $netTotal - $paidAmount - $advanceAdjusted;
 
         return [
-            'total_amount'     => $totalAmount,
-            'discount_percent' => $discountPercent,
-            'discount_amount'  => $discountAmount,
-            'tax_percent'      => $taxPercent,
-            'tax_amount'       => $taxAmount,
-            'adjustment'       => $adjust,
-            'net_total'        => $netTotal,
-            'paid_amount'      => $validated['paid_amount'] ?? 0,
-            'due_amount'       => $netTotal - ($validated['paid_amount'] ?? 0),
+            // Inventory
+            'inventory'         => $inventoryAmount,
+
+            // Sales
+            'total_amount'      => $salesAmount,
+            'discount_percent'  => $discountPercent,
+            'discount_amount'   => $discountAmount,
+            'tax_percent'       => $taxPercent,
+            'tax_amount'        => $taxAmount,
+            'adjustment'        => $adjust,
+            'advance_adjusted'  => $advanceAdjusted,
+            'net_total'         => $netTotal,
+            'paid_amount'       => $paidAmount,
+            'due_amount'        => $dueAmount,
         ];
     }
+
+
+
+
 
     protected function createModel(array $validated, array $itemsData, array $totals)
     {
@@ -100,10 +174,13 @@ abstract class BaseInventoryService
             'created_by' => auth()->id(),
         ], $validated, $totals));
 
-        foreach ($itemsData as &$item) {
-            $item[$this->getItemsForeignKey()] = $model->id;
-        }
-        $this->getItemsModel()::insert($itemsData);
+        // foreach ($itemsData as &$item) {
+        //     // $item[$this->getItemsForeignKey()] = $model->id;
+        //     $item['branch_id'] = $validated['branch_id'];
+        // }
+
+        $model->items()->createMany($itemsData);
+        // $this->getItemsModel()::insert($itemsData);
 
         return $model;
     }
@@ -119,10 +196,12 @@ abstract class BaseInventoryService
 
         $model->items()->delete();
 
-        foreach ($itemsData as &$item) {
-            $item[$this->getItemsForeignKey()] = $model->id;
-        }
-        $this->getItemsModel()::insert($itemsData);
+        // foreach ($itemsData as &$item) {
+        //     // $item[$this->getItemsForeignKey()] = $model->id;
+        //     $item['branch_id'] = $validated['branch_id'];
+        // }
+        $model->items()->createMany($itemsData);
+        // $this->getItemsModel()::insert($itemsData);
 
         return $model;
     }
@@ -151,7 +230,8 @@ protected function logActivity(string $action, $model, $oldData = null): void
         $model->id,
         $oldData ? json_encode($oldData) : null,
         $model->toArray(),
-        $model->branch_id
+        $model->branch_id,
+        $this->movementType
     );
 }
 
@@ -187,8 +267,13 @@ protected function logActivity(string $action, $model, $oldData = null): void
             ->where('reference_id', $id)
             ->delete();
 
-        app(SupplierAccountingService::class)->deleteEntry($id, $this->movementType);
+        $this->afterDelete($model);
         // Delete the main record
         $model->delete();
+    }
+
+    protected function afterDelete($model): void
+    {
+        // To be implemented in child class, e.g., to delete accounting entries
     }
 }

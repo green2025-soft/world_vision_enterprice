@@ -9,10 +9,11 @@ class StockBalanceService {
 
     public function updateFromPurchase(array $items, $branchId)
     {
+        
         foreach ($items as $item) {
             StockBalance::updateOrCreate(
                 ['product_id' => $item['product_id'], 'branch_id'=>$branchId],
-                ['quantity' => DB::raw('quantity + ' . $item['quantity']), 'branch_id'=>$branchId]
+                ['current_stock' => DB::raw('current_stock + ' . $item['quantity']), 'branch_id'=>$branchId]
             );
         }
     }
@@ -22,7 +23,7 @@ class StockBalanceService {
     foreach ($items as $item) {
         StockBalance::where('product_id', $item['product_id'])
             ->where('branch_id', $branchId)
-            ->decrement('quantity', $item['quantity']);
+            ->decrement('current_stock', $item['quantity']);
     }
 }
 

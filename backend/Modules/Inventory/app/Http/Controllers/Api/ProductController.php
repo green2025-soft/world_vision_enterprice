@@ -6,6 +6,10 @@ use Modules\Core\Http\Controllers\Api\BaseApiController;
 use Modules\Inventory\Models\Product;
 use Modules\Inventory\Http\Requests\ProductRequest;
 use Illuminate\Http\Request;
+use Modules\Inventory\Models\PriceList;
+use Modules\Inventory\Models\StockBalance;
+
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends BaseApiController
 {
@@ -66,4 +70,56 @@ class ProductController extends BaseApiController
       }
       return $this->successResponse($newSkuNo);
     }
+
+  public function getInventoryProducts(Request $request, $id=null)
+    {
+        $branchId = $request->input('branch_id');
+
+        $productTable = (new Product())->getTable(); // ✅ Table name dynamically
+
+        $query = $this->indexQuery();
+        if ($id){
+            $query->where('id',$id); 
+        }else{
+          $query->where('status',1);  
+        }
+        $query->select('id','name', 'sku', 'category_id', 'unit_id', 'brand_id', 're_order', 'image', 'made_by', 'specification')
+        ->where('branch_id', $branchId)
+        
+        ->with(['category:id,name', 'unit:id,name,short_code', 'brand:id,name'])
+        ->addSelect([
+            // Current Stock from StockBalance
+            'current_stock' => StockBalance::select('current_stock')
+                ->whereColumn('product_id', "$productTable.id")
+                ->where('branch_id', $branchId)
+                ->limit(1),
+
+            // Latest purchase price
+            'purchase_price' => PriceList::select('price')
+                ->whereColumn('product_id', "$productTable.id")
+                ->where('price_type', 'purchase')
+                ->where('branch_id', $branchId)
+                ->orderByDesc('start_date')
+                ->limit(1),
+
+
+
+            // Latest sale price
+            'sale_price' => PriceList::select('price')
+                ->whereColumn('product_id', "$productTable.id")
+                ->where('price_type', 'sale')
+                ->where('branch_id', $branchId)
+                ->orderByDesc('start_date')
+                ->limit(1),
+
+
+        ]);
+
+        // Smart paginate
+        $products = $query->smartPaginate();
+
+        // Done! No transformation or extra queries needed
+        return $this->listResponse($products);
+    }
+
 }

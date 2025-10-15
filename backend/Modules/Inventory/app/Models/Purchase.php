@@ -18,6 +18,10 @@ class Purchase extends InvBaseModel
         return $this->belongsTo(User::class, 'created_by');
     }
 
+     public function supplier(){
+        return $this->belongsTo(Supplier::class, 'supplier_id');
+    }
+
     public function items()
     {
         return $this->hasMany(PurchaseItem::class, 'purchase_id');

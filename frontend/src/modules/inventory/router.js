@@ -1,7 +1,8 @@
 import Index from "./pages/Index.vue";
 import Page404 from "@/components/Page404.vue"; // You can replace if module specific 404
 
- const lazy = (view) => () => import(`./pages/${view}.vue`);
+ const lazy = (view) => () => import(`@/modules/inventory/pages/${view}.vue`);
+
 
 const defaultAuth = true;
 const defaultMeta = { requiresAuth: defaultAuth };
@@ -26,6 +27,21 @@ const routes = {
    makeRoute("customers", lazy("Customer"), "Customer"),
    makeRoute("products", lazy("Product"), "Product"),
    makeRoute("product-sets", lazy("ProductSet"), "Product Set"),
+  {
+    path: "purchase",
+    component: () => import('@/modules/inventory/pages/purchase/Index.vue'),
+    meta: { title: "Purchase", ...defaultMeta, requiresBranch: true },
+  },
+  {
+    path: "purchase/create",
+    component: () => import('@/modules/inventory/pages/purchase/Create.vue'),
+    meta: { title: "Create Purchase", ...defaultMeta, requiresBranch: true },
+  },
+
+
+
+  
+   
     {
       path: ":catchAll(.*)",
       component: Page404

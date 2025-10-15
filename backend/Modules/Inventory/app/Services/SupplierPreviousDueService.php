@@ -8,11 +8,11 @@ use Modules\Inventory\Services\SupplierAccountingService;
 
 class SupplierPreviousDueService
 {
-    protected SupplierAccountingService $accountingService;
+   protected SupplierAccountingService $accountingService;
 
-    public function __construct()
+    public function __construct(SupplierAccountingService $accountingService)
     {
-        $this->accountingService = new SupplierAccountingService('Supplier Previous Due', 'Supplier Previous Due');;
+        $this->accountingService = $accountingService;
     }
 
     /**

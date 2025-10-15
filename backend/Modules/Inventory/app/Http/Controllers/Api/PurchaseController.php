@@ -23,7 +23,9 @@ class PurchaseController extends BaseApiController
     public function index(Request $request)
     {
         $query = $this->indexQuery()
-            ->where('branch_id', $request['branch_id']);
+            ->where('branch_id', $request['branch_id'])
+            ->with('supplier:id,name,phone,address')
+            ;
 
         return $this->listResponse($query->smartPaginate());
     }
@@ -32,32 +34,35 @@ class PurchaseController extends BaseApiController
     {
         $request->validated();
         if (empty($validated['invoice_no'])) {
-            $validated['invoice_no'] = $this->generateInvoiceNo();
+            $request['invoice_no'] = $this->generateInvoiceNo();
         }
+        
+        
         $createData = $this->purchaseService->storeOrUpdate($request->all());
         return $this->createdResponse($createData);
         
     }
 
-    protected function generateInvoiceNo(): string
-    {
-        // Example: INV-2025-10-0001 (date + increment)
-        $prefix = 'INV-' . date('Y-m-d') . '-';
+        protected function generateInvoiceNo(): string
+        {
+            $prefix = 'INV-' . date('Y-m') . '-';
 
-        // Get last invoice_no for today, extract last number, increment
-        $lastInvoice = $this->model::where('invoice_no', 'like', $prefix . '%')
-            ->orderBy('invoice_no', 'desc')
-            ->first();
+            $lastInvoiceNo = $this->model::where('invoice_no', 'like', $prefix . '%')
+                ->latest('invoice_no')
+                ->value('invoice_no');
 
-        if (!$lastInvoice) {
-            return $prefix . '0001';
+            $nextNumber = 1;
+
+            if ($lastInvoiceNo) {
+                $lastNumber = (int) substr($lastInvoiceNo, strlen($prefix));
+                $nextNumber = $lastNumber + 1;
+            }
+
+            $paddedNumber = str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+
+            return $prefix . $paddedNumber;
         }
 
-        $lastNumber = (int)substr($lastInvoice->invoice_no, strlen($prefix));
-        $newNumber = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
-
-        return $prefix . $newNumber;
-    }
 
     public function show($id)
     {

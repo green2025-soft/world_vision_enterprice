@@ -18,6 +18,8 @@ return new class extends Migration
             $table->date('invoice_date')->index()->nullable();
             $table->integer('quantity');
             $table->decimal('unit_price', 12, 2);
+            $table->decimal('cost_price', 10, 2)->nullable();
+            $table->decimal('inventory_subtotal', 12, 2)->nullable();
             $table->decimal('sale_price', 12, 2)->nullable();
             $table->decimal('total_price', 12, 2);
             $table->decimal('discount_percent', 5, 2)->default(0);

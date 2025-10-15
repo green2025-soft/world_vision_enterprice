@@ -21,7 +21,7 @@ class AccountingManagerService
     public function createEntryFromModule(string $moduleName, string $sourceType, int $sourceId, array $data): void
     {
         $map = AccountModule::where('module_name', $moduleName)->firstOrFail();
-
+// dd($data);
         if (!$map->status) return;
 
         $lines = [];

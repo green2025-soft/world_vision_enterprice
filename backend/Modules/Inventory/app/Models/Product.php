@@ -9,7 +9,6 @@ protected $table = 'inv_products';
 
     protected $fillable = [
         'name', 'sku', 'category_id', 'unit_id', 'brand_id',
-        'purchase_price', 'selling_price', 'stock_quantity',
         're_order', 'made_by', 'image', 'specification',
         'status', 'branch_id'
     ];
@@ -35,6 +34,26 @@ protected $table = 'inv_products';
     public function brand()
     {
         return $this->belongsTo(Brand::class, 'brand_id');
+    }
+
+    public function latestPurchasePrice()
+    {
+        return $this->hasOne(PriceList::class)
+            ->where('price_type', 'purchase')
+            ->latest('start_date'); // ORDER BY start_date DESC LIMIT 1
+    }
+
+    public function latestSalePrice()
+    {
+        return $this->hasOne(PriceList::class)
+            ->where('price_type', 'sale')
+            ->latest('start_date');
+    }
+
+    public function stockBalanceForBranch($branchId)
+    {
+        return $this->hasOne(StockBalance::class)
+            ->where('branch_id', $branchId);
     }
 
 }

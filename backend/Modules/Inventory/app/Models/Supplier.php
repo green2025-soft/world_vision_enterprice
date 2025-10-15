@@ -12,4 +12,17 @@ class Supplier extends InvBaseModel
     ];
 
     protected array $searchable = ['name', 'phone', 'email'];
+
+    // Supplier.php
+
+    public function branchBalance($branchId)
+    {
+        return $this->hasOne(SupplierLedger::class)
+            ->selectRaw('supplier_id, SUM(debit - credit) as balance')
+            ->where('branch_id', $branchId)
+            ->groupBy('supplier_id');
+    }
+
+  
+
 }

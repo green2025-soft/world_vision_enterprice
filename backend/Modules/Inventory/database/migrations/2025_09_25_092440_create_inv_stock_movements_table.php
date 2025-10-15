@@ -31,7 +31,6 @@ return new class extends Migration
             $table->decimal('unit_price', 10, 2);
             $table->decimal('sales_price', 10, 2)->nullable();
 
-            $table->foreignId('purchase_item_id')->constrained('inv_purchase_items')->cascadeOnDelete();
             $table->unsignedBigInteger('reference_id')->nullable();
 
             $table->foreignId('branch_id')->constrained('branches')->onDelete('cascade');
