@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch  } from 'vue'
+import { ref, watch, computed  } from 'vue'
 import { useResourceApiClient } from '@/composables/resourceApiClient'
 import { useForm, formatDate } from '@/utilities/methods'
 
@@ -91,15 +91,24 @@ async function openViewModal(id) {
 
 
 const selectedProduct = ref(null)
+
 watch(selectedProduct, (newVal) => {
-  if (newVal) {
-    form.value.items[0].product_id = newVal.id
-    form.value.items[0].quantity = 1
-    form.value.items[0].cost_price = parseFloat(newVal.purchase_price)
-    form.value.items[0].sale_price = parseFloat(newVal.sale_price)
-    form.value.items[0].stock = newVal.current_stock
-  }
+  
+  
+if (!newVal) return
+
+  form.value.items[0].product_id = newVal.id
+  form.value.items[0].purchase_price = parseFloat(newVal.purchase_price) || 0
+  form.value.items[0].sale_price = parseFloat(newVal.sale_price) || 0
+  form.value.items[0].stock = newVal.current_stock || 0
+  
 })
+
+
+
+
+
+
 
 
 
@@ -126,7 +135,7 @@ watch(selectedProduct, (newVal) => {
           <div class="input-group">
             <!-- inline style forces this instance to stretch inside input-group -->
             <ResourceSelect
-              v-model="form.supplier_id"
+              v-model="form.items[0].product"
               bUrl="inventory/suppliers/balances"
               placeholder="Select Supplier"
               :isBranch="true"
@@ -152,7 +161,7 @@ watch(selectedProduct, (newVal) => {
         </div>
       </div>
 
-      <!-- Product Entry Section -->
+
       <!-- Product Entry Section -->
 <div class="card mb-4">
   <div class="card-body">
@@ -162,13 +171,17 @@ watch(selectedProduct, (newVal) => {
         <label class="form-label fw-semibold">Product</label>
         <div class="input-group">
           <ResourceSelect
-            v-model="selectedProduct"
+             v-model="selectedProduct"
             bUrl="inventory/products-overview"
             placeholder="Select Product"
-            :isBranch="true"
+          :isBranch="true"
             :labelField="(item) => `${item.name} (${item.sku})`"
+            :emitObject="true"
+            :isEdit="true"
             style="flex:1; min-width:0; width:100%; display:block;"
+            
           />
+
           <BButton variant="outline-success" size="sm" class="btn">
             <i class="fas fa-plus"></i>
           </BButton>
@@ -185,10 +198,19 @@ watch(selectedProduct, (newVal) => {
           min="1"
         />
       </div>
+      <div class="col-lg-1 col-md-2 col-6">
+        <label class="form-label fw-semibold">Purchase Price</label>
+        <BFormInput
+          type="number"
+          v-model="form.items[0].purchase_price"
+          placeholder="0.00"
+          readonly
+        />
+      </div>
 
       <!-- Sale Price -->
       <div class="col-lg-1 col-md-2 col-6">
-        <label class="form-label fw-semibold">Sale</label>
+        <label class="form-label fw-semibold">Sale  Price</label>
         <BFormInput
           type="number"
           v-model="form.items[0].sale_price"

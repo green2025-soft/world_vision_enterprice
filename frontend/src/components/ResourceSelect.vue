@@ -41,6 +41,7 @@ const props = defineProps({
   isBranch: { type: Boolean, default: false },
   multiple: { type: Boolean, default: false },
   isEdit: { type: Boolean, default: false },
+  emitObject: { type: Boolean, default: false }
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -58,7 +59,7 @@ const { gePaginationList, getOne } = useResourceApiClient(props.bUrl, 'Resource'
 
 const hasNextPage = computed(() => page.value < lastPage.value)
 
-// ✅ Debounce utility
+// Debounce utility
 function debounce(fn, delay = 300) {
   let timer
   return (...args) => {
@@ -67,7 +68,7 @@ function debounce(fn, delay = 300) {
   }
 }
 
-// ✅ Fetch paginated list with deduplication
+// Fetch paginated data
 const fetchData = async () => {
   if (loading.value) return
   loading.value = true
@@ -103,7 +104,7 @@ const fetchData = async () => {
   }
 }
 
-// ✅ Infinite scroll handler
+// Infinite scroll
 const infiniteScroll = async ([entry]) => {
   if (entry.isIntersecting && hasNextPage.value && !loading.value) {
     observer.unobserve(entry.target)
@@ -117,40 +118,27 @@ const infiniteScroll = async ([entry]) => {
 const onOpen = async () => {
   await nextTick()
   if (!observer) {
-    observer = new IntersectionObserver(infiniteScroll, {
-      rootMargin: '50px',
-      threshold: 0.1,
-    })
+    observer = new IntersectionObserver(infiniteScroll, { rootMargin: '50px', threshold: 0.1 })
   }
-  if (hasNextPage.value && loadMoreRef.value) {
-    observer.observe(loadMoreRef.value)
-  }
+  if (hasNextPage.value && loadMoreRef.value) observer.observe(loadMoreRef.value)
 }
 
-const onClose = () => {
-  if (observer) observer.disconnect()
-}
+const onClose = () => observer?.disconnect()
 
 const onSearch = async (val) => {
   searchQuery.value = val
   page.value = 1
-  if (observer) observer.disconnect()
+  observer?.disconnect()
   await fetchData()
   await nextTick()
-  if (observer && hasNextPage.value && loadMoreRef.value) {
-    observer.observe(loadMoreRef.value)
-  }
+  if (observer && hasNextPage.value && loadMoreRef.value) observer.observe(loadMoreRef.value)
 }
 
-// ✅ Load selected item by ID (with cache)
+// Cache loaded items
 const itemCache = new Map()
-
 const loadSelectedItem = async (id) => {
   if (!id) return null
-
-  if (itemCache.has(id)) {
-    return itemCache.get(id)
-  }
+  if (itemCache.has(id)) return itemCache.get(id)
 
   const cacheKey = `${props.bUrl}-item-${id}`
   const cached = sessionStorage.getItem(cacheKey)
@@ -174,11 +162,10 @@ const loadSelectedItem = async (id) => {
   return null
 }
 
-// ✅ Process modelValue on edit
+// Process modelValue (preselect)
 const processModelValue = async (val, isEdit) => {
   if (!isEdit || !val) return
 
-  // Skip if already selected
   const currentIds = new Set(
     (Array.isArray(selected.value) ? selected.value : [selected.value])
       .map(i => i?.[props.valueField])
@@ -208,11 +195,11 @@ const processModelValue = async (val, isEdit) => {
         options.value.unshift(item)
       }
     }
+
   } else {
     const match = options.value.find(opt => opt[props.valueField] === val)
-    if (match) {
-      selected.value = match
-    } else {
+    if (match) selected.value = match
+    else {
       const item = await loadSelectedItem(val)
       if (item) {
         selected.value = item
@@ -224,26 +211,24 @@ const processModelValue = async (val, isEdit) => {
   }
 }
 
-// ✅ Debounced version
 const debouncedProcessModelValue = debounce(processModelValue, 300)
 
 watch(
   () => [props.modelValue, props.isEdit],
-  ([val, isEdit]) => {
-    debouncedProcessModelValue(val, isEdit)
-  },
+  ([val, isEdit]) => debouncedProcessModelValue(val, isEdit),
   { immediate: true }
 )
 
-// ✅ Sync selected → emit modelValue
 watch(selected, (val) => {
-  const emitVal = props.multiple
-    ? val.map(v => v?.[props.valueField])
-    : val?.[props.valueField]
+  let emitVal
+  if (props.multiple) {
+    emitVal = props.emitObject ? val : val.map(v => v?.[props.valueField])
+  } else {
+    emitVal = props.emitObject ? val : val?.[props.valueField]
+  }
   emit('update:modelValue', emitVal)
 })
 
-// ✅ Sync external modelValue → update selected (when not isEdit)
 watch(() => props.modelValue, (val) => {
   if (!props.isEdit) {
     if (props.multiple && Array.isArray(val)) {
@@ -256,7 +241,6 @@ watch(() => props.modelValue, (val) => {
 
 onMounted(async () => {
   await fetchData()
-
   if (props.isEdit && props.modelValue) {
     const ids = props.multiple ? props.modelValue : [props.modelValue]
     await Promise.all(ids.map(id => loadSelectedItem(id)))
@@ -267,9 +251,7 @@ onBeforeUnmount(() => observer?.disconnect())
 
 const getOptionLabel = (option) => {
   if (!option) return ''
-  if (typeof props.labelField === 'function') {
-    return props.labelField(option)
-  }
+  if (typeof props.labelField === 'function') return props.labelField(option)
   return option[props.labelField] || ''
 }
 </script>
