@@ -8,7 +8,7 @@
     placeholder="Select..."
     @search="onSearch"
     @open="onOpen"
-    @close="onClose"
+
     :multiple="multiple"
   >
     <template #list-footer>
@@ -28,10 +28,13 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { ref, reactive, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css'
 import { useResourceApiClient } from '@/composables/resourceApiClient'
+
+/* 🔹 Reactive global cache (shared by all ResourceSelect instances) */
+const resourceCache = reactive({})
 
 const props = defineProps({
   modelValue: [String, Number, Object, Array],
@@ -41,7 +44,9 @@ const props = defineProps({
   isBranch: { type: Boolean, default: false },
   multiple: { type: Boolean, default: false },
   isEdit: { type: Boolean, default: false },
-  emitObject: { type: Boolean, default: false }
+  emitObject: { type: Boolean, default: false },
+  positional: { type: Boolean, default: false },
+  optionsData: { type: Array, default: () => [] }
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -56,10 +61,8 @@ const loadMoreRef = ref(null)
 let observer = null
 
 const { gePaginationList, getOne } = useResourceApiClient(props.bUrl, 'Resource', props.isBranch)
-
 const hasNextPage = computed(() => page.value < lastPage.value)
 
-// Debounce utility
 function debounce(fn, delay = 300) {
   let timer
   return (...args) => {
@@ -68,15 +71,10 @@ function debounce(fn, delay = 300) {
   }
 }
 
-// Fetch paginated data
+/* 🔹 API call function */
 const fetchData = async () => {
   if (loading.value) return
   loading.value = true
-  await nextTick()
-
-  const dropdown = document.querySelector('.vs__dropdown-menu')
-  const prevScrollTop = dropdown?.scrollTop ?? 0
-  const prevScrollHeight = dropdown?.scrollHeight ?? 0
 
   try {
     const res = await gePaginationList({ page: page.value, search: searchQuery.value })
@@ -85,26 +83,50 @@ const fetchData = async () => {
 
     if (page.value === 1) {
       options.value = data
+
+      // ✅ Save to global cache (reactive)
+      resourceCache[props.bUrl] = {
+        data,
+        lastPage: lastPage.value,
+        timestamp: Date.now()
+      }
     } else {
       const existingIds = new Set(options.value.map(opt => opt[props.valueField]))
       const newItems = data.filter(item => !existingIds.has(item[props.valueField]))
-      options.value = [...options.value, ...newItems]
+      options.value.push(...newItems)
     }
-
-    await nextTick()
-    const newScrollHeight = dropdown?.scrollHeight ?? 0
-    const heightDiff = newScrollHeight - prevScrollHeight
-    if (dropdown && page.value > 1) {
-      dropdown.scrollTop = prevScrollTop + heightDiff
-    }
-  } catch (error) {
-    console.error('Failed to fetch data:', error)
+  } catch (e) {
+    console.error('Fetch failed', e)
   } finally {
     loading.value = false
   }
 }
 
-// Infinite scroll
+/* 🔹 onOpen — load cached data or call API */
+const onOpen = async () => {
+  await nextTick()
+
+  // ✅ If optionsData is given, do nothing.
+  if (props.optionsData && props.optionsData.length > 0) return
+
+  if (props.positional && options.value.length === 0) {
+    const cached = resourceCache[props.bUrl]
+    if (cached && cached.data?.length) {
+      options.value = cached.data
+      lastPage.value = cached.lastPage
+    } else {
+      await fetchData()
+    }
+  }
+
+  if (!observer) {
+    observer = new IntersectionObserver(infiniteScroll, { rootMargin: '50px', threshold: 0.1 })
+  }
+  if (hasNextPage.value && loadMoreRef.value) observer.observe(loadMoreRef.value)
+}
+
+
+/* 🔹 Infinite scroll */
 const infiniteScroll = async ([entry]) => {
   if (entry.isIntersecting && hasNextPage.value && !loading.value) {
     observer.unobserve(entry.target)
@@ -115,16 +137,7 @@ const infiniteScroll = async ([entry]) => {
   }
 }
 
-const onOpen = async () => {
-  await nextTick()
-  if (!observer) {
-    observer = new IntersectionObserver(infiniteScroll, { rootMargin: '50px', threshold: 0.1 })
-  }
-  if (hasNextPage.value && loadMoreRef.value) observer.observe(loadMoreRef.value)
-}
-
-const onClose = () => observer?.disconnect()
-
+/* 🔹 onSearch — always call API */
 const onSearch = async (val) => {
   searchQuery.value = val
   page.value = 1
@@ -134,12 +147,10 @@ const onSearch = async (val) => {
   if (observer && hasNextPage.value && loadMoreRef.value) observer.observe(loadMoreRef.value)
 }
 
-// Cache loaded items
 const itemCache = new Map()
 const loadSelectedItem = async (id) => {
   if (!id) return null
   if (itemCache.has(id)) return itemCache.get(id)
-
   const cacheKey = `${props.bUrl}-item-${id}`
   const cached = sessionStorage.getItem(cacheKey)
   if (cached) {
@@ -147,7 +158,6 @@ const loadSelectedItem = async (id) => {
     itemCache.set(id, parsed)
     return parsed
   }
-
   try {
     const item = await getOne(id)
     if (item) {
@@ -155,70 +165,34 @@ const loadSelectedItem = async (id) => {
       sessionStorage.setItem(cacheKey, JSON.stringify(item))
       return item
     }
-  } catch (e) {
-    console.error('Failed to load selected item:', e)
-  }
-
+  } catch {}
   return null
 }
 
-// Process modelValue (preselect)
+/* 🔹 Edit / Preselected value */
 const processModelValue = async (val, isEdit) => {
   if (!isEdit || !val) return
+  const id = typeof val === 'object' ? val[props.valueField] : val
+  if (selected.value && selected.value[props.valueField] === id) return
 
-  const currentIds = new Set(
-    (Array.isArray(selected.value) ? selected.value : [selected.value])
-      .map(i => i?.[props.valueField])
-  )
-  const incomingIds = props.multiple && Array.isArray(val) ? val : [val]
-  const isSame = incomingIds.every(id => currentIds.has(id))
-  if (isSame) return
-
-  if (props.multiple && Array.isArray(val)) {
-    const matched = options.value.filter(opt => val.includes(opt[props.valueField]))
-    const matchedIds = matched.map(opt => opt[props.valueField])
-    const missingIds = val.filter(id => !matchedIds.includes(id))
-
-    const fetched = await Promise.all(missingIds.map(id => loadSelectedItem(id)))
-    const allSelected = [...matched, ...fetched.filter(Boolean)]
-
-    const seen = new Set()
-    selected.value = allSelected.filter(item => {
-      const id = item?.[props.valueField]
-      if (!id || seen.has(id)) return false
-      seen.add(id)
-      return true
-    })
-
-    for (const item of fetched) {
-      if (item && !options.value.find(opt => opt[props.valueField] === item[props.valueField])) {
-        options.value.unshift(item)
-      }
-    }
-
+  const match = options.value.find(opt => opt[props.valueField] === id)
+  if (match) {
+    selected.value = match
   } else {
-    const match = options.value.find(opt => opt[props.valueField] === val)
-    if (match) selected.value = match
-    else {
-      const item = await loadSelectedItem(val)
-      if (item) {
-        selected.value = item
-        if (!options.value.find(opt => opt[props.valueField] === item[props.valueField])) {
-          options.value.unshift(item)
-        }
+    const item = await loadSelectedItem(id)
+    if (item) {
+      selected.value = item
+      if (!options.value.find(opt => opt[props.valueField] === id)) {
+        options.value.unshift(item)
       }
     }
   }
 }
 
 const debouncedProcessModelValue = debounce(processModelValue, 300)
+watch(() => [props.modelValue, props.isEdit], ([v, e]) => debouncedProcessModelValue(v, e), { immediate: true })
 
-watch(
-  () => [props.modelValue, props.isEdit],
-  ([val, isEdit]) => debouncedProcessModelValue(val, isEdit),
-  { immediate: true }
-)
-
+let lastEmitted = null
 watch(selected, (val) => {
   let emitVal
   if (props.multiple) {
@@ -226,26 +200,33 @@ watch(selected, (val) => {
   } else {
     emitVal = props.emitObject ? val : val?.[props.valueField]
   }
-  emit('update:modelValue', emitVal)
+  if (JSON.stringify(emitVal) !== JSON.stringify(lastEmitted)) {
+    lastEmitted = emitVal
+    emit('update:modelValue', emitVal)
+  }
 })
 
-watch(() => props.modelValue, (val) => {
-  if (!props.isEdit) {
-    if (props.multiple && Array.isArray(val)) {
-      selected.value = options.value.filter(opt => val.includes(opt[props.valueField]))
-    } else {
-      selected.value = options.value.find(opt => opt[props.valueField] === val) ?? null
+/* 🔹 Mounted: use cached if available */
+onMounted(async () => {
+  // ✅ If optionsData is provided externally, the API will not be called.
+  if (props.optionsData && props.optionsData.length > 0) {
+    options.value = props.optionsData
+    lastPage.value = 1
+  } else {
+    const cached = resourceCache[props.bUrl]
+    if (cached && cached.data?.length) {
+      options.value = cached.data
+      lastPage.value = cached.lastPage
+    } else if (!props.positional) {
+      await fetchData()
     }
   }
-})
 
-onMounted(async () => {
-  await fetchData()
   if (props.isEdit && props.modelValue) {
-    const ids = props.multiple ? props.modelValue : [props.modelValue]
-    await Promise.all(ids.map(id => loadSelectedItem(id)))
+    await processModelValue(props.modelValue, true)
   }
 })
+
 
 onBeforeUnmount(() => observer?.disconnect())
 
@@ -254,6 +235,25 @@ const getOptionLabel = (option) => {
   if (typeof props.labelField === 'function') return props.labelField(option)
   return option[props.labelField] || ''
 }
+
+watch(() => props.modelValue, (newVal) => {
+  if (!newVal) {
+    selected.value = props.multiple ? [] : null
+  }
+})
+
+const addOption = (item) => {
+  const exists = options.value.find(opt => opt[props.valueField] === item[props.valueField])
+  if (!exists) {
+    options.value.unshift(item)
+  }
+  selected.value = item
+}
+
+defineExpose({
+  addOption
+})
+
 </script>
 
 <style scoped>

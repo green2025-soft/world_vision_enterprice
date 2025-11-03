@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useResourceApiClient } from '@/composables/resourceApiClient'
 import { useForm } from '@/utilities/methods'
 
@@ -12,6 +12,7 @@ const {
   create,
   askDelete,
   confirmDelete,
+  gePaginationOptions,
   confirmDeleteModal,
   formErrors,
   isSubmitting,
@@ -76,6 +77,12 @@ async function saveItem() {
     errors.value = formErrors.value
   }
 }
+
+let productData = ref([]);
+onMounted(async () => {
+  productData.value = await gePaginationOptions('inventory/products');
+})
+
 </script>
 
 <template>
@@ -170,6 +177,8 @@ async function saveItem() {
               placeholder="Select product"
               :isBranch="true"
               :isEdit="isEdit"
+              :positional="true"
+              :optionsData="productData"
             />
           </BaseFormGroup>
         </div>

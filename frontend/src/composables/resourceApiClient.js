@@ -51,6 +51,26 @@ export function useResourceApiClient(baseUrl, title = 'Resource', isBranch = fal
       isLoading.value = false
     }
   }
+
+
+  const gePaginationOptions = async (customUrl, params = {}, isCBranchId=true) => {
+    isLoading.value = true
+    customUrl = isCBranchId?customUrl+`?branch_id=${branchId}`:customUrl
+    try {
+      const res = await api.get(customUrl, { 
+        requiresAuth: true, 
+        params, 
+        tosterMessage: false 
+      })
+      return res
+    } catch (err) {
+      throw err
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+
     
 
   const getOne = async (id) => {
@@ -227,6 +247,7 @@ const customPost = async (customUrl, data = {}, message=false, isCBranchId=true)
     customGet,
     customPost,
     updateWithFile,
+    gePaginationOptions,
     formErrors,
     isLoading,
     isSubmitting,

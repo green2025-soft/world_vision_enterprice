@@ -487,6 +487,17 @@ export function numberToWords(amount) {
   return words + ' Only';
 }
 
+export function formatCurrency(value, decimals = 2) {
+  let number = Number(value)
+  if (isNaN(number)) number = 0
+  return number.toFixed(decimals)
+}
+
+export function clampPercent(value) {
+  if (typeof value !== 'number') value = parseFloat(value) || 0
+  return Math.min(100, Math.max(0, value))
+}
+
 
 
 
