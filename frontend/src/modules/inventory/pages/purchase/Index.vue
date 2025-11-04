@@ -1,7 +1,8 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useResourceApiClient } from '@/composables/resourceApiClient'
 import { useForm, formatDate } from '@/utilities/methods'
+import { toast } from 'vue3-toastify'
 
 
 //  Setup
@@ -19,6 +20,16 @@ const {
 
 const dataTableRef = ref(null)
 
+onMounted(() => {
+    const toastMessage = sessionStorage.getItem('purchaseToastMessage')
+    if (toastMessage) {
+       const { message, type } = JSON.parse(toastMessage)
+       toast.success(message)
+    }
+  sessionStorage.removeItem('purchaseToastMessage')
+
+})
+
 
 </script>
 
@@ -30,7 +41,7 @@ const dataTableRef = ref(null)
         <div class="card-header">
              <h2 class="card-title"><i class="fas fa-tasks"></i> {{ title }}</h2>
             <div class="card-tools">
-              <BButton variant="primary" size="sm" ><i class="fas fa-plus"></i> Add New</BButton>
+              <RouterLink class="btn btn-primary btn-sm" :to="`/${bUrl}/create`"><i class="fas fa-plus"></i> Add New</RouterLink>
             </div>
         </div>
         <div class="card-body">
@@ -69,9 +80,12 @@ const dataTableRef = ref(null)
                               </BButton>
 
                             <ul class="dropdown-menu" >
-                               <li><a class="dropdown-item"  ><i class="fa fa-edit"></i> Edit</a></li>
+                               <li>
+                                  <RouterLink class="dropdown-item" :to="`/${bUrl}/${rowItem.id}/edit`"><i class="fas fa-edit"></i> Edit</RouterLink>
+                                
+                              </li>
                                     <li> <div class="dropdown-divider"></div></li>
-                               <li><a class="dropdown-item" href=""  @click="askDelete(rowItem.id)"><i class="fa fa-trash"></i> Delete</a></li>
+                               <li><a class="dropdown-item" href=""  @click.prevent="askDelete(rowItem.id)"><i class="fa fa-trash"></i> Delete</a></li>
                             </ul>
                         
                         </div>

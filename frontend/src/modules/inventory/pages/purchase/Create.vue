@@ -1,15 +1,17 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useResourceApiClient } from '@/composables/resourceApiClient'
 import { usePurchaseForm } from "@/modules/inventory/composables/usePurchaseForm"
 import AddProductModal from '@/modules/inventory/pages/purchase/AddProductModal.vue'
 import AddSupplierModal from '@/modules/inventory/pages/purchase/AddSupplierModal.vue'
-import { formatCurrency, clampPercent } from '@/utilities/methods'
+import { formatCurrency, clampPercent, dbDataFormat } from '@/utilities/methods'
+const router = useRouter()
 const showAddProductModal = ref(false)
 const showAddSupplierModal = ref(false)
 
 const title = 'Create Purchase'
-const bUrl = 'inventory/purchase'
+const bUrl = 'inventory/purchases'
 const { 
   create,
   formErrors,
@@ -33,7 +35,15 @@ const {
   calcSubTotal,
   calcTotal,
   totalTotal,
-  netPayable
+  netPayable,
+
+  // Footer totals
+  totalQuantity,
+  totalUnitPrice,
+  totalSalePrice,
+  totalDiscAmount,
+  totalTaxAmount,
+  totalSubTotal
 
 } = usePurchaseForm()
 
@@ -62,6 +72,36 @@ function handleSupplierCreated(supplier) {
   showAddSupplierModal.value = false
 }
 
+const errors = ref([])
+// Save (create/update)
+async function saveItem() {
+  form.value.invoice_date = dbDataFormat(form.value.invoice_date)
+  let message = `${title} created successfully`;
+  try {
+    if (form.value.id) {
+       message = `${title} updated successfully`;
+      await update(form.value.id, form.value, false, false)
+    } else {
+      await create(form.value, '', false, false)
+    }
+
+  // Redirect to purchase list after success
+  sessionStorage.setItem('purchaseToastMessage', JSON.stringify({ 
+      message: message, 
+      type: 'success' 
+    }))
+    
+  router.push(`/${bUrl}`)
+  } catch (error) {
+    errors.value = formErrors.value
+  }
+}
+
+
+
+onMounted(async () => {
+
+})
 
 </script>
 
@@ -81,14 +121,13 @@ function handleSupplierCreated(supplier) {
       <h5 class="mb-0 fw-semibold">
         <i class="fas fa-tasks me-2"></i>{{ title }}
       </h5>
-
-      <BButton variant="light" size="sm">
-        <i class="fas fa-list me-1"></i> Purchase List
-      </BButton>
+      <RouterLink class="btn btn-light btn-sm" :to="`/${bUrl}`"><i class="fas fa-list me-1"></i>Purchase List</RouterLink>
+   
     </div>
 
     <div class="card-body bg-light">
-      {{ form }}
+       <ValidationErrors :errors="errors" />
+
     
       <!-- Header Row: Supplier (wide) | Date (small) | Note (wide) -->
       <div class="row g-3 mb-4">
@@ -384,9 +423,14 @@ function handleSupplierCreated(supplier) {
     </div>
 
     <div class="card-footer bg-white text-end">
-      <BButton variant="primary">
-        <i class="fas fa-save me-1"></i> Save Purchase
-      </BButton>
+        <LoadingButton
+        :loading="isSubmitting"
+        variant="primary"
+        @click="saveItem"
+      >
+         <i class="fas fa-save me-1"></i> Save Purchase
+      </LoadingButton>
+     
     </div>
   </div>
 </template>

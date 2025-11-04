@@ -9,7 +9,7 @@ use Modules\Inventory\Models\PurchaseItem;
 use Modules\Inventory\Services\StockBalanceService;
 use Modules\Inventory\Services\PriceListService;
 
-
+   
 class PurchaseService extends BaseInventoryService{
 
      public function __construct()
@@ -31,21 +31,25 @@ class PurchaseService extends BaseInventoryService{
     {
         app(StockBalanceService::class)->updateFromPurchase($itemsData, $model->branch_id);
         app(PriceListService::class)->updatePrices($itemsData, $model->branch_id);
-        // dd($totals);
+        
         if ($isUpdate){
             app(SupplierAccountingService::class)->deleteEntry($model->id, 'purchase');
         }
 
-        // Step 3: Record Supplier Accounting Entry
+        $paidAmount       = $totals['paid_amount'] ?? 0;
+        $advanceAdjusted  = $totals['advance_adjusted'] ?? 0;
+        $dueAmount        = $totals['due_amount'] ?? 0;
+
+    
         app(SupplierAccountingService::class)->recordTransaction([
             'supplier_id'       => $validated['supplier_id'],
-            'amount'            => $totals['net_total'],
-            'paid_amount'       => $totals['paid_amount'] ?? 0,
-            'supplier_advance'  => $totals['advance_adjusted'] ?? 0,
+            'amount'            => 0,
+            'paid_amount'       => $paidAmount ?? 0,
+            'supplier_advance'  => $advanceAdjusted ?? 0,
             'tax_amount'        => $totals['tax_amount'] ?? 0,
-            'discount_amount'   => $totals['discount_amount'] ?? 0,
-            'due_amount'        => $totals['due_amount'] ?? 0,
-            'inventory'         => $totals['inventory'] ?? 0,
+            'discount_amount'   => $totals['total_discount'] ?? 0,
+            'due_amount'        => $dueAmount ?? 0,
+            'inventory'         => $totals['total_unit_price'] ?? 0,
 
             'date'              => $validated['date'] ?? now(),
             'reference_id'      => $model->id,

@@ -6,8 +6,13 @@
     :disabled="disabled || loading"
     @click.prevent="handleClick"
   >
-     <span v-if="loading" v-html="loadingText"></span>
-    <span v-else>{{ text }}</span>
+    <!-- Loading state -->
+    <span v-if="loading" v-html="loadingText"></span>
+
+    <!-- Default slot for custom content -->
+    <span v-else>
+      <slot>{{ text }}</slot>
+    </span>
   </BButton>
 </template>
 

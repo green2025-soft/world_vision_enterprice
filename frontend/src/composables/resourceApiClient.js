@@ -86,7 +86,7 @@ export function useResourceApiClient(baseUrl, title = 'Resource', isBranch = fal
   }
 
 
- const create = async (data, $message = '', multipart=false ) => {
+ const create = async (data, $message = '', multipart=false, showNotification=true ) => {
     formErrors.value = {}
     isSubmitting.value = true
     const message = $message==''?`${title} created successfully`:$message
@@ -96,6 +96,7 @@ export function useResourceApiClient(baseUrl, title = 'Resource', isBranch = fal
       }
     try {
       const res = await api.post(baseUrl, data, {
+        showNotification:showNotification,
         notifyOptions: { message: message },
          requiresAuth: true, 
          multipart:multipart
@@ -111,7 +112,7 @@ export function useResourceApiClient(baseUrl, title = 'Resource', isBranch = fal
     }
   }
 
-const update = async (id, data,  $message = '') => {
+const update = async (id, data,  $message = '', showNotification=true) => {
   formErrors.value = {}
   isSubmitting.value = true
   const message = $message==''?`${title}  updated successfully`:$message
@@ -122,6 +123,7 @@ const update = async (id, data,  $message = '') => {
     // If not multipart, use regular PUT
     const res = await api.put(`${baseUrl}/${id}`, data, {
       notifyOptions: { message: message },
+      showNotification:showNotification,
       requiresAuth: true
     })
     return res

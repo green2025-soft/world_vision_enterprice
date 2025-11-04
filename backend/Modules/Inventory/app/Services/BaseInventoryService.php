@@ -82,6 +82,7 @@ abstract class BaseInventoryService
                 'product_id'         => $item['product_id'],
                 'quantity'           => $quantity,
                 'unit_price'         => $unitPrice,
+                'total_unit_price'   => $unitPrice * $quantity,
                 'cost_price'         => $costPrice,
                 'sale_price'         => $item['sale_price'] ?? null,
 
@@ -116,7 +117,8 @@ abstract class BaseInventoryService
 
         // Sales price-based
         $salesAmount = array_sum(array_column($itemsData, 'net_price'));
-
+        $itemDiscount = array_sum(array_column($itemsData, 'discount_amount'))??0;
+        $itemDiscountPercent = array_sum(array_column($itemsData, 'discount_percent'))??0;
         // 🔁 Discount: amount > percent > none
         $discountAmount = 0;
         $discountPercent = 0;
@@ -128,27 +130,51 @@ abstract class BaseInventoryService
             $discountPercent = floatval($validated['discount_percent']);
             $discountAmount = ($discountPercent / 100) * $salesAmount;
         }
+        
+        $discountAmount += $itemDiscount;
+        $discountPercent += $itemDiscountPercent;
 
         // Tax calculation
-        $taxPercent = $validated['tax_percent'] ?? 0;
-        $taxAmount = ($taxPercent / 100) * ($salesAmount - $discountAmount);
+        $taxPercent = 0;
+        $taxAmount = 0;
+
+        if (!empty($validated['tax_amount'])) {
+            $taxAmount = floatval($validated['tax_amount']);
+            $taxPercent = $salesAmount > 0 ? ($taxAmount / $salesAmount) * 100 : 0;
+        } elseif (!empty($validated['tax_percent'])) {
+            $taxPercent = floatval($validated['tax_percent']);
+            $taxAmount = ($taxPercent / 100) * $salesAmount;
+        }
+
+        $itemTex        = array_sum(array_column($itemsData, 'discount_percent'))??0;
+        $itemTexPercent = array_sum(array_column($itemsData, 'tax_percent'))??0;
+
+         $taxPercent    +=  $itemTexPercent;
+         $taxAmount     +=  $itemTex;
 
         // Adjustment
         $adjust = $validated['adjustment'] ?? 0;
 
+
         // Net Total
-        $netTotal = $salesAmount - $discountAmount + $taxAmount - $adjust;
+        $netTotal = ($salesAmount + $taxAmount) - ($discountAmount+$adjust);
+        
 
         // Payments
         $paidAmount = $validated['paid_amount'] ?? 0;
+        
+
         $advanceAdjusted = $validated['advance_adjusted'] ?? 0;
-        $dueAmount = $netTotal - $paidAmount - $advanceAdjusted;
+        $dueAmount = $netTotal - ($paidAmount + $advanceAdjusted);
+        $dueAmount =   $dueAmount >0? $dueAmount :0;
+        $totalUnitPrice = array_sum(array_column($itemsData, 'total_unit_price'));
+
+
 
         return [
             // Inventory
             'inventory'         => $inventoryAmount,
 
-            // Sales
             'total_amount'      => $salesAmount,
             'discount_percent'  => $discountPercent,
             'discount_amount'   => $discountAmount,
@@ -159,6 +185,8 @@ abstract class BaseInventoryService
             'net_total'         => $netTotal,
             'paid_amount'       => $paidAmount,
             'due_amount'        => $dueAmount,
+            'total_discount'    => $discountAmount + $adjust,
+            'total_unit_price'  => $totalUnitPrice
         ];
     }
 

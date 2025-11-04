@@ -28,15 +28,21 @@ const routes = {
    makeRoute("products", lazy("Product"), "Product"),
    makeRoute("product-sets", lazy("ProductSet"), "Product Set"),
   {
-    path: "purchase",
+    path: "purchases",
     component: () => import('@/modules/inventory/pages/purchase/Index.vue'),
     meta: { title: "Purchase", ...defaultMeta, requiresBranch: true },
   },
   {
-    path: "purchase/create",
+    path: "purchases/create",
     component: () => import('@/modules/inventory/pages/purchase/Create.vue'),
     meta: { title: "Create Purchase", ...defaultMeta, requiresBranch: true },
   },
+  {
+  path: "purchases/:id/edit",
+  component: () => import('@/modules/inventory/pages/purchase/Create.vue'),
+  meta: { title: "Edit Purchase", ...defaultMeta, requiresBranch: true },
+  props: true
+},
 
 
 

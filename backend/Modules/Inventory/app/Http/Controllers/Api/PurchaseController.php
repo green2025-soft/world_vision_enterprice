@@ -66,7 +66,7 @@ class PurchaseController extends BaseApiController
 
     public function show($id)
     {
-        return $this->showData($id);
+        return $this->showData($id, ['items', 'supplier']);
     }
 
     public function update(PurchaseRequest $request, $id)
