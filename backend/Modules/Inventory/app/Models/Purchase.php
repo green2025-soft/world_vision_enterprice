@@ -6,7 +6,7 @@ use Modules\Core\Models\Branch;
 use Modules\Core\Models\User;
 class Purchase extends InvBaseModel
 {
-    protected $fillable = ['invoice_no', 'supplier_id', 'invoice_date', 'total_amount', 'discount_percent', 'discount_amount', 'tax_percent', 'tax_amount', 'supplier_adjust', 'net_total', 'paid_amount', 'due_amount', 'remarks', 'branch_id', 'created_by'];
+    protected $fillable = ['invoice_no', 'supplier_id', 'invoice_date', 'total_amount', 'discount_percent', 'discount_amount', 'total_discount_percent', 'total_discount_amount', 'adjustment', 'tax_percent', 'tax_amount', 'total_tax_percent', 'total_tax_amount', 'supplier_adjust', 'net_total', 'paid_amount', 'due_amount', 'remarks', 'branch_id', 'created_by'];
 
     protected array $searchable = [];
 

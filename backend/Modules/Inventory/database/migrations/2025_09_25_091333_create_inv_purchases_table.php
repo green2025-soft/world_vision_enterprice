@@ -20,9 +20,15 @@ return new class extends Migration
 
             $table->decimal('discount_percent', 5, 2)->default(0);
             $table->decimal('discount_amount', 12, 2)->default(0);
+            $table->decimal('total_discount_percent', 5, 2)->default(0);
+            $table->decimal('total_discount_amount', 12, 2)->default(0);
 
             $table->decimal('tax_percent', 5, 2)->default(0);
             $table->decimal('tax_amount', 12, 2)->default(0);
+            $table->decimal('total_tax_percent', 5, 2)->default(0);
+            $table->decimal('total_tax_amount', 12, 2)->default(0);
+
+            $table->decimal('adjustment', 12, 2)->default(0);
 
             $table->decimal('supplier_adjust', 12, 2)->default(0);
             $table->decimal('net_total', 12, 2);

@@ -6,6 +6,7 @@ use Modules\Core\Http\Controllers\Api\BaseApiController;
 use Modules\Inventory\Models\Purchase;
 use Modules\Inventory\Http\Requests\PurchaseRequest;
 use Illuminate\Http\Request;
+use Modules\Inventory\Models\SupplierLedger;
 use Modules\Inventory\Services\PurchaseService;
 
 class PurchaseController extends BaseApiController
@@ -66,7 +67,37 @@ class PurchaseController extends BaseApiController
 
     public function show($id)
     {
-        return $this->showData($id, ['items', 'supplier']);
+         $purchase = $this->model::with(['items.product', 'supplier'])->findOrFail($id);
+
+        $supplierBalance = SupplierLedger::where('supplier_id', $purchase->supplier_id)
+        ->where('branch_id', $purchase->branch_id) 
+        ->selectRaw('SUM(debit - credit) as balance')
+        ->value('balance') ?? 0;
+         // Attach balance to supplier
+        if ($purchase->supplier) {
+            $purchase->supplier->balance = (float) $supplierBalance;
+        }
+
+            $purchase->items->transform(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'product_id' => $item->product_id,
+                    'name' => $item->product?->name,
+                    'sku' => $item->product?->sku,
+                    'quantity' => $item->quantity,
+                    'purchase_price' => $item->unit_price, 
+                    'unit_price' => $item->unit_price,
+                    'cost_price' => $item->cost_price,
+                    'sale_price' => $item->sale_price,
+                    'discount_percent' => $item->discount_percent,
+                    'discount_amount' => $item->discount_amount,
+                    'tax_percent' => $item->tax_percent,
+                    'tax_amount' => $item->tax_amount,
+                ];
+            });
+
+        return $this->successResponse($purchase);
+        
     }
 
     public function update(PurchaseRequest $request, $id)

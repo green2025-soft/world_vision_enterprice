@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, defineProps } from 'vue'
 import { useRouter } from 'vue-router'
 import { useResourceApiClient } from '@/composables/resourceApiClient'
 import { usePurchaseForm } from "@/modules/inventory/composables/usePurchaseForm"
@@ -17,6 +17,7 @@ const {
   formErrors,
   isSubmitting,
   update,
+  getOne
 } = useResourceApiClient(bUrl, title, true)
 
 const {
@@ -43,7 +44,9 @@ const {
   totalSalePrice,
   totalDiscAmount,
   totalTaxAmount,
-  totalSubTotal
+  totalSubTotal,
+  syncDiscountTax,
+  syncProductValue
 
 } = usePurchaseForm()
 
@@ -97,10 +100,27 @@ async function saveItem() {
   }
 }
 
+const props = defineProps({
+  id: {
+    type: [String, Number],
+    required: false
+  }
+})
 
 
+const isEditMode = !!props.id 
+
+
+const isSpinner = ref(false)
 onMounted(async () => {
-
+  if (isEditMode){
+    isSpinner.value = true
+    const editData = await getOne(props.id)
+    form.value = editData
+    handleSupplierCreated(editData.supplier)
+    isSpinner.value =false
+  }
+  
 })
 
 </script>
@@ -115,7 +135,11 @@ onMounted(async () => {
   v-model:show="showAddSupplierModal"
   @created="handleSupplierCreated"
 />
-  <div class="card shadow-sm rounded-3">
+
+  
+
+  
+  <div   class="card shadow-sm rounded-3">
     <!-- Header -->
     <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white">
       <h5 class="mb-0 fw-semibold">
@@ -124,10 +148,12 @@ onMounted(async () => {
       <RouterLink class="btn btn-light btn-sm" :to="`/${bUrl}`"><i class="fas fa-list me-1"></i>Purchase List</RouterLink>
    
     </div>
-
-    <div class="card-body bg-light">
+     <CenteredSpinner v-if="isSpinner"  />
+    
+    <div class="card-body bg-light" v-show="!isSpinner">
        <ValidationErrors :errors="errors" />
-
+       
+       
     
       <!-- Header Row: Supplier (wide) | Date (small) | Note (wide) -->
       <div class="row g-3 mb-4">
@@ -176,14 +202,13 @@ onMounted(async () => {
         <div class="input-group">
            <ResourceSelect
                 ref="productSelect"
-                  v-model="selectedProduct"
-                  bUrl="inventory/products-overview"
-                  placeholder="Select Product"
-                  :isBranch="true"
-                  :labelField="(item) => `${item.name} (${item.sku})`"
-                  :emitObject="true"
-                  :isEdit="editingIndex !== null"
-                  style="flex:1; min-width:0; width:100%; display:block;"
+                v-model="selectedProduct"
+                bUrl="inventory/products-overview"
+                placeholder="Select Product"
+                :isBranch="true"
+                :labelField="(item) => `${item.name} (${item.sku})`"
+                :emitObject="true" 
+                style="flex:1; min-width:0; width:100%; display:block;"
                   
                 />
 
@@ -246,6 +271,7 @@ onMounted(async () => {
           placeholder="0"
           min="0"
           max="100"
+           @keyup="syncProductValue('discount', 'percent')"
           @input="productInput.discount_percent = clampPercent($event)"
         />
       </div>
@@ -256,6 +282,7 @@ onMounted(async () => {
         <BFormInput
           type="number"
           v-model="productInput.discount_amount"
+           @keyup="syncProductValue('discount', 'amount')"
           placeholder="0.00"
         />
       </div>
@@ -269,6 +296,7 @@ onMounted(async () => {
           placeholder="0"
           min="0"
           max="100"
+           @keyup="syncProductValue('tax', 'percent')"
            @input="productInput.tax_percent = clampPercent($event)"
         />
       </div>
@@ -280,6 +308,7 @@ onMounted(async () => {
           type="number"
           v-model="productInput.tax_amount"
           placeholder="0.00"
+           @keyup="syncProductValue('tax', 'amount')"
         />
       </div>
 
@@ -363,22 +392,22 @@ onMounted(async () => {
       </div>
 
       <!-- Summary -->
-      <div class="row g-3">
-        <div class="col-lg-2 col-md-4 col-6">
-          <label class="form-label fw-semibold">Discount (%)</label>
-          <BFormInput v-model.number="form.discount_percent" type="number" />
+      <div class="row g-3 mb-4">
+        <div class="col-lg-1 col-md-4 col-6">
+          <label class="form-label fw-semibold">Disc (%)</label>
+          <BFormInput v-model.number="form.discount_percent"   @keyup="syncDiscountTax('discount', 'percent')" type="number" />
         </div>
         <div class="col-lg-2 col-md-4 col-6">
           <label class="form-label fw-semibold">Discount Amount</label>
-           <BFormInput v-model.number="form.discount_amount" type="number" />
+           <BFormInput v-model.number="form.discount_amount"   @keyup="syncDiscountTax('discount', 'amount')" type="number" />
         </div>
-        <div class="col-lg-2 col-md-4 col-6">
+        <div class="col-lg-1 col-md-4 col-6">
           <label class="form-label fw-semibold">Tax (%)</label>
-          <BFormInput v-model="form.tax_percent" type="number" />
+          <BFormInput v-model="form.tax_percent" @keyup="syncDiscountTax('tax', 'percent')"  type="number" />
         </div>
           <div class="col-lg-2 col-md-4 col-6">
           <label class="form-label fw-semibold">Tax Amount</label>
-          <BFormInput v-model="form.tax_amount" type="number" />
+          <BFormInput v-model="form.tax_amount" @keyup="syncDiscountTax('tax', 'amount')"  type="number" />
         </div>
         <div class="col-lg-2 col-md-4 col-6">
           <label class="form-label fw-semibold">Adjustment</label>
@@ -390,16 +419,16 @@ onMounted(async () => {
           <label class="form-label fw-semibold">Supplier Due</label>
           <BFormInput  v-model="supplierDue" readonly />
         </div>
-        <div class="col-lg-2 col-md-4 col-6" v-if="supplierBalance > 0">
-          <label class="form-label fw-semibold">Supplier Advance</label>
+        <div class="col-lg-1 col-md-4 col-6" v-if="supplierBalance > 0">
+          <label class="form-label fw-semibold">S. Advance</label>
           <BFormInput v-model="supplierAdvance" readonly />
         </div>
             <div class="col-lg-2 col-md-4 col-6" v-if="supplierBalance === 0">
           <label class="form-label fw-semibold">Supplier Balance</label>
           <BFormInput v-model="supplierBalance" readonly />
         </div>
-        <div class="col-lg-2 col-md-4 col-6" v-if="supplierBalance > 0">
-          <label class="form-label fw-semibold">Supplier Adjusted</label>
+        <div class="col-lg-1 col-md-4 col-6" v-if="supplierBalance > 0">
+          <label class="form-label fw-semibold">S. Adjusted</label>
           <BFormInput v-model.number="form.advance_adjusted" readonly />
         </div>
         <div class="col-lg-2 col-md-4 col-6">
@@ -438,18 +467,14 @@ onMounted(async () => {
 
 
 <style scoped>
-/* Minimal scoped styles only */
+  /* keep ResourceSelect inline-stretch fallback appearance smooth */
+  .input-group .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
 
-/* keep ResourceSelect inline-stretch fallback appearance smooth */
-.input-group .btn {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-/* ensure DatePicker / textareas use full width when class used */
-.card-body .w-100 {
-  width: 100%;
-}
-
-
+  /* ensure DatePicker / textareas use full width when class used */
+  .card-body .w-100 {
+    width: 100%;
+  }
 </style>

@@ -69,70 +69,22 @@ export function usePurchaseForm() {
   })
 
   // ───── Product-level Discount Sync ─────
-  watch(
-    () => productInput.value.discount_percent,
-    (val) => {
-      if (updatingDiscount.value) return
-      updatingDiscount.value = true
-      const base = baseAmount(productInput.value)
-      const amount = percentToAmount(val, base)
-      if (!almostEqual(amount, productInput.value.discount_amount)) {
-        productInput.value.discount_amount = +amount
-      }
-      updatingDiscount.value = false
-    },
-    { flush: 'post' }
-  )
+  const syncProductValue = (field, type) => {
+  const base =
+    field === 'tax'
+      ? Math.max(baseAmount(productInput.value) - productInput.value.discount_amount, 0)
+      : baseAmount(productInput.value)
 
-  watch(
-    () => productInput.value.discount_amount,
-    (val) => {
-      if (updatingDiscount.value) return
-      updatingDiscount.value = true
-      const base = baseAmount(productInput.value)
-      const amt = Math.min(val, base)
-      const percent = amountToPercent(amt, base)
-      if (!almostEqual(percent, productInput.value.discount_percent)) {
-        productInput.value.discount_percent = +percent
-      }
-      productInput.value.discount_amount = +amt
-      updatingDiscount.value = false
-    },
-    { flush: 'post' }
-  )
+  if (type === 'percent') {
 
-  // ───── Product-level Tax Sync ─────
-  watch(
-    () => productInput.value.tax_percent,
-    (val) => {
-      if (updatingTax.value) return
-      updatingTax.value = true
-      const base = Math.max(baseAmount(productInput.value) - productInput.value.discount_amount, 0)
-      const amount = percentToAmount(val, base)
-      if (!almostEqual(amount, productInput.value.tax_amount)) {
-        productInput.value.tax_amount = +amount
-      }
-      updatingTax.value = false
-    },
-    { flush: 'post' }
-  )
+    const amount = (productInput.value[`${field}_percent`] / 100) * base
+    productInput.value[`${field}_amount`] = +amount.toFixed(2)
+  } else {
 
-  watch(
-    () => productInput.value.tax_amount,
-    (val) => {
-      if (updatingTax.value) return
-      updatingTax.value = true
-      const base = Math.max(baseAmount(productInput.value) - productInput.value.discount_amount, 0)
-      const amt = Math.min(val, base)
-      const percent = amountToPercent(amt, base)
-      if (!almostEqual(percent, productInput.value.tax_percent)) {
-        productInput.value.tax_percent = +percent
-      }
-      productInput.value.tax_amount = +amt
-      updatingTax.value = false
-    },
-    { flush: 'post' }
-  )
+    const percent = base ? (productInput.value[`${field}_amount`] / base) * 100 : 0
+    productInput.value[`${field}_percent`] = +percent.toFixed(2)
+  }
+}
 
   // ───── Supplier Watch ─────
   watch(selectedSupplier, (supplier) => {
@@ -157,10 +109,11 @@ export function usePurchaseForm() {
     input.cost_price =
       (input.purchase_price || 0) - (input.discount_amount || 0) + (input.tax_amount || 0)
 
-    input.discount_amount = parseFloat(input.discount_amount.toFixed(2))
-    input.discount_percent = parseFloat(input.discount_percent.toFixed(2)) || 0
-    input.tax_amount = parseFloat(input.tax_amount.toFixed(2))
-    input.tax_percent = parseFloat(input.tax_percent.toFixed(2))
+    input.discount_amount = parseFloat(Number(input.discount_amount || 0).toFixed(2))
+    input.discount_percent = parseFloat(Number(input.discount_percent || 0).toFixed(2))
+    input.tax_amount = parseFloat(Number(input.tax_amount || 0).toFixed(2))
+    input.tax_percent = parseFloat(Number(input.tax_percent || 0).toFixed(2))
+
 
     const duplicateIndex = form.value.items.findIndex(
       (i, idx) => i.product_id === input.product_id && idx !== editingIndex.value
@@ -223,67 +176,25 @@ export function usePurchaseForm() {
   )
 
   // ───── Form-level Discount / Tax Sync ─────
-  watch(
-    () => form.value.discount_percent,
-    (val) => {
-      if (updatingFormDiscount.value) return
-      updatingFormDiscount.value = true
-      const amount = percentToAmount(val, totalTotal.value)
-      if (!almostEqual(amount, form.value.discount_amount)) {
-        form.value.discount_amount = +amount
-      }
-      updatingFormDiscount.value = false
-    },
-    { flush: 'post' }
-  )
+  
 
-  watch(
-    () => form.value.discount_amount,
-    (val) => {
-      if (updatingFormDiscount.value) return
-      updatingFormDiscount.value = true
-      const amt = Math.min(val, totalTotal.value)
-      const percent = amountToPercent(amt, totalTotal.value)
-      if (!almostEqual(percent, form.value.discount_percent)) {
-        form.value.discount_percent = +percent
-      }
-      form.value.discount_amount = +amt
-      updatingFormDiscount.value = false
-    },
-    { flush: 'post' }
-  )
+  const syncDiscountTax = (field, type) => {
+    const base =
+      field === 'tax'
+        ? Math.max(totalTotal.value - form.value.discount_amount, 0)
+        : totalTotal.value
 
-  watch(
-    () => form.value.tax_percent,
-    (val) => {
-      if (updatingFormTax.value) return
-      updatingFormTax.value = true
-      const base = Math.max(totalTotal.value - form.value.discount_amount, 0)
-      const amount = percentToAmount(val, base)
-      if (!almostEqual(amount, form.value.tax_amount)) {
-        form.value.tax_amount = +amount
-      }
-      updatingFormTax.value = false
-    },
-    { flush: 'post' }
-  )
+    if (type === 'percent') {
 
-  watch(
-    () => form.value.tax_amount,
-    (val) => {
-      if (updatingFormTax.value) return
-      updatingFormTax.value = true
-      const base = Math.max(totalTotal.value - form.value.discount_amount, 0)
-      const amt = Math.min(val, base)
-      const percent = amountToPercent(amt, base)
-      if (!almostEqual(percent, form.value.tax_percent)) {
-        form.value.tax_percent = +percent
-      }
-      form.value.tax_amount = +amt
-      updatingFormTax.value = false
-    },
-    { flush: 'post' }
-  )
+      const amount = (form.value[`${field}_percent`] / 100) * base
+      form.value[`${field}_amount`] = +amount.toFixed(2)
+    } else {
+      const percent = base ? (form.value[`${field}_amount`] / base) * 100 : 0
+      form.value[`${field}_percent`] = +percent.toFixed(2)
+    }
+  }
+
+
 
   // ───── Net Payable (with supplier advance deduction) ─────
   const netPayable = computed(() => {
@@ -352,6 +263,8 @@ export function usePurchaseForm() {
     totalSalePrice,
     totalDiscAmount,
     totalTaxAmount,
-    totalSubTotal
+    totalSubTotal,
+    syncDiscountTax,
+    syncProductValue
   }
 }

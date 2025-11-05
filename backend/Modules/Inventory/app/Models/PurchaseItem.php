@@ -10,7 +10,7 @@ class PurchaseItem extends InvBaseModel
 
 
     public function product(){
-        return $this->belongsTo(Product::class, 'product_by');
+        return $this->belongsTo(Product::class, 'product_id');
     }
 
     public function purchase(){

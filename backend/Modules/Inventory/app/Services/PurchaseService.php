@@ -40,13 +40,14 @@ class PurchaseService extends BaseInventoryService{
         $advanceAdjusted  = $totals['advance_adjusted'] ?? 0;
         $dueAmount        = $totals['due_amount'] ?? 0;
 
+
     
         app(SupplierAccountingService::class)->recordTransaction([
             'supplier_id'       => $validated['supplier_id'],
-            'amount'            => 0,
+            'amount'            => $totals['due_amount'],
             'paid_amount'       => $paidAmount ?? 0,
             'supplier_advance'  => $advanceAdjusted ?? 0,
-            'tax_amount'        => $totals['tax_amount'] ?? 0,
+            'tax_amount'        => $totals['total_tax_amount'] ?? 0,
             'discount_amount'   => $totals['total_discount'] ?? 0,
             'due_amount'        => $dueAmount ?? 0,
             'inventory'         => $totals['total_unit_price'] ?? 0,
