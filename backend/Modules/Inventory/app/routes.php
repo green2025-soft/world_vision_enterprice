@@ -12,3 +12,5 @@ Route::apiResource('customer', \Modules\Inventory\Controllers\Api\CustomerContro
 Route::apiResource('product-set', \Modules\Inventory\Controllers\Api\ProductSetController::class);
 Route::apiResource('supplier-advance', \Modules\Inventory\Controllers\Api\SupplierAdvanceController::class);
 Route::apiResource('purchase', \Modules\Inventory\Controllers\Api\PurchaseController::class);
+Route::apiResource('customer-advance', \Modules\Inventory\Controllers\Api\CustomerAdvanceController::class);
+Route::apiResource('sale', \Modules\Inventory\Controllers\Api\SaleController::class);

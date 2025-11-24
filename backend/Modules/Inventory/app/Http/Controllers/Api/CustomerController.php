@@ -6,14 +6,19 @@ use Modules\Core\Http\Controllers\Api\BaseApiController;
 use Modules\Inventory\Models\Customer;
 use Modules\Inventory\Http\Requests\CustomerRequest;
 use Illuminate\Http\Request;
+use Modules\Inventory\Models\CustomerLedger;
+use Modules\Inventory\Services\CustomerPreviousDueService;
 
 class CustomerController extends BaseApiController
 {
     protected string $title = 'Customer';
 
-    public function __construct()
+     protected CustomerPreviousDueService $customerPreviousDueService;
+
+    public function __construct(CustomerPreviousDueService $customerPreviousDueService)
     {
         $this->model = Customer::class;
+        $this->customerPreviousDueService = $customerPreviousDueService;
     }
 
     public function index(Request $request)
@@ -28,7 +33,8 @@ class CustomerController extends BaseApiController
     {
         $request->validated();
          $request['previous_due'] = $request['previous_due']?$request['previous_due']:0.00;
-        return $this->saveData($request);
+         $createData = $this->customerPreviousDueService->createWithAccounting($request->all());
+         return $this->createdResponse($createData);
     }
 
     public function show($id)
@@ -36,14 +42,49 @@ class CustomerController extends BaseApiController
         return $this->showData($id);
     }
 
-    public function update(CustomerRequest $request, $id)
+    public function update(CustomerRequest $request, Customer $customer)
     {
         $request->validated();
-        return $this->updateData($request, $id);
+        $updated = $this->customerPreviousDueService->updateWithAccounting($customer, $request->all());
+        return $this->updatedResponse($updated);
     }
 
-    public function destroy($id)
+    public function destroy(Customer $customer)
     {
-        return $this->destroyData($id);
+        $this->customerPreviousDueService->deleteWithAccounting($customer);
+        return $this->deletedResponse();
+    }
+
+
+    public function getCustomerrBalances(Request $request, $id=null){
+         $branchId = $request->input('branch_id');
+          $query = $this->indexQuery()
+            ->where('branch_id', $branchId);
+        if ($id){
+            $query->where('id',$id); 
+        }else{
+          $query->where('status',1);  
+        }
+        $customers = $query->smartPaginate();
+            // ✅ Get supplier IDs for current page
+        $customersIds = $customers->pluck('id')->toArray();
+
+        // ✅ Query 2: Fetch balances for only current page suppliers
+        $balances = CustomerLedger::whereIn('customer_id', $customersIds)
+        ->where('customer_id', $branchId)
+        ->selectRaw('customer_id, SUM(debit - credit) as balance')
+        ->groupBy('customer_id')
+        ->get()
+        ->keyBy('customer_id');
+
+        // ✅ Attach balance to each supplier
+        $customers->getCollection()->transform(function ($customer) use ($balances) {
+            $customer->balance = $balances[$customer->id]->balance ?? 0;
+            return $customer;
+        });
+
+     return $this->listResponse($customers);
+
+
     }
 }

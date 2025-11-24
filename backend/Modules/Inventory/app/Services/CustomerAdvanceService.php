@@ -3,14 +3,16 @@
 namespace Modules\Inventory\Services;
 
 use Illuminate\Support\Facades\DB;
-use Modules\Inventory\Models\SupplierAdvance;
-use Modules\Inventory\Services\SupplierAccountingService;
+use Modules\Inventory\Models\CustomerAdvance;
+use Modules\Inventory\Services\CustomerAccountingService;
 
-class SupplierAdvanceService
+class CustomerAdvanceService
 {
-    protected SupplierAccountingService $accountingService;
+    protected CustomerAccountingService $accountingService;
 
-    public function __construct(SupplierAccountingService $accountingService)
+    
+
+    public function __construct(CustomerAccountingService $accountingService)
     {
         $this->accountingService = $accountingService;
     }
@@ -18,7 +20,7 @@ class SupplierAdvanceService
     /**
      * Create new supplier advance with ledger + accounting entry
      */
-    public function createWithAccounting(array $data): SupplierAdvance
+    public function createWithAccounting(array $data): CustomerAdvance
     {
         return DB::transaction(function () use ($data) {
 
@@ -26,8 +28,8 @@ class SupplierAdvanceService
             $data['reference_no'] = $this->generateReferenceNo();
         }
 
-            $advance = SupplierAdvance::create([
-                'supplier_id'     => $data['supplier_id'],
+            $advance = CustomerAdvance::create([
+                'customer_id'     => $data['customer_id'],
                 'advance_amount'  => $data['advance_amount'],
                 'adjusted_amount' => 0,
                 'date'            => $data['date'] ?? now(),
@@ -47,12 +49,12 @@ class SupplierAdvanceService
     /**
      * Update supplier advance and re-record ledger + accounting
      */
-    public function updateWithAccounting(SupplierAdvance $advance, array $data): SupplierAdvance
+    public function updateWithAccounting(CustomerAdvance $advance, array $data): CustomerAdvance
     {
         return DB::transaction(function () use ($advance, $data) {
 
             $advance->update([
-                'supplier_id'     => $data['supplier_id'],
+                'customer_id'     => $data['customer_id'],
                 'advance_amount'  => $data['advance_amount'],
                 'adjusted_amount' => $data['adjusted_amount'] ?? 0,
                 'date'            => $data['date'] ?? now(),
@@ -83,10 +85,10 @@ class SupplierAdvanceService
     /**
      * Internal: create ledger + accounting entry
      */
-    protected function createLedgerAndAccountingEntry(SupplierAdvance $advance, array $data): void
+    protected function createLedgerAndAccountingEntry(CustomerAdvance $advance, array $data): void
     {
         $this->accountingService->recordTransaction([
-            'supplier_id' => $advance->supplier_id,
+            'customer_id' => $advance->customer_id,
             'amount'      => $advance->advance_amount,
             'branch_id'   => $data['branch_id'],
             'reference_id'=> $advance->id, // can be prefixed if needed
@@ -110,21 +112,21 @@ class SupplierAdvanceService
     protected function generateReferenceNo(): string
     {
         
-        $lastRef = SupplierAdvance::where('reference_no', 'like', 'SAV-%')
+        $lastRef = CustomerAdvance::where('reference_no', 'like', 'CAV-%')
             ->orderBy('id', 'desc')
             ->value('reference_no');
 
         if (!$lastRef) {
-            return 'SAV-0001';
+            return 'CAV-0001';
         }
         // Extract numeric part from last ref number
-        $number = intval(str_replace('SAV-', '', $lastRef));
+        $number = intval(str_replace('CAV-', '', $lastRef));
 
         // Next number increment
         $newNumber = $number + 1;
 
-        // Format: SAV-0001, SAV-0002, SAV-0010 etc.
-        return 'ADV-' . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+        // Format: CAV-0001, CAV-0002, CAV-0010 etc.
+        return 'CAV-' . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
     }
 
 

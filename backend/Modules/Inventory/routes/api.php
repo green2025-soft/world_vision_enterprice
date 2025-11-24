@@ -9,7 +9,9 @@ use Modules\Inventory\Http\Controllers\Api\ProductSetController;
 use Modules\Inventory\Http\Controllers\Api\SupplierController;
 use Modules\Inventory\Http\Controllers\Api\UnitController;
 use Modules\Inventory\Http\Controllers\Api\SupplierAdvanceController;
+use Modules\Inventory\Http\Controllers\Api\CustomerAdvanceController;
 use Modules\Inventory\Http\Controllers\Api\PurchaseController;
+use Modules\Inventory\Http\Controllers\Api\SaleController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1/inventory')->name('inventory.')->group(function () {
 // Route::middleware(['auth:sanctum', 'admin'])->prefix('v1/inventory')->name('inventory')->group(function () {
@@ -25,6 +27,9 @@ Route::middleware(['auth:sanctum'])->prefix('v1/inventory')->name('inventory.')-
     Route::apiResource('supplier-advance', SupplierAdvanceController::class);
     Route::get('supplier-advance/{id}/balance', [SupplierAdvanceController::class, 'supplierBalance']);
     Route::apiResource('customers', CustomerController::class);
+     Route::apiResource('customer-advance', CustomerAdvanceController::class);
+    Route::get('customer-advance/{id}/balance', [CustomerAdvanceController::class, 'customerBalance']);
     Route::apiResource('purchases', PurchaseController::class);
+    Route::apiResource('sales', SaleController::class);
 
 });
