@@ -3,7 +3,7 @@ REM =============================
 REM Start Vue server
 REM =============================
 cd frontend
-start powershell -NoExit -Command "npm run dev -- --port 5175"
+start powershell -NoExit -Command "npm run dev -- --port 5174"
 
 echo Both servers started.
 

@@ -1,11 +1,11 @@
 {
   "name": "vue-project",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --port 5175",
-    "serve": "vite --port 5175",
+    "dev": "vite --port 5174",
+    "serve": "vite --port 5174",
     "build": "vite build",
     "preview": "vite preview",
     "make:module": "plop module"

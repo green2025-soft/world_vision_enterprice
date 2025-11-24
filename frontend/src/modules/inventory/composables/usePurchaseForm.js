@@ -45,10 +45,7 @@ export function usePurchaseForm() {
   })
 
   const productInput = ref(defaultProductInput())
-  const updatingDiscount = ref(false)
-  const updatingTax = ref(false)
-  const updatingFormDiscount = ref(false)
-  const updatingFormTax = ref(false)
+
 
   // ───── Product Select ─────
   watch(selectedProduct, (newVal) => {
@@ -139,7 +136,7 @@ export function usePurchaseForm() {
 
     resetProductInput()
   }
-
+const isEdit = ref(false)
   const editItem = (index) => {
     const item = form.value.items[index]
     selectedProduct.value = {
@@ -152,6 +149,7 @@ export function usePurchaseForm() {
     }
     productInput.value = { ...item }
     editingIndex.value = index
+    isEdit.value= true;
   }
 
   const removeItem = (index) => {
@@ -265,6 +263,7 @@ export function usePurchaseForm() {
     totalTaxAmount,
     totalSubTotal,
     syncDiscountTax,
-    syncProductValue
+    syncProductValue,
+    isEdit
   }
 }

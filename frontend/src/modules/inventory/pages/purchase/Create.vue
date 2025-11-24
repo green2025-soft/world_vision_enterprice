@@ -46,7 +46,8 @@ const {
   totalTaxAmount,
   totalSubTotal,
   syncDiscountTax,
-  syncProductValue
+  syncProductValue,
+  isEdit
 
 } = usePurchaseForm()
 
@@ -208,6 +209,7 @@ onMounted(async () => {
                 :isBranch="true"
                 :labelField="(item) => `${item.name} (${item.sku})`"
                 :emitObject="true" 
+                :isEdit="isEdit"
                 style="flex:1; min-width:0; width:100%; display:block;"
                   
                 />
@@ -272,7 +274,6 @@ onMounted(async () => {
           min="0"
           max="100"
            @keyup="syncProductValue('discount', 'percent')"
-          @input="productInput.discount_percent = clampPercent($event)"
         />
       </div>
 
@@ -297,7 +298,7 @@ onMounted(async () => {
           min="0"
           max="100"
            @keyup="syncProductValue('tax', 'percent')"
-           @input="productInput.tax_percent = clampPercent($event)"
+           
         />
       </div>
 
