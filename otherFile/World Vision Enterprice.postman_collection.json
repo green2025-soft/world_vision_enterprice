@@ -1,0 +1,7215 @@
+{
+	"info": {
+		"_postman_id": "59862f62-03f7-43b9-a994-b6ccc5491a10",
+		"name": "World Vision Enterprice",
+		"description": "# 🚀 Get started here\n\nThis template guides you through CRUD operations (GET, POST, PUT, DELETE), variables, and tests.\n\n## 🔖 **How to use this template**\n\n#### **Step 1: Send requests**\n\nRESTful APIs allow you to perform CRUD operations using the POST, GET, PUT, and DELETE HTTP methods.\n\nThis collection contains each of these [request](https://learning.postman.com/docs/sending-requests/requests/) types. Open each request and click \"Send\" to see what happens.\n\n#### **Step 2: View responses**\n\nObserve the response tab for status code (200 OK), response time, and size.\n\n#### **Step 3: Send new Body data**\n\nUpdate or add new data in \"Body\" in the POST request. Typically, Body data is also used in PUT request.\n\n```\n{\n    \"name\": \"Add your name in the body\"\n}\n\n ```\n\n#### **Step 4: Update the variable**\n\nVariables enable you to store and reuse values in Postman. We have created a [variable](https://learning.postman.com/docs/sending-requests/variables/) called `base_url` with the sample request [https://postman-api-learner.glitch.me](https://postman-api-learner.glitch.me). Replace it with your API endpoint to customize this collection.\n\n#### **Step 5: Add tests in the \"Scripts\" tab**\n\nAdding tests to your requests can help you confirm that your API is working as expected. You can write test scripts in JavaScript and view the output in the \"Test Results\" tab.\n\n<img src=\"https://content.pstmn.io/fa30ea0a-373d-4545-a668-e7b283cca343/aW1hZ2UucG5n\" alt=\"\" height=\"1530\" width=\"2162\">\n\n## 💪 Pro tips\n\n- Use folders to group related requests and organize the collection.\n    \n- Add more [scripts](https://learning.postman.com/docs/writing-scripts/intro-to-scripts/) to verify if the API works as expected and execute workflows.\n    \n\n## 💡Related templates\n\n[API testing basics](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9a37a28-055b-49cd-8c7e-97494a21eb54&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[API documentation](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=e9c28f47-1253-44af-a2f3-20dce4da1f18&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)  \n[Authorization methods](https://go.postman.co/redirect/workspace?type=personal&collectionTemplateId=31a9a6ed-4cdf-4ced-984c-d12c9aec1c27&sourceTemplateId=ddb19591-3097-41cf-82af-c84273e56719)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "45497065",
+		"_collection_link": "https://greensoftwaretechnology.postman.co/workspace/GST_erp~4fa591df-e008-48e1-90b8-5a31f19da244/collection/45497065-59862f62-03f7-43b9-a994-b6ccc5491a10?action=share&source=collection_link&creator=45497065"
+	},
+	"item": [
+		{
+			"name": "Core",
+			"item": [
+				{
+					"name": "Settings",
+					"item": [
+						{
+							"name": "List Setting",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/settings",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"settings"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Setting",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "app_name",
+											"value": "GST ERP",
+											"type": "text"
+										},
+										{
+											"key": "app_title",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "app_url",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "app_email",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "app_address",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "app_contact",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "app_logo",
+											"type": "file",
+											"src": "/C:/Users/USER/Desktop/logo-gst.jpg"
+										},
+										{
+											"key": "icon_logo",
+											"type": "file",
+											"src": []
+										},
+										{
+											"key": "currency_symbol",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "symbol_position",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url}}/core/settings/update",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"settings",
+										"update"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"if (response.token || response.data?.token) {\r",
+											"    let token = response.token ?? response.data.token;\r",
+											"    pm.environment.set(\"bearer_token\", token);\r",
+											"    console.log(\"Token Set:\", token);\r",
+											"} else {\r",
+											"    console.warn(\"Token not found in response.\");\r",
+											"}\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"email\": \"admin@gmail.com\",\n    \"password\": \"12345678\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/login",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Logout",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"if (response.token || response.data?.token) {\r",
+											"    let token = response.token ?? response.data.token;\r",
+											"    pm.environment.set(\"bearer_token\", token);\r",
+											"    console.log(\"Token Set:\", token);\r",
+											"} else {\r",
+											"    console.warn(\"Token not found in response.\");\r",
+											"}\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/logout",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Users",
+					"item": [
+						{
+							"name": "List Users",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/users",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get User Menus",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/user-menus",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"user-menus"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create User with Role",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Hasan Mia\",\r\n    \"email\": \"hasan@example.com\",\r\n    \"password\": \"password123\",\r\n    \"role\": 2\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/users",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "View User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/users/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"users",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Hasan Mia\",\r\n    \"email\": \"hasan@example.com\",\r\n    \"password\": \"password123\",\r\n    \"role_id\": 1\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/users/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"users",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete User",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/users/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"users",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Role",
+					"item": [
+						{
+							"name": "List Roles",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/roles",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"roles"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Role",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Admin\",\r\n    \"redirect_url\": \"/editor/home\",\r\n    \"direction\": 1,\r\n    \"guard_name\": \"web\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/roles",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"roles"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "View Role",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/roles/2",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"roles",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Role",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Admin\",\r\n    \"redirect_url\": \"/editor/home\",\r\n    \"direction\": \"1\",\r\n    \"guard_name\": \"web\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/roles/2",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"roles",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Role",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/roles/2",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"roles",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Module",
+					"item": [
+						{
+							"name": "List Module",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/modules",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"modules"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Module",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Core\",\r\n    \"slug\": \"core\",\r\n    \"status\": 1\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/modules",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"modules"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "View Module",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/modules/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"modules",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Module",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Core\",\r\n    \"slug\": \"core\",\r\n    \"status\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/modules/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"modules",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Module",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/modules/2",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"modules",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Permission",
+					"item": [
+						{
+							"name": "Get Section",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"module_id\":1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/permission/sections",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"permission",
+										"sections"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Permissions",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"role_id\":2,\r\n    \"module_id\":\"\",\r\n    \"section_id\":\"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/permission/permissions",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"permission",
+										"permissions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Permission",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"route_name\": \"api.core.users.index\",\r\n  \"section_name\": \"users\",\r\n  \"module_name\": 1,\r\n  \"role\": [2] \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/permission/store",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"permission",
+										"store"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Assign Permission",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"role_id\": 2,\r\n  \"permissions\": [42, 43, 44, 45]\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/permission/assign",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"permission",
+										"assign"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Admin Menus",
+					"item": [
+						{
+							"name": "List Menu",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/admin-menus",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"admin-menus"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Parent Menu",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/admin-menus/parent",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"admin-menus",
+										"parent"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Menu",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.text(); // Changed to text because it's HTML\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Dashboard\",\r\n    \"module_id\": 1,\r\n    \"route\": \"admin/dashboard\",\r\n    \"icon\": \"fas fa-home\",\r\n    \"parent_id\": null,\r\n    \"sequence\": 1,\r\n    \"permission_route\": \"dashboard.view\",\r\n    \"status\": true\r\n}\r\n"
+								},
+								"url": {
+									"raw": "{{base_url}}/core/admin-menus",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"admin-menus"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "View Menu",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/admin-menus/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"admin-menus",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Menu",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Dashboard 2\",\r\n    \"module_id\": 1,\r\n    \"route\": \"admin/dashboard\",\r\n    \"icon\": \"fas fa-home\",\r\n    \"parent_id\": null,\r\n    \"permission_route\": \"dashboard.view\",\r\n    \"status\": true\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/admin-menus/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"admin-menus",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Menu",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/admin-menus/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"admin-menus",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Branch",
+					"item": [
+						{
+							"name": "List",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/branches",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"branches"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "All List",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/branches/lists",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"branches",
+										"lists"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.text(); // Changed to text parsing\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true); // This will need to be adjusted\r",
+											"    pm.expect(response).to.have.property('data'); // This will need to be adjusted\r",
+											"    pm.expect(response.data).to.have.property('email'); // This will need to be adjusted\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Head Office\",\r\n  \"contact_no\": \"01700000000\",\r\n  \"fileLogo\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/branches",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"branches"
+									]
+								},
+								"description": "type: Allowed values are All, Adult, Offspring"
+							},
+							"response": []
+						},
+						{
+							"name": "View",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/branches/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"branches",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Head Office\",\r\n  \"contact_no\": \"01700000001\",\r\n  \"fileLogo\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/branches/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"branches",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/core/branches/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"core",
+										"branches",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Inventory",
+			"item": [
+				{
+					"name": "Category",
+					"item": [
+						{
+							"name": "List",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/categories?branch_id=1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"categories"
+									],
+									"query": [
+										{
+											"key": "branch_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.text(); // Changed to text parsing\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true); // This will need to be adjusted\r",
+											"    pm.expect(response).to.have.property('data'); // This will need to be adjusted\r",
+											"    pm.expect(response.data).to.have.property('email'); // This will need to be adjusted\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Electronics\",\r\n  \"branch_id\":1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/categories",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"categories"
+									]
+								},
+								"description": "type: Allowed values are All, Adult, Offspring"
+							},
+							"response": []
+						},
+						{
+							"name": "View",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/categories/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"categories",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Electronics\",\r\n  \"branch_id\":1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/categories/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"categories",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/categories/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"categories",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Unit",
+					"item": [
+						{
+							"name": "List",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/units?branch_id=1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"units"
+									],
+									"query": [
+										{
+											"key": "branch_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.text(); // Changed to text parsing\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true); // This will need to be adjusted\r",
+											"    pm.expect(response).to.have.property('data'); // This will need to be adjusted\r",
+											"    pm.expect(response.data).to.have.property('email'); // This will need to be adjusted\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Kg\",\r\n  \"short_code\":\"Kg\",\r\n  \"branch_id\":1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/units",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"units"
+									]
+								},
+								"description": "type: Allowed values are All, Adult, Offspring"
+							},
+							"response": []
+						},
+						{
+							"name": "View",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/units/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"units",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Ps\",\r\n  \"short_code\":\"ps\",\r\n  \"branch_id\":1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/units/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"units",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/units/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"units",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Brand",
+					"item": [
+						{
+							"name": "List",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/brands?branch_id=1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"brands"
+									],
+									"query": [
+										{
+											"key": "branch_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.text(); // Changed to text parsing\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true); // This will need to be adjusted\r",
+											"    pm.expect(response).to.have.property('data'); // This will need to be adjusted\r",
+											"    pm.expect(response.data).to.have.property('email'); // This will need to be adjusted\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Avanteb\",\r\n  \"branch_id\":1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/brands",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"brands"
+									]
+								},
+								"description": "type: Allowed values are All, Adult, Offspring"
+							},
+							"response": []
+						},
+						{
+							"name": "View",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/brands/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"brands",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Avanteb\",\r\n  \"branch_id\":1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/brands/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"brands",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/brands/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"brands",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Product",
+					"item": [
+						{
+							"name": "List",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/products?branch_id=1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"products"
+									],
+									"query": [
+										{
+											"key": "branch_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Product Overview",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/products-overview?branch_id=1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"products-overview"
+									],
+									"query": [
+										{
+											"key": "branch_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.text(); // Changed to text parsing\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true); // This will need to be adjusted\r",
+											"    pm.expect(response).to.have.property('data'); // This will need to be adjusted\r",
+											"    pm.expect(response.data).to.have.property('email'); // This will need to be adjusted\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Digital Card\",\r\n  \"sku\": \"THERMO-001\",\r\n  \"category_id\": 1,\r\n  \"unit_id\": 1,\r\n  \"brand_id\": 1,\r\n  \"purchase_price\": 100.00,\r\n  \"selling_price\": 150.00,\r\n  \"stock_quantity\": 20,\r\n  \"re_order\": 5,\r\n  \"made_by\": \"ThermoTech Co.\",\r\n  \"image\": \"\",\r\n  \"specification\": \"Fast reading digital thermometer.\",\r\n  \"status\": 1,\r\n  \"branch_id\": 1\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/products",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"products"
+									]
+								},
+								"description": "type: Allowed values are All, Adult, Offspring"
+							},
+							"response": []
+						},
+						{
+							"name": "View",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/products/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"products",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Digital Thermometer\",\r\n  \"sku\": \"000001\",\r\n  \"category_id\": 3,\r\n  \"unit_id\": 2,\r\n  \"brand_id\": 1,\r\n  \"purchase_price\": 100.00,\r\n  \"selling_price\": 150.00,\r\n  \"stock_quantity\": 20,\r\n  \"re_order\": 5,\r\n  \"made_by\": \"ThermoTech Co.\",\r\n  \"image\": \"products/thermo.jpg\",\r\n  \"specification\": \"Fast reading digital thermometer.\",\r\n  \"status\": 1,\r\n  \"branch_id\": 1\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/products/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"products",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/products/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"products",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Product Set",
+					"item": [
+						{
+							"name": "List",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/product-sets?branch_id=1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"product-sets"
+									],
+									"query": [
+										{
+											"key": "branch_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.text(); // Changed to text parsing\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true); // This will need to be adjusted\r",
+											"    pm.expect(response).to.have.property('data'); // This will need to be adjusted\r",
+											"    pm.expect(response.data).to.have.property('email'); // This will need to be adjusted\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Winter Combo Set\",\r\n  \"discount\": 10,\r\n  \"branch_id\": 1,\r\n  \"items\": [\r\n    {\r\n      \"product_id\": 1,\r\n      \"qty\": 2,\r\n      \"price\": 150.00\r\n    },\r\n    {\r\n      \"product_id\": 2,\r\n      \"qty\": 1,\r\n      \"price\": 250.00\r\n    }\r\n  ]\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/product-sets",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"product-sets"
+									]
+								},
+								"description": "type: Allowed values are All, Adult, Offspring"
+							},
+							"response": []
+						},
+						{
+							"name": "View",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/product-sets/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"product-sets",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Winter Combo Set\",\r\n  \"discount\": 10,\r\n  \"branch_id\": 1,\r\n  \"items\": [\r\n    {\r\n      \"product_id\": 1,\r\n      \"qty\": 2,\r\n      \"price\": 150.00\r\n    },\r\n    {\r\n      \"product_id\": 2,\r\n      \"qty\": 1,\r\n      \"price\": 250.00\r\n    }\r\n  ]\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/product-sets/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"product-sets",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/product-sets/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"product-sets",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Supplier",
+					"item": [
+						{
+							"name": "List",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/suppliers?branch_id=1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"suppliers"
+									],
+									"query": [
+										{
+											"key": "branch_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Supplier Balances",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/suppliers/balances?branch_id=1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"suppliers",
+										"balances"
+									],
+									"query": [
+										{
+											"key": "branch_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.text(); // Changed to text parsing\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true); // This will need to be adjusted\r",
+											"    pm.expect(response).to.have.property('data'); // This will need to be adjusted\r",
+											"    pm.expect(response.data).to.have.property('email'); // This will need to be adjusted\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"ABC Supplies Ltd.\",\r\n  \"phone\": \"01712345678\",\r\n  \"email\": \"abc@supplies.com\",\r\n  \"address\": \"123 Supplier Street, Dhaka\",\r\n  \"previous_due\": 1500.00,\r\n  \"advance_amount\": 500.00,\r\n  \"status\": 1,\r\n  \"branch_id\": 1\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/suppliers",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"suppliers"
+									]
+								},
+								"description": "type: Allowed values are All, Adult, Offspring"
+							},
+							"response": []
+						},
+						{
+							"name": "View",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/suppliers/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"suppliers",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"ABC Supplies Ltd.\",\r\n  \"phone\": \"01712345678\",\r\n  \"email\": \"abc@supplies.com\",\r\n  \"address\": \"123 Supplier Street, Dhaka\",\r\n  \"previous_due\": 1500.00,\r\n  \"advance_amount\": 500.00,\r\n  \"status\": 1,\r\n  \"branch_id\": 1\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/suppliers/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"suppliers",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/suppliers/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"suppliers",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Customer",
+					"item": [
+						{
+							"name": "List",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/customers?branch_id=1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"customers"
+									],
+									"query": [
+										{
+											"key": "branch_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.text(); // Changed to text parsing\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true); // This will need to be adjusted\r",
+											"    pm.expect(response).to.have.property('data'); // This will need to be adjusted\r",
+											"    pm.expect(response.data).to.have.property('email'); // This will need to be adjusted\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"John Doe\",\r\n  \"phone\": \"01711223344\",\r\n  \"email\": \"john@example.com\",\r\n  \"address\": \"456 Customer Lane, Chattogram\",\r\n  \"previous_due\": 250.00,\r\n  \"advance_amount\": 100.00,\r\n  \"status\": 1,\r\n  \"branch_id\": 1\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/customers",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"customers"
+									]
+								},
+								"description": "type: Allowed values are All, Adult, Offspring"
+							},
+							"response": []
+						},
+						{
+							"name": "View",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/customers/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"customers",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"John Doe\",\r\n  \"phone\": \"01711223344\",\r\n  \"email\": \"john@example.com\",\r\n  \"address\": \"456 Customer Lane, Chattogram\",\r\n  \"previous_due\": 250.00,\r\n  \"advance_amount\": 100.00,\r\n  \"status\": 1,\r\n  \"branch_id\": 1\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/customers/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"customers",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/customers/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"customers",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Supplier Advance",
+					"item": [
+						{
+							"name": "List",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/supplier-advance?branch_id=1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"supplier-advance"
+									],
+									"query": [
+										{
+											"key": "branch_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.text(); // Changed to text parsing\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true); // This will need to be adjusted\r",
+											"    pm.expect(response).to.have.property('data'); // This will need to be adjusted\r",
+											"    pm.expect(response.data).to.have.property('email'); // This will need to be adjusted\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"supplier_id\": 4,\r\n  \"advance_amount\": 5000.00,\r\n  \"date\": \"2025-09-22\",\r\n  \"note\": \"Advance payment for upcoming order\",\r\n  \"branch_id\": 1\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/supplier-advance",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"supplier-advance"
+									]
+								},
+								"description": "type: Allowed values are All, Adult, Offspring"
+							},
+							"response": []
+						},
+						{
+							"name": "View",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/supplier-advance/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"supplier-advance",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Balance",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/supplier-advance/1/balance",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"supplier-advance",
+										"1",
+										"balance"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"supplier_id\": 4,\r\n  \"advance_amount\": 5000.00,\r\n  \"date\": \"2025-09-22\",\r\n  \"note\": \"Advance payment for upcoming order\",\r\n  \"branch_id\": 1\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/supplier-advance/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"supplier-advance",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/supplier-advance/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"supplier-advance",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Customer Advance",
+					"item": [
+						{
+							"name": "List",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/customer-advance?branch_id=1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"customer-advance"
+									],
+									"query": [
+										{
+											"key": "branch_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.text(); // Changed to text parsing\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true); // This will need to be adjusted\r",
+											"    pm.expect(response).to.have.property('data'); // This will need to be adjusted\r",
+											"    pm.expect(response.data).to.have.property('email'); // This will need to be adjusted\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"customer_id\": 2,\r\n  \"advance_amount\": 5000.00,\r\n  \"date\": \"2025-11-24\",\r\n  \"note\": \"Advance payment for upcoming order\",\r\n  \"branch_id\": 1\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/customer-advance",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"customer-advance"
+									]
+								},
+								"description": "type: Allowed values are All, Adult, Offspring"
+							},
+							"response": []
+						},
+						{
+							"name": "View",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/customer-advance/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"customer-advance",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Balance",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/customer-advance/1/balance",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"customer-advance",
+										"1",
+										"balance"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"customer_id\": 2,\r\n  \"advance_amount\": 5000.00,\r\n  \"date\": \"2025-11-24\",\r\n  \"note\": \"Advance payment for upcoming order\",\r\n  \"branch_id\": 1\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/customer-advance/3",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"customer-advance",
+										"3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/customer-advance/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"customer-advance",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Purchase",
+					"item": [
+						{
+							"name": "List",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/purchases?branch_id=1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"purchases"
+									],
+									"query": [
+										{
+											"key": "branch_id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.text(); // Changed to text parsing\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true); // This will need to be adjusted\r",
+											"    pm.expect(response).to.have.property('data'); // This will need to be adjusted\r",
+											"    pm.expect(response.data).to.have.property('email'); // This will need to be adjusted\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"branch_id\": 1,\r\n  \"supplier_id\": 1,\r\n  \"invoice_date\": \"2025-10-11\",\r\n  \"note\": \"First purchase order\",\r\n  \r\n  \"discount_percent\": 5,\r\n  \"discount_amount\": null,\r\n  \"tax_percent\": 10,\r\n  \"adjustment\": 0,\r\n\r\n  \"paid_amount\": 500,\r\n  \"advance_adjusted\": 0,\r\n\r\n  \"items\": [\r\n    {\r\n      \"product_id\": 1,\r\n      \"quantity\": 20,\r\n      \"unit_price\": 100,\r\n      \"cost_price\": 90,\r\n      \"sale_price\": 200,\r\n      \"discount_percent\": 10,\r\n      \"discount_amount\": null,\r\n      \"tax_percent\": 5\r\n    },\r\n    {\r\n      \"product_id\": 2,\r\n      \"quantity\": 25,\r\n      \"unit_price\": 200,\r\n      \"cost_price\": 180,\r\n      \"sale_price\": 300,\r\n      \"discount_amount\": 50,\r\n      \"tax_percent\": 8\r\n    }\r\n  ]\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/purchases",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"purchases"
+									]
+								},
+								"description": "type: Allowed values are All, Adult, Offspring"
+							},
+							"response": []
+						},
+						{
+							"name": "View",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/purchases/25",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"purchases",
+										"25"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"branch_id\": 1,\r\n  \"supplier_id\": 1,\r\n  \"invoice_date\": \"2025-10-11\",\r\n  \"note\": \"First purchase order\",\r\n  \r\n  \"discount_percent\": 5,\r\n  \"discount_amount\": null,\r\n  \"tax_percent\": 10,\r\n  \"adjustment\": 0,\r\n\r\n  \"paid_amount\": 500,\r\n  \"advance_adjusted\": 0,\r\n\r\n  \"items\": [\r\n    {\r\n      \"product_id\": 1,\r\n      \"quantity\": 20,\r\n      \"unit_price\": 100,\r\n      \"cost_price\": 90,\r\n      \"sale_price\": 200,\r\n      \"discount_percent\": 10,\r\n      \"discount_amount\": null,\r\n      \"tax_percent\": 5\r\n    },\r\n    {\r\n      \"product_id\": 2,\r\n      \"quantity\": 25,\r\n      \"unit_price\": 200,\r\n      \"cost_price\": 180,\r\n      \"sale_price\": 300,\r\n      \"discount_amount\": 50,\r\n      \"tax_percent\": 8\r\n    }\r\n  ]\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/purchases/25",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"purchases",
+										"25"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {},
+										"requests": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/inventory/purchases/25",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"inventory",
+										"purchases",
+										"25"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Accounting",
+			"item": [
+				{
+					"name": "Chart Of Account",
+					"item": [
+						{
+							"name": "List",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/accounting/chart-of-accounts",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"accounting",
+										"chart-of-accounts"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Account Head",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/accounting/account-heads",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"accounting",
+										"account-heads"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Voucher Type",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/accounting/voucher-types",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"accounting",
+										"voucher-types"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.text(); // Changed to text parsing\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true); // This will need to be adjusted\r",
+											"    pm.expect(response).to.have.property('data'); // This will need to be adjusted\r",
+											"    pm.expect(response.data).to.have.property('email'); // This will need to be adjusted\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Sales Revenue\",\r\n  \"parent_id\": 4,\r\n  \"remarks\": \"Revenue from product sales\",\r\n  \"status\":1\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/accounting/chart-of-accounts",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"accounting",
+										"chart-of-accounts"
+									]
+								},
+								"description": "type: Allowed values are All, Adult, Offspring"
+							},
+							"response": []
+						},
+						{
+							"name": "View",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/accounting/chart-of-accounts/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"accounting",
+										"chart-of-accounts",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Sales Revenue\",\r\n  \"parent_id\": 1,\r\n  \"remarks\": \"Revenue from product sales\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/accounting/chart-of-accounts/20",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"accounting",
+										"chart-of-accounts",
+										"20"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/accounting/chart-of-accounts/20",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"accounting",
+										"chart-of-accounts",
+										"20"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Journal Entry",
+					"item": [
+						{
+							"name": "List",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/accounting/journal-entries",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"accounting",
+										"journal-entries"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Generate Rreference No",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/accounting/generate-reference-no",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"accounting",
+										"generate-reference-no"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.text(); // Changed to text parsing\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true); // This will need to be adjusted\r",
+											"    pm.expect(response).to.have.property('data'); // This will need to be adjusted\r",
+											"    pm.expect(response.data).to.have.property('email'); // This will need to be adjusted\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"date\": \"2025-09-08\",\r\n  \"voucher_type\": \"Journal Voucher\",\r\n  \"reference\": \"INV-001\",\r\n  \"description\": \"Office supply purchase\",\r\n  \"lines\": [\r\n    {\r\n      \"account_head_id\": 6,\r\n      \"debit\": 500,\r\n      \"credit\": 0,\r\n      \"description\": \"Stationery expense\"\r\n    },\r\n    {\r\n      \"account_head_id\": 9,\r\n      \"debit\": 0,\r\n      \"credit\": 500,\r\n      \"description\": \"Cash payment\"\r\n    }\r\n  ]\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/accounting/journal-entries",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"accounting",
+										"journal-entries"
+									]
+								},
+								"description": "type: Allowed values are All, Adult, Offspring"
+							},
+							"response": []
+						},
+						{
+							"name": "View",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/accounting/journal-entries/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"accounting",
+										"journal-entries",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"date\": \"2025-09-08\",\r\n  \"voucher_type\": \"Journal Voucher\",\r\n  \"reference\": \"INV-001\",\r\n  \"description\": \"Office supply purchase\",\r\n  \"lines\": [\r\n    {\r\n      \"account_head_id\": 6,\r\n      \"debit\": 500,\r\n      \"credit\": 0,\r\n      \"description\": \"Stationery expense\"\r\n    },\r\n    {\r\n      \"account_head_id\": 9,\r\n      \"debit\": 0,\r\n      \"credit\": 500,\r\n      \"description\": \"Cash payment\"\r\n    }\r\n  ]\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/accounting/journal-entries/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"accounting",
+										"journal-entries",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/accounting/journal-entries/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"accounting",
+										"journal-entries",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Account Module",
+					"item": [
+						{
+							"name": "List",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/accounting/account-modules",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"accounting",
+										"account-modules"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.text(); // Changed to text parsing\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true); // This will need to be adjusted\r",
+											"    pm.expect(response).to.have.property('data'); // This will need to be adjusted\r",
+											"    pm.expect(response.data).to.have.property('email'); // This will need to be adjusted\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"module_name\": \"Sales Invoice\",\r\n  \"entry_type\": \"sales\",\r\n  \"description\": \"Account entries for sales invoices\",\r\n  \"status\": true,\r\n  \"accounts\": [\r\n    {\r\n      \"component\": \"Revenue\",\r\n      \"account_head_id\": 5,\r\n      \"is_debit\": false,\r\n      \"description\": \"Sales revenue account\"\r\n    },\r\n    {\r\n      \"component\": \"Cash\",\r\n      \"account_head_id\": 2,\r\n      \"is_debit\": true,\r\n      \"description\": \"Cash received from customer\"\r\n    }\r\n  ]\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/accounting/account-modules",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"accounting",
+										"account-modules"
+									]
+								},
+								"description": "type: Allowed values are All, Adult, Offspring"
+							},
+							"response": []
+						},
+						{
+							"name": "View",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/accounting/account-modules/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"accounting",
+										"account-modules",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"module_name\": \"Sales Invoice\",\r\n  \"entry_type\": \"sales\",\r\n  \"description\": \"Account entries for sales invoices\",\r\n  \"status\": true,\r\n  \"accounts\": [\r\n    {\r\n      \"component\": \"Revenue\",\r\n      \"account_head_id\": 5,\r\n      \"is_debit\": false,\r\n      \"description\": \"Sales revenue account\"\r\n    },\r\n    {\r\n      \"component\": \"Cash\",\r\n      \"account_head_id\": 2,\r\n      \"is_debit\": true,\r\n      \"description\": \"Cash received from customer\"\r\n    }\r\n  ]\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/accounting/account-modules/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"accounting",
+										"account-modules",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"let response = pm.response.json();\r",
+											"\r",
+											"pm.test(\"User Created\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"    pm.expect(response).to.have.property('status', true);\r",
+											"    pm.expect(response).to.have.property('data');\r",
+											"    pm.expect(response.data).to.have.property('email');\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{bearer_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/accounting/account-modules/1",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"accounting",
+										"account-modules",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "id",
+			"value": "1"
+		},
+		{
+			"key": "base_url",
+			"value": "https://postman-rest-api-learner.glitch.me/"
+		}
+	]
+}
