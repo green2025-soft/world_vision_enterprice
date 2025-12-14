@@ -1,4 +1,5 @@
 import Index from "./pages/Index.vue";
+import Pos from "./pages/Pos.vue";
 import Page404 from "@/components/Page404.vue"; // You can replace if module specific 404
 
  const lazy = (view) => () => import(`@/modules/inventory/pages/${view}.vue`);
@@ -54,5 +55,13 @@ const routes = {
     }
   ]
 };
+
+const posRoute = {
+  path: "/inventory/pos",
+  component: Pos,
+  meta: { title: "POS", ...defaultMeta, requiresBranch: true },
+};
+
+export { posRoute };
 
 export default routes;

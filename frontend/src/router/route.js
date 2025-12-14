@@ -4,7 +4,7 @@ import { authenticate } from "../store/authenticate.js";
 import { useBranchStore } from '@/store/branch-store'
 
 import coreRoutes from "../modules/core/router";
-import inventoryRoutes from "../modules/inventory/router";
+import inventoryRoutes, { posRoute } from "../modules/inventory/router";
 import accountingRoutes from "../modules/accounting/router";
 
 
@@ -33,6 +33,7 @@ const routes = [
   // },
   coreRoutes,
   inventoryRoutes,
+  posRoute,
   accountingRoutes
 ];
 

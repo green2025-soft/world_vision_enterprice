@@ -44,13 +44,16 @@ class SaleService extends BaseInventoryService{
     
         app(CustomerAccountingService::class)->recordTransaction([
             'customer_id'       => $validated['customer_id'],
+
             'amount'            => $totals['due_amount'],
             'paid_amount'       => $paidAmount ?? 0,
-            'supplier_advance'  => $advanceAdjusted ?? 0,
+            'customer_advance'  => $advanceAdjusted ?? 0,
             'tax_amount'        => $totals['total_tax_amount'] ?? 0,
             'discount_amount'   => $totals['total_discount'] ?? 0,
             'due_amount'        => $dueAmount ?? 0,
-            'inventory'         => $totals['total_unit_price'] ?? 0,
+            'inventory'         => $totals['inventory'] ?? 0,
+            'cogs'              => $totals['inventory'] ?? 0,
+            'sales_revenue'     => $totals['total_unit_price'] ?? 0,
 
             'date'              => $validated['date'] ?? now(),
             'reference_id'      => $model->id,
