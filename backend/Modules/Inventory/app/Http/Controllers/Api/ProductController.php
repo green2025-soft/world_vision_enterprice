@@ -73,7 +73,9 @@ class ProductController extends BaseApiController
 
   public function getInventoryProducts(Request $request, $id=null)
     {
-        $branchId = $request->input('branch_id');
+        $branchId   = $request->input('branch_id');
+        $categoryId = $request->input('category_id');
+        $isStock    = $request->input('isStock');
 
         $productTable = (new Product())->getTable(); // ✅ Table name dynamically
 
@@ -82,6 +84,9 @@ class ProductController extends BaseApiController
             $query->where('id',$id); 
         }else{
           $query->where('status',1);  
+        }
+        if($categoryId){
+            $query->where('category_id',$categoryId); 
         }
         $query->select('id','name', 'sku', 'category_id', 'unit_id', 'brand_id', 're_order', 'image', 'made_by', 'specification')
         ->where('branch_id', $branchId)
@@ -114,6 +119,20 @@ class ProductController extends BaseApiController
 
 
         ]);
+
+      if ($isStock) {
+            $stockTable = (new StockBalance())->getTable();
+
+            $query->whereExists(function ($q) use ($branchId, $productTable, $stockTable) {
+                $q->selectRaw(1)
+                ->from($stockTable)
+                ->whereColumn("$stockTable.product_id", "$productTable.id")
+                ->where("$stockTable.branch_id", $branchId)
+                ->where("$stockTable.current_stock", '>', 0);
+            });
+        }
+
+        
 
         // Smart paginate
         $products = $query->smartPaginate();

@@ -131,6 +131,11 @@ async function openViewModal(id) {
   }
 }
 
+let accountHeads = ref([]);
+onMounted(async () => {
+  accountHeads.value = await customGet('accounting/account-heads');
+})
+
 </script>
 
 <template>
@@ -254,6 +259,7 @@ async function openViewModal(id) {
               :clearable="false"
               :labelField="(item) => `(${item.code}) ${item.name} (${item.type})`"
               :isEdit="isEdit"
+              :positional="true"
             />
             </td>
             <td>

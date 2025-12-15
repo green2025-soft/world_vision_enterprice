@@ -46,7 +46,9 @@ const props = defineProps({
   isEdit: { type: Boolean, default: false },
   emitObject: { type: Boolean, default: false },
   positional: { type: Boolean, default: false },
-  optionsData: { type: Array, default: () => [] }
+  optionsData: { type: Array, default: () => [] },
+
+  extraParams: { type: Object, default: () => ({}) }
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -77,7 +79,7 @@ const fetchData = async () => {
   loading.value = true
 
   try {
-    const res = await gePaginationList({ page: page.value, search: searchQuery.value })
+    const res = await gePaginationList({ page: page.value, search: searchQuery.value, ...props.extraParams })
     const data = res?.data ?? []
     lastPage.value = res?.pagination?.last_page || lastPage.value
 
@@ -251,7 +253,9 @@ const addOption = (item) => {
 }
 
 defineExpose({
-  addOption
+  addOption,
+  fetchData, 
+  onOpen
 })
 
 </script>

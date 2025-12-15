@@ -1,8 +1,89 @@
 <script setup>
+  import {ref, watch, onMounted } from 'vue'
+  
     import "@/modules/inventory/assets/css/pos.css";
     import { authenticate } from "@/store/authenticate";
+    import { useForm, formatDate } from '@/utilities/methods';
     const auth = authenticate;
-    const user = auth.getUser();
+
+const title = 'Pos'
+const bUrl = 'inventory/categories'
+
+import { useResourceApiClient } from '@/composables/resourceApiClient'
+
+  const {
+  update,
+  create,
+  askDelete,
+  confirmDelete,
+  customGet,
+  confirmDeleteModal,
+  formErrors,
+  isSubmitting,
+} = useResourceApiClient(bUrl, title, true)
+
+
+const { form: filterForm, reset:filterReset } = useForm({
+  category_id: '',
+  isStock: true,
+  per_page:50
+})
+
+
+let productData = ref([]);
+onMounted(async () => {
+  await fetchProducts()
+})
+
+
+const fetchProducts = async () => {
+  productData.value = await customGet(
+    'inventory/products-overview',
+    filterForm.value 
+  )
+}
+
+
+watch(
+  () => [filterForm.value.category_id],
+  () => {
+    fetchProducts()
+  }
+)
+    
+const { form, reset } = useForm({
+  customer_id:'',
+  invoice_date:new Date(),
+  items: []
+})
+
+  // ───── Add Product ─────
+  const addProduct = (input) => {
+    
+    const productId =input.id
+    if (!productId) return
+    input.unit_price = input.purchase_price
+    input.cost_price =
+      (input.purchase_price || 0) - (input.discount_amount || 0) + (input.tax_amount || 0)
+    const duplicateIndex = form.value.items.findIndex(
+      (i, idx) => i.id === input.id
+    )
+
+    if (duplicateIndex !== -1) {
+
+    }else{
+      input.quantity = 1;
+       form.value.items.push(input)
+    }
+
+  }
+
+  const removeItem = (index) => {
+    form.value.items.splice(index, 1)
+   
+  }
+
+
 
 </script>
 <template>
@@ -19,270 +100,77 @@
             <i class="fas fa-eraser"></i> Clear All
           </button>
         </div>
-        <div class="col-md-5">
-          <div class="search-wrapper">
-            <i class="fas fa-search"></i>
+         <div class="col-md-5">
+          <!-- <div class="search-wrapper"> -->
+            <!-- <i class="fas fa-search"></i>
+            <BFormInput autocomplete="off"
+             placeholder="Enter Product name / SKU / Scan bar code" 
+             id="product_search"
+             /> -->
             
-            <input type="text" class="form-control" placeholder="Enter Product name / SKU / Scan bar code">
-          </div>
+            <!-- Popover -->
+           <ResourceSelect
+                ref="productSelect"
+                
+                bUrl="inventory/products-overview?"
+                placeholder="Select Product"
+                :isBranch="true"
+                :labelField="(item) => `${item.name} (${item.sku})`"
+                :emitObject="true" 
+                
+                style="flex:1; min-width:0; width:100%; display:block;"
+                :extraParams="{isStock: true}"
+                  
+                />
+          <!-- </div> -->
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
+          
              <ResourceSelect
+              v-model="filterForm.category_id"
                 bUrl="inventory/categories"
                 :isBranch="true"
-                :isEdit="isEdit"
+
                 placeholder="Select Category" />
 
        
         </div>
-        <div class="col-md-2 text-end">
-            <ul class="list-unstyled d-flex align-items-center mb-0 text-end">
-        <!-- External Website Link -->
-        <!-- <li class="me-3">
-          <a href="#" class="text-dark text-decoration-none d-flex align-items-center">
-            <i class="fas fa-globe me-1"></i> Go to Website
-          </a>
-        </li> -->
+        <div class="col-md-1 text-end">
 
-        <!-- Admin Dropdown -->
-        <li class="dropdown ms-3 text-end">
-        
-          <a
-            href="#"
-            class="text-dark text-decoration-none dropdown-toggle text-end d-block"
-            id="adminDropdown"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i class="fas fa-user me-1"></i>  {{ user.data.user.name }}
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminDropdown">
-            <!-- <li><a class="dropdown-item" href="#">Profile</a></li> -->
-            <li><a class="dropdown-item" href="#"  @click.prevent="auth.logout()
-                            ">Logout</a></li>
-          </ul>
-        </li>
-
-      
-      </ul>
-          
+           <BButton variant="outline-primary" @click.prevent="auth.logout()" >
+             <i class="fas fa-sign-out-alt me-2"></i> Logout
+          </BButton>
         </div>        
       </div>
 
 
       <div class="row" style="height: 86vh;">
         <div class="col-md-2 category overflow-auto d-none">
-          <select class="form-select mb-2">
-            <option selected="" disabled="">Category Filter</option>
-            <option>Beverages</option>
-            <option>Snacks</option>
-            <option>Desserts</option>
-          </select>
-          <button class="category-btn active">Appetizers</button>
-          <button class="category-btn">Soups</button>
-          <button class="category-btn">Salads</button>
-          <button class="category-btn">Main Course</button>
-          <button class="category-btn">Desserts</button>
-          <button class="category-btn">Drinks</button>
-          <button class="category-btn">Burgers</button>
-          <button class="category-btn">Clothing</button>
-          <button class="category-btn">Appetizers</button>
-          <button class="category-btn">Soups</button>
-          <button class="category-btn">Salads</button>
-          <button class="category-btn">Main Course</button>
-          <button class="category-btn">Desserts</button>
-          <button class="category-btn">Drinks</button>
-          <button class="category-btn">Burgers</button>
-          <button class="category-btn">Clothing</button>
-          <button class="category-btn">Appetizers</button>
-          <button class="category-btn">Soups</button>
-          <button class="category-btn">Salads</button>
-          <button class="category-btn">Main Course</button>
-          <button class="category-btn">Desserts</button>
-          <button class="category-btn">Drinks</button>
-          <button class="category-btn">Burgers</button>
-          <button class="category-btn">Clothing</button>
+          
         </div>
 
 
         <div class="col-md-7 p-0 products overflow-auto">
+          {{ form.items }}
+          
           <div class="row row-cols-3 row-cols-md-6 g-2 py-3">
-            <div class="col">
-              <div class="product-card">
+            <div v-for="(productItem, index) in productData" :key="index" class="col">
+              <div class="product-card"  @click="() => addProduct(productItem)">
                 <img src="https://i.postimg.cc/SK1RJzw2/Qcp8h-TLke9-HWc-LIhxn-GGx-CKp3-R3num-R79-ZQG5r-MR.jpg"
                   class="w-100 product-img" alt="product">
                 <div class="pt-2">
-                  <h6 class="mb-1">Spinach Dip</h6>
-                  <p class="text-muted mb-2">$9.00</p>
-                  <button class="btn btn-sm btn-primary w-100">Add</button>
+                  <h6 class="mb-1">{{ productItem.name }}</h6>
+                  <p class="text-muted mb-2">{{ productItem.sale_price }}</p>
+                  <button  @click.stop="addProduct(productItem)"  class="btn btn-sm btn-primary w-100">Add</button>
                 </div>
               </div>
             </div>
-            <div class="col">
-              <div class="product-card">
-                <img src="https://i.postimg.cc/SK1RJzw2/Qcp8h-TLke9-HWc-LIhxn-GGx-CKp3-R3num-R79-ZQG5r-MR.jpg"
-                  class="w-100 product-img" alt="product">
-                <div class="pt-2">
-                  <h6 class="mb-1">Spinach Dip</h6>
-                  <p class="text-muted mb-2">$9.00</p>
-                  <button class="btn btn-sm btn-primary w-100">Add</button>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="product-card">
-                <img src="https://i.postimg.cc/SK1RJzw2/Qcp8h-TLke9-HWc-LIhxn-GGx-CKp3-R3num-R79-ZQG5r-MR.jpg"
-                  class="w-100 product-img" alt="product">
-                <div class="pt-2">
-                  <h6 class="mb-1">Spinach Dip</h6>
-                  <p class="text-muted mb-2">$9.00</p>
-                  <button class="btn btn-sm btn-primary w-100">Add</button>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="product-card">
-                <img src="https://i.postimg.cc/SK1RJzw2/Qcp8h-TLke9-HWc-LIhxn-GGx-CKp3-R3num-R79-ZQG5r-MR.jpg"
-                  class="w-100 product-img" alt="product">
-                <div class="pt-2">
-                  <h6 class="mb-1">Spinach Dip</h6>
-                  <p class="text-muted mb-2">$9.00</p>
-                  <button class="btn btn-sm btn-primary w-100">Add</button>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="product-card">
-                <img src="https://i.postimg.cc/SK1RJzw2/Qcp8h-TLke9-HWc-LIhxn-GGx-CKp3-R3num-R79-ZQG5r-MR.jpg"
-                  class="w-100 product-img" alt="product">
-                <div class="pt-2">
-                  <h6 class="mb-1">Spinach Dip</h6>
-                  <p class="text-muted mb-2">$9.00</p>
-                  <button class="btn btn-sm btn-primary w-100">Add</button>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="product-card">
-                <img src="https://i.postimg.cc/SK1RJzw2/Qcp8h-TLke9-HWc-LIhxn-GGx-CKp3-R3num-R79-ZQG5r-MR.jpg"
-                  class="w-100 product-img" alt="product">
-                <div class="pt-2">
-                  <h6 class="mb-1">Spinach Dip</h6>
-                  <p class="text-muted mb-2">$9.00</p>
-                  <button class="btn btn-sm btn-primary w-100">Add</button>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="product-card">
-                <img src="https://i.postimg.cc/SK1RJzw2/Qcp8h-TLke9-HWc-LIhxn-GGx-CKp3-R3num-R79-ZQG5r-MR.jpg"
-                  class="w-100 product-img" alt="product">
-                <div class="pt-2">
-                  <h6 class="mb-1">Spinach Dip</h6>
-                  <p class="text-muted mb-2">$9.00</p>
-                  <button class="btn btn-sm btn-primary w-100">Add</button>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="product-card">
-                <img src="https://i.postimg.cc/SK1RJzw2/Qcp8h-TLke9-HWc-LIhxn-GGx-CKp3-R3num-R79-ZQG5r-MR.jpg"
-                  class="w-100 product-img" alt="product">
-                <div class="pt-2">
-                  <h6 class="mb-1">Spinach Dip</h6>
-                  <p class="text-muted mb-2">$9.00</p>
-                  <button class="btn btn-sm btn-primary w-100">Add</button>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="product-card">
-                <img src="https://i.postimg.cc/SK1RJzw2/Qcp8h-TLke9-HWc-LIhxn-GGx-CKp3-R3num-R79-ZQG5r-MR.jpg"
-                  class="w-100 product-img" alt="product">
-                <div class="pt-2">
-                  <h6 class="mb-1">Spinach Dip</h6>
-                  <p class="text-muted mb-2">$9.00</p>
-                  <button class="btn btn-sm btn-primary w-100">Add</button>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="product-card">
-                <img src="https://i.postimg.cc/SK1RJzw2/Qcp8h-TLke9-HWc-LIhxn-GGx-CKp3-R3num-R79-ZQG5r-MR.jpg"
-                  class="w-100 product-img" alt="product">
-                <div class="pt-2">
-                  <h6 class="mb-1">Spinach Dip</h6>
-                  <p class="text-muted mb-2">$9.00</p>
-                  <button class="btn btn-sm btn-primary w-100">Add</button>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="product-card">
-                <img src="https://i.postimg.cc/SK1RJzw2/Qcp8h-TLke9-HWc-LIhxn-GGx-CKp3-R3num-R79-ZQG5r-MR.jpg"
-                  class="w-100 product-img" alt="product">
-                <div class="pt-2">
-                  <h6 class="mb-1">Spinach Dip</h6>
-                  <p class="text-muted mb-2">$9.00</p>
-                  <button class="btn btn-sm btn-primary w-100">Add</button>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="product-card">
-                <img src="https://i.postimg.cc/SK1RJzw2/Qcp8h-TLke9-HWc-LIhxn-GGx-CKp3-R3num-R79-ZQG5r-MR.jpg"
-                  class="w-100 product-img" alt="product">
-                <div class="pt-2">
-                  <h6 class="mb-1">Spinach Dip</h6>
-                  <p class="text-muted mb-2">$9.00</p>
-                  <button class="btn btn-sm btn-primary w-100">Add</button>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="product-card">
-                <img src="https://i.postimg.cc/SK1RJzw2/Qcp8h-TLke9-HWc-LIhxn-GGx-CKp3-R3num-R79-ZQG5r-MR.jpg"
-                  class="w-100 product-img" alt="product">
-                <div class="pt-2">
-                  <h6 class="mb-1">Spinach Dip</h6>
-                  <p class="text-muted mb-2">$9.00</p>
-                  <button class="btn btn-sm btn-primary w-100">Add</button>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="product-card">
-                <img src="https://i.postimg.cc/SK1RJzw2/Qcp8h-TLke9-HWc-LIhxn-GGx-CKp3-R3num-R79-ZQG5r-MR.jpg"
-                  class="w-100 product-img" alt="product">
-                <div class="pt-2">
-                  <h6 class="mb-1">Spinach Dip</h6>
-                  <p class="text-muted mb-2">$9.00</p>
-                  <button class="btn btn-sm btn-primary w-100">Add</button>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="product-card">
-                <img src="https://i.postimg.cc/SK1RJzw2/Qcp8h-TLke9-HWc-LIhxn-GGx-CKp3-R3num-R79-ZQG5r-MR.jpg"
-                  class="w-100 product-img" alt="product">
-                <div class="pt-2">
-                  <h6 class="mb-1">Spinach Dip</h6>
-                  <p class="text-muted mb-2">$9.00</p>
-                  <button class="btn btn-sm btn-primary w-100">Add</button>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div class="product-card">
-                <img src="https://i.postimg.cc/SK1RJzw2/Qcp8h-TLke9-HWc-LIhxn-GGx-CKp3-R3num-R79-ZQG5r-MR.jpg"
-                  class="w-100 product-img" alt="product">
-                <div class="pt-2">
-                  <h6 class="mb-1">Spinach Dip</h6>
-                  <p class="text-muted mb-2">$9.00</p>
-                  <button class="btn btn-sm btn-primary w-100">Add</button>
-                </div>
-              </div>
-            </div>
+            
+            
+            
+            
+            
+            
 
             <!-- Repeat for more products -->
           </div>
@@ -292,7 +180,7 @@
           <div class="order-summary-container d-flex flex-column flex-grow-1 bg-white">
 
             <!-- POS Header -->
-            <div class="row g-2 order-summary-header mb-3 px-2 pt-2">
+            <!-- <div class="row g-2 order-summary-header mb-3 px-2 pt-2">
               <div class="col-md-3 col-sm-6">
                 <button class="btn btn-outline-primary w-100">Dine In</button>
               </div>
@@ -305,11 +193,11 @@
               <div class="col-md-3 col-sm-6">
                 <button class="btn btn-outline-primary w-100">Table</button>
               </div>
-            </div>
+            </div> -->
 
             <!-- Select Section -->
             <div class="row g-2 mb-3 px-2">
-              <div class="col-md-7">
+              <div class="col-md-8">
                 <div class="custom-customer-component">
                   <div class="customer-selection-wrapper">
                     <div class="customer-selection">
@@ -336,12 +224,11 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-5">
-                <select class="form-select">
-                  <option selected>Waiter</option>
-                  <option>John</option>
-                  <option>Emma</option>
-                </select>
+              <div class="col-md-4">
+                <DatePicker v-model="form.invoice_date"  />
+                <!-- <select class="form-select">
+                  <option selected>Waiter</option>                  
+                </select> -->
               </div>
             </div>
 
@@ -358,174 +245,26 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr data-price="196">
-                    <td><i class="bi bi-pencil"></i> Chicken dish with chicken pieces</td>
-                    <td>196.00</td>
+                  <tr v-for="(item, index) in form.items" :key="index">
+                    <td><i class="bi bi-pencil"></i> {{ item.name }}</td>
+                    <td>{{ item.sale_price }}</td>
                     <!-- Quantity Control -->
                     <td>
                       <div class="order-summary-qty-box d-flex align-items-center justify-content-center">
                         <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">-</button>
-                        <input type="number" class="form-control qty-input text-center" value="2" min="1">
+                        <input type="number" class="form-control qty-input text-center" v-model="item.quantity" value="" min="1">
                         <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">+</button>
                       </div>
                     </td>
-                    <td class="item-total">392.00</td>
-                    <td><button class="btn btn-remove"><i class="fas fa-trash-alt"></i></button></td>
+                    <td class="item-total">{{ item.sale_price*item.quantity  }}</td>
+                    <td><button @click="removeItem(index)" class="btn btn-remove"><i class="fas fa-trash-alt"></i></button></td>
                   </tr>
-                  <tr data-price="149">
-                    <td><i class="bi bi-pencil"></i> Arancini</td>
-                    <td>149.00</td>
-                    <!-- Quantity Control -->
-                    <td>
-                      <div class="order-summary-qty-box d-flex align-items-center justify-content-center">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">-</button>
-                        <input type="number" class="form-control qty-input text-center" value="2" min="1">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">+</button>
-                      </div>
-                    </td>
-                    <td class="item-total">298.00</td>
-                    <td><button class="btn btn-remove"><i class="fas fa-trash-alt"></i></button></td>
-                  </tr>
-                  <tr data-price="149">
-                    <td><i class="bi bi-pencil"></i> Arancini</td>
-                    <td>149.00</td>
-                    <!-- Quantity Control -->
-                    <td>
-                      <div class="order-summary-qty-box d-flex align-items-center justify-content-center">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">-</button>
-                        <input type="number" class="form-control qty-input text-center" value="2" min="1">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">+</button>
-                      </div>
-                    </td>
-                    <td class="item-total">298.00</td>
-                    <td><button class="btn btn-remove"><i class="fas fa-trash-alt"></i></button></td>
-                  </tr>
-                  <tr data-price="149">
-                    <td><i class="bi bi-pencil"></i> Arancini</td>
-                    <td>149.00</td>
-                    <!-- Quantity Control -->
-                    <td>
-                      <div class="order-summary-qty-box d-flex align-items-center justify-content-center">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">-</button>
-                        <input type="number" class="form-control qty-input text-center" value="2" min="1">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">+</button>
-                      </div>
-                    </td>
-                    <td class="item-total">298.00</td>
-                    <td><button class="btn btn-remove"><i class="fas fa-trash-alt"></i></button></td>
-                  </tr>
-                  <tr data-price="149">
-                    <td><i class="bi bi-pencil"></i> Arancini</td>
-                    <td>149.00</td>
-                    <!-- Quantity Control -->
-                    <td>
-                      <div class="order-summary-qty-box d-flex align-items-center justify-content-center">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">-</button>
-                        <input type="number" class="form-control qty-input text-center" value="2" min="1">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">+</button>
-                      </div>
-                    </td>
-                    <td class="item-total">298.00</td>
-                    <td><button class="btn btn-remove"><i class="fas fa-trash-alt"></i></button></td>
-                  </tr>
-                  <tr data-price="149">
-                    <td><i class="bi bi-pencil"></i> Arancini</td>
-                    <td>149.00</td>
-                    <!-- Quantity Control -->
-                    <td>
-                      <div class="order-summary-qty-box d-flex align-items-center justify-content-center">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">-</button>
-                        <input type="number" class="form-control qty-input text-center" value="2" min="1">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">+</button>
-                      </div>
-                    </td>
-                    <td class="item-total">298.00</td>
-                    <td><button class="btn btn-remove"><i class="fas fa-trash-alt"></i></button></td>
-                  </tr>
-                  <tr data-price="149">
-                    <td><i class="bi bi-pencil"></i> Arancini</td>
-                    <td>149.00</td>
-                    <!-- Quantity Control -->
-                    <td>
-                      <div class="order-summary-qty-box d-flex align-items-center justify-content-center">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">-</button>
-                        <input type="number" class="form-control qty-input text-center" value="2" min="1">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">+</button>
-                      </div>
-                    </td>
-                    <td class="item-total">298.00</td>
-                    <td><button class="btn btn-remove"><i class="fas fa-trash-alt"></i></button></td>
-                  </tr>
-                  <tr data-price="149">
-                    <td><i class="bi bi-pencil"></i> Arancini</td>
-                    <td>149.00</td>
-                    <!-- Quantity Control -->
-                    <td>
-                      <div class="order-summary-qty-box d-flex align-items-center justify-content-center">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">-</button>
-                        <input type="number" class="form-control qty-input text-center" value="2" min="1">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">+</button>
-                      </div>
-                    </td>
-                    <td class="item-total">298.00</td>
-                    <td><button class="btn btn-remove"><i class="fas fa-trash-alt"></i></button></td>
-                  </tr>
-                  <tr data-price="149">
-                    <td><i class="bi bi-pencil"></i> Arancini</td>
-                    <td>149.00</td>
-                    <!-- Quantity Control -->
-                    <td>
-                      <div class="order-summary-qty-box d-flex align-items-center justify-content-center">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">-</button>
-                        <input type="number" class="form-control qty-input text-center" value="2" min="1">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">+</button>
-                      </div>
-                    </td>
-                    <td class="item-total">298.00</td>
-                    <td><button class="btn btn-remove"><i class="fas fa-trash-alt"></i></button></td>
-                  </tr>
-                  <tr data-price="149">
-                    <td><i class="bi bi-pencil"></i> Arancini</td>
-                    <td>149.00</td>
-                    <!-- Quantity Control -->
-                    <td>
-                      <div class="order-summary-qty-box d-flex align-items-center justify-content-center">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">-</button>
-                        <input type="number" class="form-control qty-input text-center" value="2" min="1">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">+</button>
-                      </div>
-                    </td>
-                    <td class="item-total">298.00</td>
-                    <td><button class="btn btn-remove"><i class="fas fa-trash-alt"></i></button></td>
-                  </tr>
-                  <tr data-price="149">
-                    <td><i class="bi bi-pencil"></i> Arancini</td>
-                    <td>149.00</td>
-                    <!-- Quantity Control -->
-                    <td>
-                      <div class="order-summary-qty-box d-flex align-items-center justify-content-center">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">-</button>
-                        <input type="number" class="form-control qty-input text-center" value="2" min="1">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">+</button>
-                      </div>
-                    </td>
-                    <td class="item-total">298.00</td>
-                    <td><button class="btn btn-remove"><i class="fas fa-trash-alt"></i></button></td>
-                  </tr>
-                  <tr data-price="149">
-                    <td><i class="bi bi-pencil"></i> Arancini</td>
-                    <td>149.00</td>
-                    <!-- Quantity Control -->
-                    <td>
-                      <div class="order-summary-qty-box d-flex align-items-center justify-content-center">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">-</button>
-                        <input type="number" class="form-control qty-input text-center" value="2" min="1">
-                        <button class="btn btn-outline-secondary btn-sm qty-btn" type="button">+</button>
-                      </div>
-                    </td>
-                    <td class="item-total">298.00</td>
-                    <td><button class="btn btn-remove"><i class="fas fa-trash-alt"></i></button></td>
-                  </tr>
+                 
+                 
+                
+           
+             
+               
                   
                 </tbody>
               </table>

@@ -183,7 +183,7 @@ const updateWithFile = async (id, data, $message = '') => {
 const customGet = async (customUrl, params = {}, isCBranchId=true ) => {
   isLoading.value = true
 
-  customUrl = isCBranchId?customUrl+`?branch_id=${branchId}`:customUrl
+  customUrl = isCBranchId?customUrl+`?branch_id=${branchId.value}`:customUrl
   try {
     const res = await api.get(customUrl, {
       requiresAuth: true,

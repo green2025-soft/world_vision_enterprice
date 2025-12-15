@@ -12,7 +12,7 @@ const {
   create,
   askDelete,
   confirmDelete,
-  gePaginationOptions,
+  customGet,
   confirmDeleteModal,
   formErrors,
   isSubmitting,
@@ -80,7 +80,7 @@ async function saveItem() {
 
 let productData = ref([]);
 onMounted(async () => {
-  productData.value = await gePaginationOptions('inventory/products');
+  productData.value = await customGet('inventory/products');
 })
 
 </script>
@@ -171,7 +171,8 @@ onMounted(async () => {
       <div class="row align-items-center">
         <div class="col-md-8">
           <BaseFormGroup :label="`Product ${index + 1}`" labelCols="3" required>
-            <ResourceSelect
+            
+              <ResourceSelect
               v-model="item.product_id"
               bUrl="inventory/products"
               placeholder="Select product"
@@ -180,6 +181,9 @@ onMounted(async () => {
               :positional="true"
               :optionsData="productData"
             />
+
+            
+            
           </BaseFormGroup>
         </div>
 

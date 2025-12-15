@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useResourceApiClient } from '@/composables/resourceApiClient'
 import { useForm, dbDataFormat } from '@/utilities/methods'
 
@@ -16,6 +16,7 @@ const {
   confirmDelete,
   customGet,
   confirmDeleteModal,
+  gePaginationOptions,
   formErrors,
   isSubmitting,
 } = useResourceApiClient(bUrl, title, true)
@@ -119,6 +120,12 @@ async function openViewModal(id) {
     isLoading.value = false
   }
 }
+
+
+let accountHeads = ref([]);
+onMounted(async () => {
+  accountHeads.value = await customGet('accounting/account-heads');
+})
 
 </script>
 
@@ -234,6 +241,8 @@ async function openViewModal(id) {
              :clearable="false"
               :labelField="(item) => `(${item.code}) ${item.name} (${item.type})`"
               :isEdit="isEdit"
+              :optionsData="accountHeads"
+              :positional="true"
           />
         </td>
         <td class="text-center">

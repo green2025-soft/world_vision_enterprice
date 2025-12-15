@@ -51,8 +51,16 @@ trait HandlesModelQueries
     }
 
     public function scopeSmartPaginate($query)
-    {
-        $limit = (int) request('per_page', $this->limit);
-        return $query->paginate($limit);
-    }
+	{
+		$limit = (int) request('per_page', $this->limit);
+		$requestedPage = (int) request('page', 1);
+
+		$total = $query->count(); // total matching items
+		$lastPage = max(ceil($total / $limit), 1);
+
+		$page = min($requestedPage, $lastPage); // clamp requested page
+
+		return $query->paginate($limit, ['*'], 'page', $page);
+	}
+
 }
