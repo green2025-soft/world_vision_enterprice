@@ -24,6 +24,8 @@ class Sale extends InvBaseModel
 
     public function items()
     {
-        return $this->hasMany(PurchaseItem::class, 'purchase_id');
+        return $this->hasMany(SaleItem::class, 'sale_id');
     }
+
+    
 }

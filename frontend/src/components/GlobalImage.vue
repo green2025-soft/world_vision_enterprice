@@ -56,7 +56,14 @@ function onError() {
       class="fallback d-flex align-items-center justify-content-center w-100 h-100"
       :style="{ borderRadius: radius }"
     >
-      <i :class="['fas', fallbackIcon, 'text-muted']" :style="{ fontSize: size * 0.6 + 'px' }"></i>
+      <!-- <i :class="['fas', fallbackIcon, 'text-muted']" :style="{ fontSize: size * 0.6 + 'px' }"></i> -->
+         <img
+      src="/backend/images/gallery.svg"
+      :alt="alt"
+      :class="imgClass"
+      loading="lazy"
+      :style="{ maxWidth: '100%', maxHeight: '100%', borderRadius: radius }"
+    />
     </div>
   </div>
 </template>

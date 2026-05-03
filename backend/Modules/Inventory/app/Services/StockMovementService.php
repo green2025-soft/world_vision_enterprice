@@ -112,9 +112,9 @@ class StockMovementService
             }
         }
 
-        if ($remaining > 0) {
-            throw new Exception("Insufficient stock for product ID: {$productId}");
-        }
+        // if ($remaining > 0) {
+        //     throw new Exception("Insufficient stock for product ID: {$productId}");
+        // }
 
         return $consumed;
     }

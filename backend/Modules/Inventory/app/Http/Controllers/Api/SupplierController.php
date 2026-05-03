@@ -76,10 +76,10 @@ class SupplierController extends BaseApiController
           $query->where('status',1);  
         }
         $suppliers = $query->smartPaginate();
-            // ✅ Get supplier IDs for current page
+            // Get supplier IDs for current page
         $supplierIds = $suppliers->pluck('id')->toArray();
 
-        // ✅ Query 2: Fetch balances for only current page suppliers
+        // Query 2: Fetch balances for only current page suppliers
         $balances = SupplierLedger::whereIn('supplier_id', $supplierIds)
         ->where('branch_id', $branchId)
         ->selectRaw('supplier_id, SUM(debit - credit) as balance')
@@ -87,7 +87,7 @@ class SupplierController extends BaseApiController
         ->get()
         ->keyBy('supplier_id');
 
-        // ✅ Attach balance to each supplier
+        // Attach balance to each supplier
         $suppliers->getCollection()->transform(function ($supplier) use ($balances) {
             $supplier->balance = $balances[$supplier->id]->balance ?? 0;
             return $supplier;

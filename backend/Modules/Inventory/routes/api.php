@@ -21,14 +21,18 @@ Route::middleware(['auth:sanctum'])->prefix('v1/inventory')->name('inventory.')-
     Route::apiResource('products', ProductController::class);
     Route::get('products-overview/{id?}', [ProductController::class, 'getInventoryProducts'])->name('products-overview');
     Route::apiResource('product-sets', ProductSetController::class);
+
     Route::get('suppliers/balances/{id?}', [SupplierController::class, 'getSupplierBalances'])->name('suppliers.balances');
     Route::apiResource('suppliers', SupplierController::class);
- 
     Route::apiResource('supplier-advance', SupplierAdvanceController::class);
-    Route::get('supplier-advance/{id}/balance', [SupplierAdvanceController::class, 'supplierBalance']);
+    Route::get('supplier-advance/{id}/balance', [SupplierAdvanceController::class, 'supplierBalance'])->name('supplier-advance.balances');
+
+
+    Route::get('customers/balances/{id?}', [CustomerController::class, 'getCustomerrBalances'])->name('customers.balances');
     Route::apiResource('customers', CustomerController::class);
-     Route::apiResource('customer-advance', CustomerAdvanceController::class);
-    Route::get('customer-advance/{id}/balance', [CustomerAdvanceController::class, 'customerBalance']);
+    Route::apiResource('customer-advance', CustomerAdvanceController::class);
+    Route::get('customer-advance/{id}/balance', [CustomerAdvanceController::class, 'customerBalance'])->name('customer-advance.balances');
+
     Route::apiResource('purchases', PurchaseController::class);
     Route::apiResource('sales', SaleController::class);
 

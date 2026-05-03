@@ -370,9 +370,12 @@ export function useForm(defaults = {}) {
     form.value = { ...form.value, ...data }
   }
 
-  const reset = () => {
-    form.value = { ...defaults }
+const reset = (override = {}) => {
+  form.value = {
+    ...defaults,
+    ...override
   }
+}
 
   const getRawForm = () => JSON.parse(JSON.stringify(form.value))
 
@@ -490,7 +493,7 @@ export function numberToWords(amount) {
 export function formatCurrency(value, decimals = 2) {
   let number = Number(value)
   if (isNaN(number)) number = 0
-  return number.toFixed(decimals)
+  return '৳'+number.toFixed(decimals)
 }
 
 export function clampPercent(value) {

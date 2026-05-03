@@ -29,7 +29,6 @@ class PurchaseService extends BaseInventoryService{
 
     protected function afterStockHandling($model, array $itemsData, array $validated, array $totals, bool $isUpdate)
     {
-        app(StockBalanceService::class)->updateFromPurchase($itemsData, $model->branch_id);
         app(PriceListService::class)->updatePrices($itemsData, $model->branch_id);
         
         if ($isUpdate){

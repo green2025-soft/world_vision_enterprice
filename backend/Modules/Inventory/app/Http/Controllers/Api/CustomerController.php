@@ -58,6 +58,7 @@ class CustomerController extends BaseApiController
 
     public function getCustomerrBalances(Request $request, $id=null){
          $branchId = $request->input('branch_id');
+         
           $query = $this->indexQuery()
             ->where('branch_id', $branchId);
         if ($id){
@@ -66,18 +67,18 @@ class CustomerController extends BaseApiController
           $query->where('status',1);  
         }
         $customers = $query->smartPaginate();
-            // ✅ Get supplier IDs for current page
+            //  Get supplier IDs for current page
         $customersIds = $customers->pluck('id')->toArray();
 
-        // ✅ Query 2: Fetch balances for only current page suppliers
+        //  Query 2: Fetch balances for only current page suppliers
         $balances = CustomerLedger::whereIn('customer_id', $customersIds)
-        ->where('customer_id', $branchId)
+        ->where('branch_id', $branchId)
         ->selectRaw('customer_id, SUM(debit - credit) as balance')
         ->groupBy('customer_id')
         ->get()
         ->keyBy('customer_id');
-
-        // ✅ Attach balance to each supplier
+        
+        // Attach balance to each supplier
         $customers->getCollection()->transform(function ($customer) use ($balances) {
             $customer->balance = $balances[$customer->id]->balance ?? 0;
             return $customer;

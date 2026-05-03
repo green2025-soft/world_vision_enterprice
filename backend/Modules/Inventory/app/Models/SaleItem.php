@@ -13,6 +13,10 @@ class SaleItem extends InvBaseModel
         return $this->belongsTo(Product::class, 'product_id');
     }
 
+    public function currentStock(){
+        return $this->belongsTo(StockBalance::class, 'product_id', 'product_id');
+    }
+
     public function sale(){
         return $this->belongsTo(Sale::class, 'sale_id');
     }

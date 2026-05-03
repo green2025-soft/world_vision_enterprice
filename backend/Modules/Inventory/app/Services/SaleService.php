@@ -6,8 +6,7 @@ namespace Modules\Inventory\Services;
 
 use Modules\Inventory\Models\Sale;
 use Modules\Inventory\Models\SaleItem;
-use Modules\Inventory\Services\StockBalanceService;
-use Modules\Inventory\Services\PriceListService;
+
 
    
 class SaleService extends BaseInventoryService{
@@ -29,8 +28,6 @@ class SaleService extends BaseInventoryService{
 
     protected function afterStockHandling($model, array $itemsData, array $validated, array $totals, bool $isUpdate)
     {
-        app(StockBalanceService::class)->updateFromPurchase($itemsData, $model->branch_id);
-        app(PriceListService::class)->updatePrices($itemsData, $model->branch_id);
         
         if ($isUpdate){
             app(CustomerAccountingService::class)->deleteEntry($model->id, 'sale');

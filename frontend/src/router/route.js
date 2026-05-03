@@ -64,7 +64,7 @@ router.beforeEach((to, from, next) => {
     }
   }
 
-  return next(); // ✅ always call next() once
+  return next(); // always call next() once
 });
 
 

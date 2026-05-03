@@ -14,7 +14,7 @@ class CustomerAccountingService extends BasePartyAccountingService
     protected function getAccountingMetaForType(string $type): array
     {
         return match ($type) {
-            'sale'              => ['module' => 'Sale Voucher', 'source' => 'Sale Voucher'],
+            'sale'              => ['module' => 'Sales Voucher', 'source' => 'Sales Voucher'],
             'payment'           => ['module' => 'Customer Payment', 'source' => 'Customer Payment'],
             'advance'           => ['module' => 'Customer Advance', 'source' => 'Customer Advance'],
             'return'            => ['module' => 'Sale Return', 'source' => 'Return'],

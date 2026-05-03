@@ -31,6 +31,13 @@ abstract class BaseInventoryService
 
             $this->handleStock($model, $validated['items'], $id !== null);
 
+             // apply new stock
+            app(StockBalanceService::class)->adjustStock(
+                $itemsData,
+                $model->branch_id,
+                $this->movementType
+            );
+
           
             $this->afterStockHandling($model, $itemsData, $validated, $totals, $id !== null);
 
@@ -40,6 +47,17 @@ abstract class BaseInventoryService
 
             return $model;
         });
+    }
+
+    private function reverseType(string $type): string
+    {
+        return match ($type) {
+            'purchase'        => 'purchase_return',
+            'sale'            => 'sale_return',
+            'purchase_return' => 'purchase',
+            'sale_return'     => 'sale',
+            default => throw new \Exception("Invalid type")
+        };
     }
 
     private function percentAmountCal($price, $amount=0, $percent=0){
@@ -69,8 +87,11 @@ abstract class BaseInventoryService
             // Subtotal (unit price × qty)
             $subtotal = $unitPrice * $quantity;
 
+            $itemDiscount           = isset($item['discount_amount'])?$item['discount_amount']:0;
+            $itemDiscountPercent    = isset($item['discount_percent'])?$item['discount_percent']:0;
+
             // Discount handling
-            $discountCall = $this->percentAmountCal( $subtotal, $item['discount_amount'], $item['discount_percent']);
+            $discountCall = $this->percentAmountCal( $subtotal, $itemDiscount, $itemDiscountPercent);
             $discountAmount = $discountCall['amount'];
             $discountPercent = $discountCall['percent'];
 
@@ -78,7 +99,10 @@ abstract class BaseInventoryService
             // Tax handling
             $taxable   = $subtotal - $discountAmount;
 
-            $texCall = $this->percentAmountCal($subtotal, $item['tax_amount'], $item['tax_percent']);
+            $itemTexAmount = isset($item['tax_amount'])?$item['tax_amount']:0;
+            $itemTexPercent = isset($item['tax_percent'])?$item['tax_percent']:0;
+
+            $texCall = $this->percentAmountCal($subtotal, $itemTexAmount, $itemTexPercent);
 
             $taxPercent = $texCall['percent'];
             $taxAmount  = $texCall['amount'];
@@ -129,7 +153,7 @@ abstract class BaseInventoryService
         $salesAmount = array_sum(array_column($itemsData, 'net_price'));
         $itemDiscount = array_sum(array_column($itemsData, 'discount_amount'))??0;
         $itemDiscountPercent = array_sum(array_column($itemsData, 'discount_percent'))??0;
-        // 🔁 Discount: amount > percent > none
+        //  Discount: amount > percent > none
         $discountCall = $this->percentAmountCal( $salesAmount, $validated['discount_amount'], $validated['discount_percent']);
         $discountAmount = $discountCall['amount'];
         $discountPercent = $discountCall['percent'];
@@ -225,6 +249,14 @@ abstract class BaseInventoryService
         $modelClass = $this->modelClass;
         $model = $modelClass::findOrFail($id);
 
+        $stockService = app(StockBalanceService::class);
+        $oldItems = $model->items->toArray();
+        $stockService->adjustStock(
+            $oldItems,
+            $model->branch_id,
+            $this->reverseType($this->movementType)
+        );
+
         app(StockMovementService::class)->validateEdit($this->movementType, $model, $validated['items']);
 
         $model->update(array_merge($validated, $totals));
@@ -292,7 +324,7 @@ protected function logActivity(string $action, $model, $oldData = null): void
         app(StockMovementService::class)->validateDelete($this->movementType, $id);
 
         // Rollback stock balance from items — override this method if needed for different movement types
-        app(StockBalanceService::class)->rollbackFromPurchase($model->items->toArray(), $model->branch_id);
+        app(StockBalanceService::class)->adjustStock($model->items->toArray(), $model->branch_id, $this->reverseType($this->movementType));
 
         // Delete related items
         $model->items()->delete();

@@ -1,5 +1,5 @@
 import Index from "./pages/Index.vue";
-import Pos from "./pages/Pos.vue";
+import Pos from "./pages/sales/Pos.vue";
 import Page404 from "@/components/Page404.vue"; // You can replace if module specific 404
 
  const lazy = (view) => () => import(`@/modules/inventory/pages/${view}.vue`);
@@ -26,6 +26,7 @@ const routes = {
    makeRoute("suppliers", lazy("Supplier"), "Supplier"),
    makeRoute("supplier-advance", lazy("SupplierAdvance"), "Supplier Advance"),
    makeRoute("customers", lazy("Customer"), "Customer"),
+   makeRoute("customer-advance", lazy("CustomerAdvance"), "Customer Advance"),
    makeRoute("products", lazy("Product"), "Product"),
    makeRoute("product-sets", lazy("ProductSet"), "Product Set"),
   {
@@ -39,28 +40,53 @@ const routes = {
     meta: { title: "Create Purchase", ...defaultMeta, requiresBranch: true },
   },
   {
-  path: "purchases/:id/edit",
-  component: () => import('@/modules/inventory/pages/purchase/Create.vue'),
-  meta: { title: "Edit Purchase", ...defaultMeta, requiresBranch: true },
-  props: true
-},
+    path: "purchases/:id/edit",
+    component: () => import('@/modules/inventory/pages/purchase/Create.vue'),
+    meta: { title: "Edit Purchase", ...defaultMeta, requiresBranch: true },
+    props: true
+  },
+
+  {
+    path: "sales",
+    component: () => import('@/modules/inventory/pages/sales/Index.vue'),
+    meta: { title: "Sales", ...defaultMeta, requiresBranch: true },
+  },
+
+  {
+    path: "sales/:id",
+    component: () => import('@/modules/inventory/pages/sales/view.vue'),
+    meta: { title: "Sales Invoice", ...defaultMeta, requiresBranch: true },
+    props: true
+  },
 
 
 
   
    
-    {
-      path: ":catchAll(.*)",
-      component: Page404
-    }
+    // {
+    //   path: ":catchAll(.*)",
+    //   component: Page404
+    // }
   ]
 };
 
 const posRoute = {
-  path: "/inventory/pos",
-  component: Pos,
-  meta: { title: "POS", ...defaultMeta, requiresBranch: true },
+  path: "/inventory",
+  children:[{
+     path: "pos",
+    component: Pos,
+    meta: { title: "POS", ...defaultMeta, requiresBranch: true }
+  },
+  {
+    path: "pos/:id/edit",
+    component: Pos,
+    meta: { title: "Edit POS", ...defaultMeta, requiresBranch: true }, 
+    props: true
+  }
+]
 };
+
+
 
 export { posRoute };
 

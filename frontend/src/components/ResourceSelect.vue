@@ -8,6 +8,7 @@
     placeholder="Select..."
     @search="onSearch"
     @open="onOpen"
+    ref="selectRef"
 
     :multiple="multiple"
   >
@@ -35,6 +36,8 @@ import { useResourceApiClient } from '@/composables/resourceApiClient'
 
 /* 🔹 Reactive global cache (shared by all ResourceSelect instances) */
 const resourceCache = reactive({})
+
+const selectRef = ref(null)
 
 const props = defineProps({
   modelValue: [String, Number, Object, Array],
@@ -252,10 +255,28 @@ const addOption = (item) => {
   selected.value = item
 }
 
+const focus = () => {
+  const el = selectRef.value
+
+  if (!el) return
+
+  // focus input
+  el.$el?.querySelector('input')?.focus()
+
+  // dropdown force open (hacky but works)
+  if (el.openDropdown) {
+    el.openDropdown()
+  } else {
+    // fallback: simulate click
+    el.$el?.querySelector('.vs__dropdown-toggle')?.click()
+  }
+}
+
 defineExpose({
   addOption,
   fetchData, 
-  onOpen
+  onOpen,
+  focus
 })
 
 </script>
