@@ -100,8 +100,8 @@ onMounted(async () => {
                       <td>{{ ++index }}</td>
                       <td> {{ item.name }}</td>
                       <td class="text-end">{{ item.quantity }}</td>
-                      <td class="text-end">{{ item.sale_price }}</td>
-                      <td class="text-end">{{ item.sale_price * item.quantity}}</td>
+                      <td class="text-end">{{ item.unit_price }}</td>
+                      <td class="text-end">{{ item.unit_price * item.quantity}}</td>
                   </tr>
 
                   

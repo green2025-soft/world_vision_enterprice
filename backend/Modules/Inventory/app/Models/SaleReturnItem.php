@@ -4,9 +4,9 @@ namespace Modules\Inventory\Models;
 
 use Modules\Core\Models\Branch;
 
-class SaleItem extends InvBaseModel
+class SaleReturnItem extends InvBaseModel
 {
-    protected $fillable = ['sale_id', 'product_id', 'invoice_date', 'quantity', 'unit_price', 'cost_price', 'inventory_subtotal', 'total_price', 'discount_percent', 'discount_amount', 'tax_percent', 'tax_amount', 'net_price', 'profit', 'remarks', 'branch_id'];
+    protected $fillable = ['sale_return_id', 'sale_item_id', 'product_id', 'sold_qty', 'return_qty', 'sale_unit_price', 'return_unit_price', 'branch_id'];
 
 
     public function product(){
@@ -17,8 +17,8 @@ class SaleItem extends InvBaseModel
         return $this->belongsTo(StockBalance::class, 'product_id', 'product_id');
     }
 
-    public function sale(){
-        return $this->belongsTo(Sale::class, 'sale_id');
+    public function return(){
+        return $this->belongsTo(SaleReturn::class, 'sale_return_id');
     }
 
 

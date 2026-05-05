@@ -7,7 +7,7 @@ use Modules\Inventory\Models\Purchase;
 use Modules\Inventory\Http\Requests\PurchaseRequest;
 use Illuminate\Http\Request;
 use Modules\Inventory\Models\SupplierLedger;
-use Modules\Inventory\Services\PurchaseService;
+use Modules\Inventory\Services\Transaction\PurchaseService;
 
 class PurchaseController extends BaseApiController
 {

@@ -19,7 +19,6 @@ return new class extends Migration
             $table->decimal('quantity', 15, 2)->default(0);
             $table->decimal('unit_price', 15, 2)->default(0);
             $table->decimal('cost_price', 15, 2)->default(0);
-            $table->decimal('sale_price', 15, 2)->default(0);
             $table->decimal('inventory_subtotal', 15, 2)->default(0);
             $table->decimal('total_price', 15, 2)->default(0);
             $table->decimal('discount_percent', 8, 2)->default(0);
@@ -27,6 +26,7 @@ return new class extends Migration
             $table->decimal('tax_percent', 8, 2)->default(0);
             $table->decimal('tax_amount', 15, 2)->default(0);
             $table->decimal('net_price', 15, 2)->default(0);
+            $table->decimal('profit', 15, 2)->default(0);
             $table->text('remarks')->nullable();
             $table->foreignId('branch_id')->constrained('branches')->onDelete('cascade');
             $table->timestamps();

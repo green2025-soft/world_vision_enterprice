@@ -7,7 +7,7 @@ use Modules\Inventory\Models\Sale;
 use Modules\Inventory\Http\Requests\SaleRequest;
 use Illuminate\Http\Request;
 use Modules\Inventory\Models\CustomerLedger;
-use Modules\Inventory\Services\SaleService;
+use Modules\Inventory\Services\Transaction\SaleService;
 
 class SaleController extends BaseApiController
 {

@@ -20,7 +20,7 @@ class PriceListService
         $now = now();
 
         foreach ($items as $item) {
-            $this->updatePriceIfNeeded($item, 'unit_price', 'purchase', $branchId, $priceType, $now);
+            $this->updatePriceIfNeeded($item, 'cost_price', 'purchase', $branchId, $priceType, $now);
             $this->updatePriceIfNeeded($item, 'sale_price', 'sale', $branchId, $priceType, $now);
         }
     }

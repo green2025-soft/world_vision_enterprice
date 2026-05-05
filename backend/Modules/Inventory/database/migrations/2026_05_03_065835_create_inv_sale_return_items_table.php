@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained('inv_products')->onDelete('restrict');
             $table->decimal('sold_qty', 12, 2);  
             $table->decimal('return_qty', 12, 2);
-            $table->decimal('sale_unit_price', 15, 2)->default(0);
+            $table->decimal('unit_price', 15, 2)->default(0);
             $table->decimal('return_unit_price', 12, 2);
             $table->foreignId('branch_id')->constrained('branches')->onDelete('cascade');
             $table->timestamps();

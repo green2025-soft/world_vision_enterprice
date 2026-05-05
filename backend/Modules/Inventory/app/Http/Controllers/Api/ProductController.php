@@ -106,6 +106,13 @@ class ProductController extends BaseApiController
                 ->where('branch_id', $branchId)
                 ->orderByDesc('start_date')
                 ->limit(1),
+                
+            'cost_price' => PriceList::select('price')
+                ->whereColumn('product_id', "$productTable.id")
+                ->where('price_type', 'purchase')
+                ->where('branch_id', $branchId)
+                ->orderByDesc('start_date')
+                ->limit(1),
 
 
 

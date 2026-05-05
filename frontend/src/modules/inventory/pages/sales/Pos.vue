@@ -111,9 +111,9 @@ form.value.items.push({
   name: p.name,
 
   quantity: 1,
-  unit_price: Number(p.purchase_price || 0),
+  unit_price: Number(p.sale_price || 0),
 
-  sale_price: Number(p.sale_price || 0),
+  cost_price: Number(p.cost_price || 0),
   current_stock: Number(p.current_stock || 0),
 
 })
@@ -151,7 +151,7 @@ const removeItem = (i) => form.value.items.splice(i, 1)
 // ───── TOTALS ─────
 const subtotal = computed(() =>
   form.value.items.reduce(
-    (sum, i) => sum + i.quantity * (i.sale_price || 0),
+    (sum, i) => sum + i.quantity * (i.unit_price || 0),
     0
   )
 )
@@ -160,7 +160,7 @@ const totals = computed(() =>
   form.value.items.reduce(
     (acc, i) => {
       acc.quantity += i.quantity
-      acc.amount += i.quantity * (i.sale_price || 0)
+      acc.amount += i.quantity * (i.unit_price || 0)
       return acc
     },
     { quantity: 0, amount: 0 }
@@ -418,7 +418,7 @@ async function saveItem() {
           
           <div class="row row-cols-3 row-cols-md-6 g-2 py-3" v-else>
             
-            
+            {{ productData }}
             <div v-for="(productItem, index) in productData" :key="index" class="col">
               <div class="product-card"  @click="() => addProduct(productItem)">
                 <GlobalImage :src="productItem.image" wrapperClass="m-auto" />
@@ -513,7 +513,7 @@ async function saveItem() {
                 <tbody>
                   <tr v-for="(item, index) in form.items" :key="index">
                     <td class="p-2"><i class="bi bi-pencil"></i> {{ item.name }} ({{ item.sku }})</td>
-                    <td class="text-end p-0" style="padding-right: 8px !important;">{{ item.sale_price }} </td>
+                    <td class="text-end p-0" style="padding-right: 8px !important;">{{ item.unit_price }} </td>
                     <!-- Quantity Control -->
                     <td class="p-0">
                       <div class="order-summary-qty-box d-flex align-items-center justify-content-center">
@@ -533,7 +533,7 @@ async function saveItem() {
                         </BInputGroup>
                       </div>
                     </td>
-                    <td class="item-total text-end p-0">{{ item.sale_price*item.quantity  }}</td>
+                    <td class="item-total text-end p-0">{{ item.unit_price*item.quantity  }}</td>
                     <td class="p-0"><button @click="removeItem(index)" class="btn btn-remove"><i class="fas fa-trash-alt"></i></button></td>
                   </tr>
                  

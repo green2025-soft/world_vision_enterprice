@@ -28,8 +28,8 @@ return new class extends Migration
 
             $table->integer('quantity');
             $table->float('consumed_quantity')->nullable()->default(0)->after('quantity');
+            $table->decimal('unit_cost', 10, 2)->nullable();
             $table->decimal('unit_price', 10, 2);
-            $table->decimal('sales_price', 10, 2)->nullable();
 
             $table->unsignedBigInteger('reference_id')->nullable();
 
