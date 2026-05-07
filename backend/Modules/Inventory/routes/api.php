@@ -34,6 +34,7 @@ Route::middleware(['auth:sanctum'])->prefix('v1/inventory')->name('inventory.')-
     Route::get('customer-advance/{id}/balance', [CustomerAdvanceController::class, 'customerBalance'])->name('customer-advance.balances');
 
     Route::apiResource('purchases', PurchaseController::class);
+    Route::get('sale-invoice-items', [SaleController::class, 'invoiceItems'])->name('sale-invoice-items');
     Route::apiResource('sales', SaleController::class);
 
 });

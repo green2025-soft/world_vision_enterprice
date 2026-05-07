@@ -25,6 +25,7 @@ class PurchaseService extends TransactionService{
         $extra = [
             'supplier_id'       => $data['supplier_id'] ?? null,
             'supplier_advance'  => $totals['advance_adjusted'] ?? 0,
+            'adjustment'        => $data['adjustment'] ?? 0,
         ];
 
         $this->transactionAccounting

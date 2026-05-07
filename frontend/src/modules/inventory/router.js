@@ -59,6 +59,12 @@ const routes = {
     props: true
   },
 
+  {
+    path: "sales_return/create",
+    component: () => import('@/modules/inventory/pages/sales_return/Create.vue'),
+    meta: { title: "Sale Return", ...defaultMeta, requiresBranch: true },
+  },
+
 
 
   

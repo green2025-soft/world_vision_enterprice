@@ -9,7 +9,13 @@ class FinancialResolver
      */
     public function resolvePrice(array $item, string $type): float
     {
-        return (float) ($item['unit_price'] ?? 0);
+         return (float) (
+            $item['unit_price']
+            ?? $item['refund_unit_price']
+            ?? $item['wastage_unit_price']
+            ?? 0
+        );
+        
     }
 
     /**

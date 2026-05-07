@@ -109,7 +109,7 @@ class ProductController extends BaseApiController
                 
             'cost_price' => PriceList::select('price')
                 ->whereColumn('product_id', "$productTable.id")
-                ->where('price_type', 'purchase')
+                ->where('price_type', 'cost_price')
                 ->where('branch_id', $branchId)
                 ->orderByDesc('start_date')
                 ->limit(1),

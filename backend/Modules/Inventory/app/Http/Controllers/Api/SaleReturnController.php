@@ -9,9 +9,9 @@ use Illuminate\Http\Request;
 use Modules\Inventory\Models\CustomerLedger;
 use Modules\Inventory\Services\Transaction\SaleService;
 
-class SaleController extends BaseApiController
+class SaleReturnController extends BaseApiController
 {
-    protected string $title = 'Sale';
+    protected string $title = 'Sale Return';
 
     protected SaleService $saleService;
 
@@ -108,19 +108,5 @@ class SaleController extends BaseApiController
     }
 
 
-    public function invoiceItems(Request $request){
-        $query = $this->indexQuery()
-            ->where('branch_id', $request['branch_id'])
-            ->with([
-                'customer:id,name,phone,address',
-                'items.product',
-                'items.currentStock',
-                'stockMovements'
-            ]);
-        if ($request->customer_id) {
-            $query->where('customer_id', $request->customer_id);
-        }
-
-        return $this->listResponse($query->smartPaginate());
-    }
+    
 }

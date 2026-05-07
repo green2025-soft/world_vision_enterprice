@@ -10,7 +10,6 @@ class StockMovementService
 {
     public function create(string $type, object $source, array $item): void
     {
-        dd($item);
         StockMovement::create([
             'product_id'    => $item['product_id'],
             'movement_type' => $type,

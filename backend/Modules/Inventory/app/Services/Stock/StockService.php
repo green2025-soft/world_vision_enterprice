@@ -21,7 +21,10 @@ class StockService
             // 1. VALIDATE
             $this->validator->validate($type, $item, $source->branch_id);
 
-            // 2. FIFO CONSUME (ONLY STOCK OUT)
+            // 2. MOVEMENT FIRST 🔥
+            $this->movement->create($type, $source, $item);
+
+            // 3. FIFO LOGIC
             if (StockType::isStockOut($type)) {
                 $this->consumption->consume(
                     $item['product_id'],
@@ -30,10 +33,15 @@ class StockService
                 );
             }
 
-            // 3. MOVEMENT LOG
-            $this->movement->create($type, $source, $item);
+            if ($type === StockType::SALE_RETURN) {
+                $this->consumption->restore(
+                    $item['product_id'],
+                    $item['quantity'],
+                    $source->branch_id
+                );
+            }
 
-            // 4. BALANCE UPDATE (LAST 🔥)
+            // 4. BALANCE LAST
             $this->balance->apply($type, $item, $source->branch_id);
         }
     }

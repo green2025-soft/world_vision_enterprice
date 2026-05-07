@@ -24,6 +24,7 @@ class SaleService extends TransactionService{
             'customer_id'       => $data['customer_id'] ?? null,
             'customer_advance'  => $totals['advance_adjusted'] ?? 0,
             'sales_revenue'     => $totals['subtotal'] ?? 0,
+            'adjustment'        => $data['adjustment'] ?? 0,
         ];
 
         $this->transactionAccounting

@@ -323,7 +323,7 @@ async function saveItem() {
       await update(form.value.id, form.value, false, false)
     } else {
       const saleData = await create(form.value, '', false, false)
-      let saleId = saleData.id;
+       saleId = saleData.id;
     }
 
     clearAll()
@@ -346,7 +346,7 @@ async function saveItem() {
     <div class="container-fluid">
       <div class="row topbar p-2 align-items-center g-2">
         <div class="col-md-1">
-          <router-link to="/inventory/dashboard" class="btn btn-outline-primary w-100">
+          <router-link to="/inventory/dashboard" class="btn btn-outline-primary w-100 px-0">
             <i class="fas fa-arrow-left"></i> Dashboard
           </router-link>
         </div>
@@ -418,7 +418,7 @@ async function saveItem() {
           
           <div class="row row-cols-3 row-cols-md-6 g-2 py-3" v-else>
             
-            {{ productData }}
+            
             <div v-for="(productItem, index) in productData" :key="index" class="col">
               <div class="product-card"  @click="() => addProduct(productItem)">
                 <GlobalImage :src="productItem.image" wrapperClass="m-auto" />

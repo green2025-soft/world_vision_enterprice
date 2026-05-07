@@ -16,7 +16,7 @@ class ItemCalculator
     public function calculate(array $items, array $input, string $type, $ratio=1): array
     {
         $result = [];
-
+        
         foreach ($items as $item) {
 
             // ---------------- VALIDATION ----------------
@@ -85,7 +85,7 @@ class ItemCalculator
             ];
 
             // ---------------- TYPE EXTRA ----------------
-            $extra = $this->typeHandler->handle($type, $itemData, $ratio);
+            $extra = $this->typeHandler->handle($type, $itemData, $ratio, $item);
 
             $result[] = array_merge($itemData, $extra);
         }
