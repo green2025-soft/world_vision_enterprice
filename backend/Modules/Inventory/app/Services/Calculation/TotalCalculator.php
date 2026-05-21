@@ -4,11 +4,24 @@ namespace Modules\Inventory\Services\Calculation;
 
 class TotalCalculator
 {
+    public function __construct(
+        protected SaleReturnCalculator $sale_return
+    ){}
+      public function handle(array $items, array $input, $type): array
+      {
+        return match ($type) {
+            'sale_return'   => (function() use ($items, $input) {
+                return $this->sale_return->calculate($items, $input);
+            }),
+            default => $this->calculate($items, $input)
+        };
+
+      }
     public function calculate(array $items, array $input): array
     {
-        $subtotal = array_sum(array_column($items, 'total_price'));
-        $discount = array_sum(array_column($items, 'discount_amount'));
-        $tax      = array_sum(array_column($items, 'tax_amount'));
+        $subtotal       = array_sum(array_column($items, 'total_price'));
+        $discount       = array_sum(array_column($items, 'discount_amount'));
+        $tax            = array_sum(array_column($items, 'tax_amount'));
         $inventorySubtotal      = array_sum(array_column($items, 'inventory_subtotal'));
 
         $adjustment = $input['adjustment'] ?? 0;

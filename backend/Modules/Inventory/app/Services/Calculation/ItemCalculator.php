@@ -26,7 +26,7 @@ class ItemCalculator
                 throw new \Exception("Product ID missing");
             }
 
-            $qty = (float) ($item['quantity'] ?? 0);
+            $qty = $this->financial->resolveQuantity($item, $type);
 
             if ($qty <= 0) {
                 throw new \Exception("Invalid quantity for product ID: {$productId}");
@@ -84,6 +84,7 @@ class ItemCalculator
                 'invoice_date' => $input['invoice_date'] ?? now(),
             ];
 
+            $itemData = $this->financial->resolveBaseItems($itemData, $item, $type);
             // ---------------- TYPE EXTRA ----------------
             $extra = $this->typeHandler->handle($type, $itemData, $ratio, $item);
 

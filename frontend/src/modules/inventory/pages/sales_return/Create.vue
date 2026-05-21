@@ -95,7 +95,7 @@ watch(selectedInvoice, async (invoice) => {
       unit_price: num(item.unit_price),
       unit_sale_price: num(item.unit_price),
 
-      refund_unit_price: num(item.unit_price),
+      return_unit_price: num(item.unit_price),
       refund_total_price: 0,
 
       _source: null
@@ -137,12 +137,12 @@ const syncItem = (item, source = null) => {
   /* -------------------------------
   | DEFAULT REFUND UNIT PRICE
   ------------------------------- */
-  if (!item.refund_unit_price) {
-    item.refund_unit_price = originalPrice
+  if (!item.return_unit_price) {
+    item.return_unit_price = originalPrice
   }
 
-  item.refund_unit_price = clamp(
-    item.refund_unit_price,
+  item.return_unit_price = clamp(
+    item.return_unit_price,
     0,
     originalPrice
   )
@@ -157,7 +157,7 @@ const syncItem = (item, source = null) => {
 
     item.refund_total_price =
       num(item.return_qty) *
-      num(item.refund_unit_price)
+      num(item.return_unit_price)
   }
 
   /* -------------------------------
@@ -171,7 +171,7 @@ const syncItem = (item, source = null) => {
       maxRefundTotal
     )
 
-    item.refund_unit_price =
+    item.return_unit_price =
       num(item.return_qty)
         ? num(item.refund_total_price) /
           num(item.return_qty)
@@ -185,7 +185,7 @@ const syncItem = (item, source = null) => {
 
     item.refund_total_price =
       num(item.return_qty) *
-      num(item.refund_unit_price)
+      num(item.return_unit_price)
   }
 
   /* -------------------------------
@@ -382,6 +382,7 @@ const submit = async () => {
 
   <!-- ITEMS -->
   <div class="card">
+    {{ form.items }}
     <div class="table-responsive">
 
       <table class="table align-middle">
@@ -456,7 +457,7 @@ const submit = async () => {
             <input
                 type="number"
                 class="form-control text-end"
-                v-model.number="item.refund_unit_price"
+                v-model.number="item.return_unit_price"
                  :max="item.unit_price"
                 @input="
                 item._source = 'unit';

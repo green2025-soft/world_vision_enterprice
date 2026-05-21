@@ -11,11 +11,19 @@ class FinancialResolver
     {
          return (float) (
             $item['unit_price']
-            ?? $item['refund_unit_price']
+            ?? $item['return_unit_price']
             ?? $item['wastage_unit_price']
             ?? 0
         );
         
+    }
+
+     public function resolveQuantity(array $item, string $type)
+    {
+        return match ($type) {
+            'sale_return'   => $item['return_qty'],
+            default         => $item['quantity']
+        };  
     }
 
     /**
@@ -44,5 +52,25 @@ class FinancialResolver
         }
 
         return [round($amount, 2), round($percent, 2)];
+    }
+
+    public function resolveBaseItems(array $baseItem, $item, string $type)
+    {
+        return match ($type) {
+            'sale_return'   => (function() use ($baseItem, $item) {
+                $data = [
+                    'sale_item_id'          => $item['id'],
+                    'product_id'            => $item['product_id'],
+                    'return_qty'            => $baseItem['quantity'],
+                    'wastage_qty'           => $item['wastage_qty'],
+                    'unit_sale_price'       => $item['unit_sale_price'],
+                    'return_unit_price'     => $item['return_unit_price'],
+                    'total_refund_price'    => $baseItem['total_price'],
+                    'cost_price'            => $baseItem['cost_price'],
+                ];
+                return $data;
+            }),
+            default         => $baseItem
+        };  
     }
 }

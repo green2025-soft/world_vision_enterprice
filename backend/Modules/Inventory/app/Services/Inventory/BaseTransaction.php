@@ -1,27 +1,29 @@
-<?php
-
-namespace Modules\Inventory\Services\Transaction;
+<?php 
+namespace Modules\Inventory\Services\Inventory;
 
 use Illuminate\Support\Facades\DB;
-use Modules\Inventory\Services\Calculation\CalculationService;
-use Modules\Inventory\Services\Item\ItemService;
-use Modules\Inventory\Services\Stock\StockService;
+use Modules\Inventory\Services\Inventory\Calculation\CalculationService;
+use Modules\Inventory\Services\Inventory\Stock\StockService;
+use Modules\Inventory\Services\Inventory\Transaction\ItemService;
+use Modules\Inventory\Services\Transaction\TransactionAccountingService;
 
-abstract class TransactionService
-{
+abstract class BaseTransaction {
+
     protected string $type;
 
     public function __construct(
         protected TransactionAccountingService $transactionAccounting
     ) {}
 
-    protected function modelClass() {}
-    protected function relationKey() {}
+     protected function modelClass() {}
 
-    public function storeOrUpdate(array $data, ?int $id = null)
+
+     protected function relationKey() {}
+
+     public function storeOrUpdate(array $data, ?int $id = null)
     {
         return DB::transaction(function () use ($data, $id) {
-            // 1. CALCULATION
+             // 1. CALCULATION
             $calc = app(CalculationService::class)->calculate(
                 $data['items'],
                 $data,
@@ -31,7 +33,6 @@ abstract class TransactionService
             $items  = $calc['items'];
             $totals = $calc['totals'];
 
-            // 2. MODEL CREATE / UPDATE
             $model = $id
                 ? $this->update($id, $data, $totals)
                 : $this->create($data, $totals);
@@ -43,7 +44,7 @@ abstract class TransactionService
                 $this->relationKey()
             );
 
-            // 4. STOCK ENGINE
+             // 4. STOCK ENGINE
             app(StockService::class)->handle(
                 $this->type,
                 $model,
@@ -53,9 +54,11 @@ abstract class TransactionService
             // 5. POST ACTION (ACCOUNTING ETC)
             $this->after($model, $items, $data, $totals, $id !== null);
 
-            return $model;
+             return $model;
+
         });
     }
+
 
     protected function create(array $data, array $totals)
     {
@@ -64,7 +67,9 @@ abstract class TransactionService
         return $class::create(array_merge($data, $totals, [
             'created_by' => auth()->id(),
         ]));
+
     }
+
 
     protected function update(int $id, array $data, array $totals)
     {
@@ -77,6 +82,7 @@ abstract class TransactionService
         return $model;
     }
 
+
     protected function after($model, $items, $data, $totals, bool $isUpdate)
     {
         // override in child
@@ -85,29 +91,25 @@ abstract class TransactionService
     public function delete(int $id): void
     {
         DB::transaction(function () use ($id) {
-
             $class = $this->modelClass();
-
             $model = $class::with('items')->findOrFail($id);
-
-            //  1. STOCK REVERSE
             app(StockService::class)
                 ->reverse($this->type, $model->id);
 
-            $this->transactionAccounting->delete($model->id, $this->type);
-            //  2. ACCOUNTING DELETE (HOOK)
+            // $this->transactionAccounting->delete($model->id, $this->type);
+
             $this->afterDelete($model);
-
-            //  3. DELETE ITEMS
             $model->items()->delete();
-
-            // 4. DELETE MAIN MODEL
             $model->delete();
+
         });
     }
 
     protected function afterDelete($model): void
     {
-
+        
     }
+
+
+
 }

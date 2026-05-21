@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Inventory\Services\Stock;
+namespace Modules\Inventory\Services\Inventory\Stock;
 
-use Modules\Inventory\Services\Stock\Movement\StockMovementService;
-use Modules\Inventory\Services\Stock\Movement\StockConsumptionService;
+use Modules\Inventory\Services\Inventory\Stock\Movement\StockMovementService;
+use Modules\Inventory\Services\Inventory\Stock\Movement\StockConsumptionService;
 
 class StockService
 {
