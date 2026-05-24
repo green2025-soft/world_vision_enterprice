@@ -17,11 +17,10 @@ class StockService
 
 
     public function handle(string $type, object $source, array $items){
+         $type = trim((string) $type);
         return match ($type) {
-            'sale_return'   => (function() use ($source, $items) {
-                return $this->sale_return->handle($source, $items);
-            }),
-            default => $this->process($type, $source, $items)
+            'sale_return'   =>  $this->sale_return->handle($source, $items),
+            default         => $this->process($type, $source, $items)
         };
     }
 
@@ -31,7 +30,7 @@ class StockService
 
             // 1. VALIDATE
             $this->validator->validate($type, $item, $source->branch_id);
-
+        
             // 2. MOVEMENT FIRST 🔥
             $this->movement->create($type, $source, $item);
 

@@ -16,10 +16,13 @@ return new class extends Migration
             $table->foreignId('sale_return_id')->constrained('inv_sale_returns')->onDelete('cascade');
             $table->foreignId('sale_item_id')->constrained('inv_sale_items')->onDelete('cascade');
             $table->foreignId('product_id')->constrained('inv_products')->onDelete('restrict');
-            $table->decimal('sold_qty', 12, 2);  
-            $table->decimal('return_qty', 12, 2);
-            $table->decimal('unit_price', 15, 2)->default(0);
-            $table->decimal('return_unit_price', 12, 2);
+            $table->decimal('return_qty', 12, 2)->default(0);
+            $table->decimal('wastage_qty', 12, 2)->default(0);
+            $table->decimal('unit_sale_price', 12, 2)->default(0);
+            $table->decimal('return_unit_price', 12, 2)->default(0);
+            $table->decimal('total_return_price', 12, 2)->default(0);
+            $table->decimal('total_refund_price', 12, 2)->default(0);
+            $table->decimal('cost_price', 12, 2)->default(0);
             $table->foreignId('branch_id')->constrained('branches')->onDelete('cascade');
             $table->timestamps();
         });

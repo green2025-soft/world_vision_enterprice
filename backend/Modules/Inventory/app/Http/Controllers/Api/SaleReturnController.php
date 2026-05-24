@@ -3,22 +3,23 @@
 namespace Modules\Inventory\Http\Controllers\Api;
 use Modules\Core\Http\Controllers\Api\BaseApiController;
 
-use Modules\Inventory\Models\Sale;
-use Modules\Inventory\Http\Requests\SaleRequest;
+
 use Illuminate\Http\Request;
+use Modules\Inventory\Http\Requests\SaleReturnRequest;
 use Modules\Inventory\Models\CustomerLedger;
-use Modules\Inventory\Services\Transaction\SaleService;
+use Modules\Inventory\Models\SaleReturn;
+use Modules\Inventory\Services\Inventory\Transaction\SaleReturnService;
 
 class SaleReturnController extends BaseApiController
 {
     protected string $title = 'Sale Return';
 
-    protected SaleService $saleService;
+    protected SaleReturnService $saleReturnService;
 
-    public function __construct(SaleService $saleService)
+    public function __construct(SaleReturnService $saleReturnService)
     {
-        $this->saleService  = $saleService;
-        $this->model = Sale::class;
+        $this->saleReturnService  = $saleReturnService;
+        $this->model = SaleReturn::class;
     }
 
     public function index(Request $request)
@@ -31,7 +32,7 @@ class SaleReturnController extends BaseApiController
         return $this->listResponse($query->smartPaginate());
     }
 
-    public function store(SaleRequest $request)
+    public function store(SaleReturnRequest $request)
     {
         $request->validated();
         if (empty($validated['invoice_no'])) {
@@ -39,13 +40,13 @@ class SaleReturnController extends BaseApiController
         }
         if(!isset($request['']))
 
-        $createData = $this->saleService->storeOrUpdate($request->all());
+        $createData = $this->saleReturnService->storeOrUpdate($request->all());
         return $this->createdResponse($createData);
     }
 
-         protected function generateInvoiceNo(): string
+        protected function generateInvoiceNo(): string
         {
-            $prefix = 'SAL-' . date('ym') . '-';
+            $prefix = 'SRT-' . date('ym') . '-';
 
             $lastInvoiceNo = $this->model::where('invoice_no', 'like', $prefix . '%')
                 ->latest('invoice_no')
@@ -94,16 +95,16 @@ class SaleReturnController extends BaseApiController
 
     }
 
-    public function update(SaleRequest $request, $id)
+    public function update(SaleReturnRequest $request, $id)
     {
         $request->validated();
-        $updated = $this->saleService->storeOrUpdate($request->all(), $id);
+        $updated = $this->saleReturnService->storeOrUpdate($request->all(), $id);
         return $this->updatedResponse($updated);
     }
 
     public function destroy($id)
     {
-        $this->saleService->delete($id);
+        $this->saleReturnService->delete($id);
         return $this->deletedResponse();
     }
 

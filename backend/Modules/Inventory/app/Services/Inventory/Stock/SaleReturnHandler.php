@@ -1,41 +1,72 @@
 <?php 
 namespace Modules\Inventory\Services\Inventory\Stock;
+use Modules\Inventory\Services\Inventory\Stock\Movement\StockMovementService;
+use Modules\Inventory\Services\Inventory\Stock\Movement\StockConsumptionService;
 class SaleReturnHandler
 {
     public function __construct(
-        protected StockService $stock
+        protected StockValidator $validator,
+        protected StockMovementService $movement,
+        protected StockConsumptionService $consumption,
+        protected StockBalanceService $balance
     ) {}
 
     public function handle(object $source, array $items): void
     {
+        
+      
+        
         foreach ($items as $item) {
+            $oldQty = $this->movement->getPreviousQty(
+                $item['product_id'],
+                $source->branch_id,
+                $source->id,
+                [StockType::SALE_RETURN, StockType::WASTAGE]
+            )??0;
 
+           $newQty = $item['return_qty'] + $item['wastage_qty'];
+           $difference = $newQty - $oldQty;
+
+           $this->consumption->updateStock(StockType::SALE_RETURN, $item['product_id'], $source->branch_id, $source->sale_id, abs($difference));
+
+            // SALE RETURN
             if (($item['return_qty'] ?? 0) > 0) {
+                $applyItem =  $item;
+                $applyItem['quantity'] = $item['return_qty'];
+                $this->validator->validate(StockType::SALE_RETURN, $applyItem, $source->branch_id);
 
-                $this->stock->process(
-                    StockType::SALE_RETURN,
-                    $source,
-                    [[
-                        'product_id' => $item['product_id'],
-                        'quantity'   => $item['return_qty'],
-                        'cost_price' => $item['cost_price'],
-                        'unit_price' => $item['unit_price'],
-                    ]]
+                $this->movement->create(StockType::SALE_RETURN, $source, [
+                    'product_id' => $item['product_id'],
+                    'quantity'   => $item['return_qty'],
+                    'cost_price' => $item['cost_price'],
+                    'unit_price' => $item['return_unit_price'],
+                ]);
+
+                $this->consumption->restore(
+                    $item['product_id'],
+                    $item['return_qty'],
+                    $source->branch_id
                 );
+                
+                $this->balance->apply(StockType::SALE_RETURN, $applyItem, $source->branch_id);
             }
 
+            // WASTAGE
             if (($item['wastage_qty'] ?? 0) > 0) {
+                $applyItem = $item;
+                $applyItem['quantity'] = $item['wastage_qty'];
 
-                $this->stock->process(
-                    StockType::WASTAGE,
-                    $source,
-                    [[
-                        'product_id' => $item['product_id'],
-                        'quantity'   => $item['wastage_qty'],
-                        'cost_price' => $item['cost_price'],
-                        'unit_price' => $item['unit_price'],
-                    ]]
-                );
+                $this->validator->validate(StockType::WASTAGE, $applyItem, $source->branch_id);
+
+                $this->movement->create(StockType::WASTAGE, $source, [
+                    'product_id' => $item['product_id'],
+                    'quantity'   => $item['wastage_qty'],
+                    'cost_price' => $item['cost_price'],
+                    'unit_price' => $item['unit_sale_price'],
+                ]);
+
+                
+                $this->balance->apply(StockType::WASTAGE, $applyItem, $source->branch_id);
             }
         }
     }

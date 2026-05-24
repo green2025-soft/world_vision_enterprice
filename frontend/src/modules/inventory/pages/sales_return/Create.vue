@@ -1,23 +1,27 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { useResourceApiClient } from '@/composables/resourceApiClient'
-import { useForm, formatCurrency } from '@/utilities/methods'
+import { useForm, formatCurrency, dbDataFormat } from '@/utilities/methods'
 
-const bUrl = 'inventory/purchases'
+const router = useRouter()
+
+const bUrl = 'inventory/sale-return'
+const title = 'Sale Return'
 const selectedCustomer = ref(null)
 
 const {
   customGet,
   create,
   isSubmitting
-} = useResourceApiClient(bUrl, 'Sale Return', true)
+} = useResourceApiClient(bUrl, title, true)
 
 const { form } = useForm({
   customer_id: null,
   return_date: new Date(),
   items: [],
   sale_id: null,
-   cash_return: 0,
+  cash_return: 0,
   customer_advance: 0,
   note: '',
 })
@@ -82,6 +86,7 @@ watch(selectedInvoice, async (invoice) => {
     const consumed = (invoice.stock_movements || [])
       .filter(m => m.product_id === item.product_id)
       .reduce((s, m) => s + num(m.consumed_quantity), 0)
+      item.sale_item_id = item.id
 
     return {
       ...item,
@@ -248,8 +253,11 @@ const customerDueAdjusted = computed(() => {
   )
 
   const totalRefund = refundTotal.value + wastageSaleAmount
+
+  const dueAdjust = customerDue.value >= totalRefund ? totalRefund :  customerDue.value
+  form.value.due_adjusted = dueAdjust;
   
-  return  customerDue.value >= totalRefund ? totalRefund :  customerDue.value 
+  return  dueAdjust
 })
 
 const cashRefund = computed(() => {
@@ -304,8 +312,28 @@ const syncSplit = (source) => {
 /* ----------------------------------
 | SUBMIT
 ---------------------------------- */
+const errors = ref([])
 const submit = async () => {
-  // await create(form.value)
+  form.value.return_date = dbDataFormat(form.value.return_date)
+   let message = `${title} created successfully`;
+   try {
+      if (form.value.id) {
+         message = `${title} updated successfully`;
+        await update(form.value.id, form.value, false, false)
+      }else{
+        await create(form.value, '', false, false)
+      }
+
+    sessionStorage.setItem('saleReturnToastMessage', JSON.stringify({ 
+      message: message, 
+      type: 'success' 
+    }))
+
+      router.push(`/${bUrl}`)
+   }catch (error) {
+    errors.value = formErrors.value
+  }
+  await create(form.value)
 }
 
 
@@ -382,9 +410,9 @@ const submit = async () => {
 
   <!-- ITEMS -->
   <div class="card">
-    {{ form.items }}
-    <div class="table-responsive">
 
+    <div class="table-responsive">
+      
       <table class="table align-middle">
 
         <thead>
@@ -426,7 +454,10 @@ const submit = async () => {
             </td>
 
             <!-- SOLD -->
-            <td class="text-center">{{ item.sold_qty }}</td>
+            <td class="text-center">{{ item.sold_qty }} 
+              <span v-if="item.consumed_quantity >0" class="text-danger"> - ({{ item.consumed_quantity }})</span>
+              
+            </td>
             <td class="text-center">{{ item.unit_price }}</td>
             <!-- <td class="text-end">{{ item.cost_price }}</td> -->
 

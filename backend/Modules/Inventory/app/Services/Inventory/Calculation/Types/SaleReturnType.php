@@ -7,7 +7,7 @@ namespace Modules\Inventory\Services\Inventory\Calculation\Types;
 
 class SaleReturnType extends ReturnType
 {
-    public function build(array $item, array $input, float $ratio): array
+    public function build(array $item, array $input, float $ratio=1): array
     {
         $trade = $this->trade($item, $input, $ratio);
 

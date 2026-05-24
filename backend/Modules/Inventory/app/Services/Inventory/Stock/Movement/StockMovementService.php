@@ -39,4 +39,17 @@ class StockMovementService
             $movement->delete();
         }
     }
+
+    public function getPreviousQty(
+        int $productId,
+        int $branchId,
+        int $referenceId,
+        array $type
+    ): float {
+        return StockMovement::where('product_id', $productId)
+            ->where('branch_id', $branchId)
+            ->where('reference_id', $referenceId)
+            ->whereIn('movement_type', $type)
+            ->sum('quantity');
+    }
 }

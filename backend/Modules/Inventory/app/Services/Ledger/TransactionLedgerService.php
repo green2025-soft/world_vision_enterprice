@@ -13,23 +13,27 @@ class TransactionLedgerService extends BaseLedgerService
     /**
      * CUSTOMER CONTEXT
      */
-    public function customer(): self
+  public function customer(): static
     {
-        $this->model = CustomerLedger::class;
-        $this->key   = 'customer_id';
+        $clone = clone $this;
 
-        return $this;
+        $clone->model = CustomerLedger::class;
+        $clone->key = 'customer_id';
+
+        return $clone;
     }
 
     /**
      * SUPPLIER CONTEXT
      */
-    public function supplier(): self
+    public function supplier(): static
     {
-        $this->model = SupplierLedger::class;
-        $this->key   = 'supplier_id';
+        $clone = clone $this;
 
-        return $this;
+        $clone->model = SupplierLedger::class;
+        $clone->key = 'supplier_id';
+
+        return $clone;
     }
 
     /**
@@ -37,16 +41,16 @@ class TransactionLedgerService extends BaseLedgerService
      */
     public function store(array $data)
     {
+         if (isset($data[0])){
+            $results = [];
+             foreach ($data as $item) {
+                $results[] = $this->storeOrUpdate($item);
+            }
+            return $results;
+         }
         return $this->storeOrUpdate($data);
     }
 
-    /**
-     * DELETE LEDGER ENTRY
-     */
-    public function delete(array $data): void
-    {
-        $this->delete($data);
-    }
 
     /**
      * MODEL BINDING
@@ -63,4 +67,6 @@ class TransactionLedgerService extends BaseLedgerService
     {
         return $this->key;
     }
+
+    
 }

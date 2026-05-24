@@ -36,7 +36,7 @@ class Sale extends InvBaseModel
 
     public function stockMovements()
     {
-        return $this->hasMany(StockMovement::class, 'reference_id', 'sale_id')->where('movement_type', 'sale');
+        return $this->hasMany(StockMovement::class, 'reference_id')->where('movement_type', 'sale');
     }
 
    

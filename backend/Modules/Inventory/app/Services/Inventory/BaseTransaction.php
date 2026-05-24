@@ -2,6 +2,7 @@
 namespace Modules\Inventory\Services\Inventory;
 
 use Illuminate\Support\Facades\DB;
+use Modules\Inventory\Services\Accounts\TypeAccountResolver;
 use Modules\Inventory\Services\Inventory\Calculation\CalculationService;
 use Modules\Inventory\Services\Inventory\Stock\StockService;
 use Modules\Inventory\Services\Inventory\Transaction\ItemService;
@@ -12,7 +13,7 @@ abstract class BaseTransaction {
     protected string $type;
 
     public function __construct(
-        protected TransactionAccountingService $transactionAccounting
+        protected TypeAccountResolver $typeAccountResolver
     ) {}
 
      protected function modelClass() {}
@@ -23,6 +24,7 @@ abstract class BaseTransaction {
      public function storeOrUpdate(array $data, ?int $id = null)
     {
         return DB::transaction(function () use ($data, $id) {
+            
              // 1. CALCULATION
             $calc = app(CalculationService::class)->calculate(
                 $data['items'],

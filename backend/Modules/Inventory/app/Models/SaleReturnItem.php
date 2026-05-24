@@ -6,7 +6,7 @@ use Modules\Core\Models\Branch;
 
 class SaleReturnItem extends InvBaseModel
 {
-    protected $fillable = ['sale_return_id', 'sale_item_id', 'product_id', 'sold_qty', 'return_qty', 'sale_unit_price', 'return_unit_price', 'branch_id'];
+    protected $fillable = ['sale_return_id', 'sale_item_id', 'product_id', 'return_qty', 'wastage_qty', 'unit_sale_price', 'return_unit_price', 'total_return_price', 'total_refund_price', 'cost_price', 'branch_id'];
 
 
     public function product(){

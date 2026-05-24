@@ -4,99 +4,110 @@ namespace Modules\Inventory\Services\Ledger;
 
 class LedgerEntryBuilder
 {
+    protected array $data = [];
+
+    protected string $type = '';
+
+    /**
+     * Set payload
+     */
+    protected function set(array $data, string $type): void
+    {
+        $this->data = $data;
+        $this->type = $type;
+    }
+
+    /**
+     * Create ledger entry
+     */
+    protected function makeEntry(
+        string $type,
+        float|int $amount,
+        string $direction
+    ): array {
+        unset($this->data['items']);
+        unset($this->data['date']);
+        return array_merge($this->data, [
+            'type'      => $type,
+            'amount'    => $amount,
+            'direction' => $direction,
+        ]);
+    }
+
     /**
      * SALE / PURCHASE BUILDER
      */
     public function build(array $data, string $type): array
     {
+        $this->set($data, $type);
+
         $entries = [];
 
-        /**
-         * 1️⃣ MAIN DUE ENTRY
-         */
         if (!empty($data['due'])) {
-            $entries[] = [
-                'type'      => $type, // sale OR purchase
-                'amount'    => $data['due'],
-                'direction' => 'in',
-            ];
+            $entries[] = $this->makeEntry(
+                $this->type,
+                $data['due'],
+                'in'
+            );
         }
 
-        /**
-         * 2️⃣ ADVANCE ADJUST (COMMON)
-         */
         if (!empty($data['advance_adjust'])) {
-            $entries[] = [
-                'type'      => 'advance_adjust',
-                'amount'    => $data['advance_adjust'],
-                'direction' => 'out',
-            ];
+            $entries[] = $this->makeEntry(
+                'advance_adjust',
+                $data['advance_adjust'],
+                'out'
+            );
         }
 
-        /**
-         * 3️⃣ PAYMENT (COMMON)
-         */
         if (!empty($data['payment'])) {
-            $entries[] = [
-                'type'      => 'payment',
-                'amount'    => $data['payment'],
-                'direction' => 'out',
-            ];
+            $entries[] = $this->makeEntry(
+                'payment',
+                $data['payment'],
+                'out'
+            );
         }
 
         return $entries;
     }
 
     /**
-     * 🔥 RETURN BUILDER (REVERSAL LOGIC)
+     * 🔥 RETURN BUILDER
      */
     public function buildReturn(array $data, string $type): array
     {
+        $this->set($data, $type);
+
         $entries = [];
 
-        /**
-         * INPUT (already normalized outside)
-         */
         $refundAmount     = (float) ($data['advance'] ?? 0);
-        $adjustDueAmount  = (float) ($data['adjusted_due_amount'] ?? 0);
-        $cashRefundAmount = (float) ($data['cash_refund_amount'] ?? 0);
+        $adjustDueAmount  = (float) ($data['due_adjusted'] ?? 0);
+        $cashRefundAmount = (float) ($data['cash_return'] ?? 0);
+        // dd( $cashRefundAmount);
 
-        /**
-         * 1️⃣ DUE ADJUST (highest priority)
-         * Liability reduction
-         */
         if ($adjustDueAmount > 0) {
-            $entries[] = [
-                'type'      => 'return_due_adjust',
-                'amount'    => $adjustDueAmount,
-                'direction' => 'out',
-            ];
+            $entries[] = $this->makeEntry(
+                'return_due_adjust',
+                $adjustDueAmount,
+                'out'
+            );
         }
 
-        /**
-         * 2️⃣ CASH REFUND
-         * Money going out
-         */
         if ($cashRefundAmount > 0) {
-            $entries[] = [
-                'type'      => 'return_cash_refund',
-                'amount'    => $cashRefundAmount,
-                'direction' => 'out',
-            ];
+            $entries[] = $this->makeEntry(
+                'return_cash_refund',
+                $cashRefundAmount,
+                'out'
+            );
         }
 
-        /**
-         * 3️⃣ ADVANCE (remaining balance)
-         * Future credit to customer/supplier
-         */
-        $remaining = $refundAmount - ($adjustDueAmount + $cashRefundAmount);
+        // $remaining = $refundAmount - ($adjustDueAmount + $cashRefundAmount);
 
-        if ($remaining > 0) {
-            $entries[] = [
-                'type'      => 'return_advance',
-                'amount'    => $remaining,
-                'direction' => 'in',
-            ];
+        if ($refundAmount > 0) {
+            $entries[] = $this->makeEntry(
+                'return_advance',
+                $refundAmount,
+                'in'
+            );
         }
 
         return $entries;

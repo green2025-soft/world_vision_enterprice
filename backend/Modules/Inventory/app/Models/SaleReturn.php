@@ -6,7 +6,7 @@ use Modules\Core\Models\Branch;
 use Modules\Core\Models\User;
 class SaleReturn extends InvBaseModel
 {
-    protected $fillable = ['return_no', 'sale_id', 'customer_id', 'return_date', 'total_return_amount', 'adjusted_due_amount', 'cash_refund_amount', 'store_credit_amount', 'note', 'branch_id', 'created_by', 'status'];
+    protected $fillable = ['invoice_no', 'sale_id', 'customer_id', 'return_date', 'total_return_amount', 'total_refund_amount', 'adjusted_due_amount', 'cash_refund_amount', 'customer_advance', 'note', 'branch_id', 'created_by', 'status'];
 
     protected array $searchable = [];
 

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 
 abstract class BaseLedgerService
 {
-    protected string $type;
+    
 
     abstract protected function modelClass(): string;
     abstract protected function relationKey(): string;
@@ -33,7 +33,7 @@ abstract class BaseLedgerService
 
             $payload = array_merge($data, [
                 $this->relationKey() => $data[$this->relationKey()],
-                'transaction_type'   => $this->type,
+                'transaction_type'   => $data['type'],
                 'debit'              => $debit,
                 'credit'             => $credit,
                 'balance'            => $balance,
@@ -75,12 +75,12 @@ abstract class BaseLedgerService
             ->sum(DB::raw('debit - credit'));
     }
 
-   public function generateReferenceNo($model, string $prefix = '', int $digit = 6): string
+   public function generateReferenceNo(string $prefix = '', int $digit = 6): string
     {
-        return DB::transaction(function () use ($model, $prefix, $digit) {
+        return DB::transaction(function () use ($prefix, $digit) {
 
             // lock latest row (avoid duplicate in concurrent request)
-            $last = $model::query()
+            $last = $this->modelClass()::query()
                 ->select('reference_no')
                 ->whereNotNull('reference_no')
                 ->lockForUpdate()

@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('inv_sale_returns', function (Blueprint $table) {
             $table->id();
-            $table->string('return_no')->unique();
+            $table->string('invoice_no')->unique();
             $table->foreignId('sale_id')->constrained('inv_sales')->onDelete('cascade');
             $table->foreignId('customer_id')->constrained('inv_customers')->onDelete('cascade');
             $table->date('return_date');
-            $table->decimal('total_return_amount', 12, 2);
+            $table->decimal('total_return_amount', 12, 2)->default(0);
+            $table->decimal('total_refund_amount', 12, 2)->default(0);
             $table->decimal('adjusted_due_amount', 12, 2)->default(0);
             $table->decimal('cash_refund_amount', 12, 2)->default(0);
-            $table->decimal('store_credit_amount', 12, 2)->default(0);
+            $table->decimal('customer_advance', 12, 2)->default(0);
             $table->text('note')->nullable();
             $table->foreignId('branch_id')->constrained('branches')->onDelete('cascade');
             $table->foreignId('created_by')->nullable()->constrained('users');

@@ -76,4 +76,48 @@ class StockConsumptionService
             throw new Exception("Cannot restore more than sold quantity");
         }
     }
+
+    public function updateStock(
+        string $type,
+        int $productId,
+        int $branchId,
+        int $referenceId,
+        float $qty,
+        string $mode ='add'
+    ): void {
+
+        $movementType = match ($type) {
+            'sale_return'     => 'sale',
+            'purchase_return' => 'purchase',
+            default => throw new Exception("Invalid return type")
+        };
+
+        $batch = StockMovement::where('product_id', $productId)
+            ->where('branch_id', $branchId)
+            ->where('reference_id', $referenceId)
+            ->where('movement_type', $movementType)
+            ->first();
+
+        if (! $batch) {
+            throw new Exception("Stock movement not found");
+        }
+
+        if ($mode === 'add') {
+            $new = $batch->consumed_quantity + $qty;
+
+            if ($new > $batch->quantity) {
+                throw new Exception("Consumed exceeds stock");
+            }
+
+        } else {
+            $new = $batch->consumed_quantity - $qty;
+
+            if ($new < 0) {
+                throw new Exception("Consumed cannot be negative");
+            }
+        }
+
+        $batch->consumed_quantity = $new;
+        $batch->save();
+    }
 }

@@ -10,7 +10,7 @@ class ItemService
     public function store(object $model, array $items, string $relation): void
     {
         $data = [];
-
+        // dd($items);
         foreach ($items as $item) {
 
             $data[] = array_merge($item, [

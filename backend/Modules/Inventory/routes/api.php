@@ -12,6 +12,7 @@ use Modules\Inventory\Http\Controllers\Api\SupplierAdvanceController;
 use Modules\Inventory\Http\Controllers\Api\CustomerAdvanceController;
 use Modules\Inventory\Http\Controllers\Api\PurchaseController;
 use Modules\Inventory\Http\Controllers\Api\SaleController;
+use Modules\Inventory\Http\Controllers\Api\SaleReturnController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1/inventory')->name('inventory.')->group(function () {
 // Route::middleware(['auth:sanctum', 'admin'])->prefix('v1/inventory')->name('inventory')->group(function () {
@@ -36,5 +37,6 @@ Route::middleware(['auth:sanctum'])->prefix('v1/inventory')->name('inventory.')-
     Route::apiResource('purchases', PurchaseController::class);
     Route::get('sale-invoice-items', [SaleController::class, 'invoiceItems'])->name('sale-invoice-items');
     Route::apiResource('sales', SaleController::class);
+    Route::apiResource('sale-return', SaleReturnController::class);
 
 });

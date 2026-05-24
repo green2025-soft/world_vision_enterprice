@@ -60,8 +60,14 @@ const routes = {
   },
 
   {
-    path: "sales_return/create",
+    path: "sale-return/create",
     component: () => import('@/modules/inventory/pages/sales_return/Create.vue'),
+    meta: { title: "Sale Return", ...defaultMeta, requiresBranch: true },
+  },
+
+    {
+    path: "sale-return",
+    component: () => import('@/modules/inventory/pages/sales_return/Index.vue'),
     meta: { title: "Sale Return", ...defaultMeta, requiresBranch: true },
   },
 
