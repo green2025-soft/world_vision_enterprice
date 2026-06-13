@@ -14,7 +14,6 @@ class SaleReturnHandler
     public function handle(object $source, array $items): void
     {
         
-      
         
         foreach ($items as $item) {
             $oldQty = $this->movement->getPreviousQty(

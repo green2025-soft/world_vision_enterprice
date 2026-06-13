@@ -318,6 +318,7 @@ protected function logActivity(string $action, $model, $oldData = null): void
     public function delete(int $id): void
     {
         $modelClass = $this->modelClass;
+        
         $model = $modelClass::findOrFail($id);
 
         // Validate delete permission or constraints

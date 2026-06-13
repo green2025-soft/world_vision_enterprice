@@ -6,7 +6,7 @@ use Modules\Inventory\Services\Accounts\TypeAccountResolver;
 use Modules\Inventory\Services\Inventory\Calculation\CalculationService;
 use Modules\Inventory\Services\Inventory\Stock\StockService;
 use Modules\Inventory\Services\Inventory\Transaction\ItemService;
-use Modules\Inventory\Services\Transaction\TransactionAccountingService;
+
 
 abstract class BaseTransaction {
 
@@ -40,7 +40,7 @@ abstract class BaseTransaction {
                 : $this->create($data, $totals);
 
             // 3. ITEM SAVE (ONLY DB LAYER)
-            app(ItemService::class)->store(
+            app(ItemService::class)->replace(
                 $model,
                 $items,
                 $this->relationKey()
@@ -77,7 +77,7 @@ abstract class BaseTransaction {
     {
         $class = $this->modelClass();
 
-        $model = $class::findOrFail($id);
+        $model = $class::with('items')->findOrFail($id);
 
         $model->update(array_merge($data, $totals));
 
@@ -95,8 +95,10 @@ abstract class BaseTransaction {
         DB::transaction(function () use ($id) {
             $class = $this->modelClass();
             $model = $class::with('items')->findOrFail($id);
+            // \Log::debug($this->type);
+            
             app(StockService::class)
-                ->reverse($this->type, $model->id);
+                ->reverse($this->type, $model->id, $model);
 
             // $this->transactionAccounting->delete($model->id, $this->type);
 
@@ -111,6 +113,50 @@ abstract class BaseTransaction {
     {
         
     }
+
+    protected function tradingComondData($model, $data, $totals){
+        $data['reference_id'] = $model->id;
+        $data['reference_no'] = $model->invoice_no;
+        return $data;
+    }
+
+    protected function tradingData($model, $data, $totals){
+        $tradingData = $this->tradingComondData($model, $data, $totals);
+        $tradingData['amount']              = $totals['net_total'];
+        $tradingData['subtotal']            = $totals['subtotal'];
+
+        $tradingData['paid_amount']         = $totals['paid_amount'];
+        $tradingData['due_amount']          = $totals['due_amount'];
+        $tradingData['tax_amount']          = $totals['total_tax'];
+        $tradingData['discount_amount']     = $totals['total_discount'];
+        $tradingData['inventory']           = $totals['inventory_subtotal'];
+        $tradingData['cash_return']         = $totals['inventory_subtotal'];
+        $tradingData['cogs']                = $totals['inventory_subtotal'];
+        $tradingData['adjustment']          = $totals['adjustment'];
+
+        return $tradingData;
+    }
+
+    protected function returnData($model, $data, $totals){
+        $tradingData = $this->tradingComondData($model, $data, $totals);
+        $cashRefund = $totals['cash_refund_amount'];
+        $tradingData['amount']                  = $cashRefund;
+
+        $tradingData['stock_wastage']           = $totals['wastage_amount'];
+        $tradingData['due_adjusted']            = $totals['adjusted_due_amount'];
+        $tradingData['cash_return']             = $cashRefund;
+ 
+        $tradingData['returned_stock']          = $totals['inventory'];
+        $tradingData['inventory_wastage']       = $totals['wastage_amount'];
+        
+
+        $tradingData['adjusted_due_amount']     = $cashRefund;
+        $tradingData['cash_refund_amount']      = $cashRefund;
+
+         return $tradingData;
+    }
+
+
 
 
 

@@ -14,7 +14,7 @@ abstract class BaseLedgerService
     /**
      * CREATE / UPDATE
      */
-    public function storeOrUpdate(array $data)
+    protected function storeOrUpdate(array $data)
     {
         return DB::transaction(function () use ($data) {
 
@@ -23,14 +23,11 @@ abstract class BaseLedgerService
             $debit  = ($data['direction'] ?? null) === 'in' ? $amount : 0;
             $credit = ($data['direction'] ?? null) === 'out' ? $amount : 0;
 
-            // 1. delete existing record first
-            $this->delete($data);
-
             // 2. recalculate AFTER clean state
             $lastBalance = $this->getLastBalance($data);
 
             $balance = $lastBalance + $debit - $credit;
-
+            
             $payload = array_merge($data, [
                 $this->relationKey() => $data[$this->relationKey()],
                 'transaction_type'   => $data['type'],
@@ -59,6 +56,18 @@ abstract class BaseLedgerService
                 $q->where('reference_id', $data['reference_id']);
             })
             ->delete();
+    }
+
+    public function existingDelete(array $data): void
+    {
+        if (isset($data[0])){
+            foreach ($data as $item) {
+                $this->delete($item);
+            }
+        }else{
+            $this->delete($data);
+        }
+
     }
 
 

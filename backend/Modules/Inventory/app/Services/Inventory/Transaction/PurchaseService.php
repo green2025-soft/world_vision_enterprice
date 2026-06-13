@@ -23,28 +23,27 @@ class PurchaseService extends BaseTransaction{
     protected function after($model, $items, $data, $totals, bool $isUpdate)
     {
         app(PriceListService::class)->updatePrices($items, $data['branch_id']);
-        $extra = [
-            'supplier_id'       => $data['supplier_id'] ?? null,
-            'supplier_advance'  => $totals['advance_adjusted'] ?? 0,
-            'adjustment'        => $data['adjustment'] ?? 0,
-        ];
 
-        $this->transactionAccounting
-            ->record(
-                model: $model,
-                data: $data,
-                totals: $totals,
-                context: [
-                    'type'      => $this->type,
-                    'extra'     => $extra 
-                ],
-                isUpdate: $isUpdate
-            );
+        $accountData =  $this->tradingData($model, $data, $totals); 
+        $accountData['supplier_advance']    = $totals['advance_adjusted'];
+       
+        $this->typeAccountResolver->resolve($this->type)->recordTransaction($accountData, $this->type);
+        
     }
 
      protected function afterDelete($model): void
     {
-        $this->transactionAccounting->delete($model->id, $this->type);
+
+        $deleteData = [
+            'module'        => $this->type,
+            'source'        => $this->type,
+            'sourceId'      => $model->id,
+            'reference_id'  => $model->id,
+            'purchase_id'   => $model->purchase_id,
+        ];
+
+        $this->typeAccountResolver->resolve($this->type)->deleteEntry($deleteData);
+
     }
 
 }

@@ -13,6 +13,9 @@ use Modules\Inventory\Http\Controllers\Api\CustomerAdvanceController;
 use Modules\Inventory\Http\Controllers\Api\PurchaseController;
 use Modules\Inventory\Http\Controllers\Api\SaleController;
 use Modules\Inventory\Http\Controllers\Api\SaleReturnController;
+use Modules\Inventory\Http\Controllers\Api\PurchaseReturnController;
+use Modules\Inventory\Http\Controllers\Api\CustomerPaymentController;
+use Modules\Inventory\Http\Controllers\Api\SupplierPaymentController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1/inventory')->name('inventory.')->group(function () {
 // Route::middleware(['auth:sanctum', 'admin'])->prefix('v1/inventory')->name('inventory')->group(function () {
@@ -35,8 +38,11 @@ Route::middleware(['auth:sanctum'])->prefix('v1/inventory')->name('inventory.')-
     Route::get('customer-advance/{id}/balance', [CustomerAdvanceController::class, 'customerBalance'])->name('customer-advance.balances');
 
     Route::apiResource('purchases', PurchaseController::class);
+    Route::apiResource('purchase-return', PurchaseReturnController::class);
     Route::get('sale-invoice-items', [SaleController::class, 'invoiceItems'])->name('sale-invoice-items');
     Route::apiResource('sales', SaleController::class);
     Route::apiResource('sale-return', SaleReturnController::class);
+    Route::apiResource('customer-payment', CustomerPaymentController::class);
+    Route::apiResource('supplier-payment', SupplierPaymentController::class);
 
 });

@@ -4,13 +4,15 @@ namespace Modules\Inventory\Services\Inventory\Stock\Movement;
 
 use Modules\Inventory\Models\StockMovement;
 use Exception;
+use Modules\Inventory\Services\Stock\StockType;
 
 class StockConsumptionService
 {
     protected string $strategy = 'fifo';
 
-    protected array $stockInTypes = ['purchase', 'sale_return'];
+    protected array $stockInTypes = ['purchase'];
 
+    
     public function consume(int $productId, float $qty, int $branchId): void
     {
         $remaining = $qty;
@@ -38,7 +40,6 @@ class StockConsumptionService
 
             if ($remaining <= 0) break;
         }
-
         if ($remaining > 0) {
             throw new Exception("Insufficient FIFO stock for product ID: {$productId}");
         }
@@ -119,5 +120,14 @@ class StockConsumptionService
 
         $batch->consumed_quantity = $new;
         $batch->save();
+    }
+
+
+    public function currentStock(int $productId, int $branchId): float
+    {
+        return (float) StockMovement::where('product_id', $productId)
+            ->where('branch_id', $branchId)
+            ->where('movement_type', StockType::PURCHASE)
+            ->sum(\DB::raw('quantity - consumed_quantity'));
     }
 }

@@ -10,6 +10,7 @@ abstract class BaseType
         return [
             'product_id' => $item['product_id'],
             'branch_id'  => $input['branch_id'] ?? null,
+            'consumed_quantity'  => $input['consumed_quantity'] ?? null,
         ];
     }
 

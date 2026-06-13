@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('customer_id')->constrained('inv_customers')->onDelete('cascade');
             $table->date('date');
-            $table->enum('transaction_type', ['sale','sale_return', 'advance', 'payment', 'adjustment', 'opening_balance']);
+            $table->enum('transaction_type', ['opening_balance','advance','sale','payment','advance_adjust','adjustment','sale_return','due_payment','due_payment_adjust','return_due_adjust','return_advance_adjust','return_cash_refund','return_advance','tex_amount']);
             $table->decimal('debit', 15, 2)->default(0);
             $table->decimal('credit', 15, 2)->default(0);
             $table->decimal('balance', 15, 2)->default(0);

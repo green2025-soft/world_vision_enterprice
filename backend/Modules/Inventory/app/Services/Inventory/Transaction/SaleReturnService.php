@@ -22,9 +22,11 @@ class SaleReturnService extends BaseTransaction{
 
     protected function after($model, $items, $data, $totals, bool $isUpdate)
     {
+    
         $accountData =  $data;
         $accountData['amount']                  = $totals['cash_refund_amount'];
 
+        $accountData['total_refund_amount']     = $totals['total_refund_amount'];
         $accountData['sales_return']            = $totals['total_return_amount'];
         $accountData['sales_adjustment']        = $totals['wastage_amount_sale'];
         $accountData['inventory']               = $totals['inventory'];
@@ -48,7 +50,15 @@ class SaleReturnService extends BaseTransaction{
 
      protected function afterDelete($model): void
     {
-        // $this->transactionAccounting->delete($model->id, $this->type);
+        $deleteData = [
+            'module'        => $this->type,
+            'source'        => 'Return',
+            'sourceId'      => $model->id,
+            'reference_id'  => $model->id,
+            'customer_id'   => $model->customer_id,
+        ];
+
+        $this->typeAccountResolver->resolve($this->type)->deleteEntry($deleteData);
     }
 
 }

@@ -53,21 +53,22 @@ abstract class TradeType extends BaseType
         $inventoryValue = $this->financial->inventoryValue($item, $qty);
 
         return [
-            'quantity'          => $qty,
-            'unit_price'        => $price,
-            'cost_price'        => $costPrice,
-            'total_price'       => $subtotal,
-            'net_price'         => $netPrice,
+            'consumed_quantity'     => $item['consumed_quantity']??null,
+            'quantity'              => $qty,
+            'unit_price'            => $price,
+            'cost_price'            => $costPrice,
+            'total_price'           => $subtotal,
+            'net_price'             => $netPrice,
 
-            'discount_amount'   => $discountAmount,
-            'discount_percent'  => $discountPercent,
+            'discount_amount'       => $discountAmount,
+            'discount_percent'      => $discountPercent,
 
-            'inventory_subtotal' => $inventoryValue,
+            'inventory_subtotal'    => $inventoryValue,
 
-            'tax_amount'        => $taxAmount,
-            'tax_percent'       => $taxPercent,
+            'tax_amount'            => $taxAmount,
+            'tax_percent'           => $taxPercent,
 
-            'invoice_date'      => $input['invoice_date'] ?? now(),
+            'invoice_date'          => $input['invoice_date'] ?? now(),
         ];
     }
 }

@@ -115,6 +115,7 @@ form.value.items.push({
 
   cost_price: Number(p.cost_price || 0),
   current_stock: Number(p.current_stock || 0),
+  consumed_quantity: Number(p.consumed_quantity || 0),
 
 })
 }
@@ -133,6 +134,8 @@ watch(selectedProduct, (val) => {
 const clampQuantity = (item) => {
   const stock = item.current_stock || 0
 
+  const consumed = Number(item.consumed_quantity || 0)
+
   if (item.quantity > stock) {
     item.quantity = stock
     toast.error(`Only ${stock} available`)
@@ -140,6 +143,9 @@ const clampQuantity = (item) => {
 
   if (item.quantity < 1) {
     item.quantity = 1
+  }
+  if(item.quantity < consumed){
+    item.quantity = consumed
   }
 }
 
@@ -408,6 +414,7 @@ async function saveItem() {
 
         <div class="col-md-7 p-0 products overflow-auto">
           <div class="col-md-12 px-3">
+            
              
               <ValidationErrors :errors="errors" />
             </div>

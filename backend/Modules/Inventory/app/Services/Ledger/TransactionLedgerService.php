@@ -41,6 +41,8 @@ class TransactionLedgerService extends BaseLedgerService
      */
     public function store(array $data)
     {
+       
+        $this->existingDelete($data);
          if (isset($data[0])){
             $results = [];
              foreach ($data as $item) {
@@ -48,6 +50,7 @@ class TransactionLedgerService extends BaseLedgerService
             }
             return $results;
          }
+         
         return $this->storeOrUpdate($data);
     }
 

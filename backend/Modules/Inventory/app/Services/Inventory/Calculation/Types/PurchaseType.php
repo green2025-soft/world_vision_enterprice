@@ -13,11 +13,12 @@ class PurchaseType extends TradeType
     ): array {
 
         $trade = $this->trade($item, $input, $ratio);
+        
         return array_merge(
             $this->base($item, $input),
             $trade,
             [
-                'reversed_cost' => $item['inventory_subtotal']
+                'reversed_cost' => $item['cost_price']
             ]
         );
     }

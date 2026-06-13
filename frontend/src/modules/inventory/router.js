@@ -65,12 +65,42 @@ const routes = {
     meta: { title: "Sale Return", ...defaultMeta, requiresBranch: true },
   },
 
-    {
+  {
     path: "sale-return",
     component: () => import('@/modules/inventory/pages/sales_return/Index.vue'),
     meta: { title: "Sale Return", ...defaultMeta, requiresBranch: true },
   },
+    {
+    path: "sale-return/:id/edit",
+    component: () => import('@/modules/inventory/pages/sales_return/Create.vue'),
+    meta: { title: "Edit Sale Return", ...defaultMeta, requiresBranch: true },
+  },
 
+
+   {
+    path: "customer-due-payment/create",
+    component: () => import('@/modules/inventory/pages/customer_payment/Create.vue'),
+    meta: { title: "Customer Due Payment", ...defaultMeta, requiresBranch: true },
+  },
+
+     {
+    path: "customer-due-payment/",
+    component: () => import('@/modules/inventory/pages/customer_payment/Index.vue'),
+    meta: { title: "Customer Due Payment", ...defaultMeta, requiresBranch: true },
+  },
+
+  
+   {
+    path: "supplier-due-payment/create",
+    component: () => import('@/modules/inventory/pages/supplier_payment/Create.vue'),
+    meta: { title: "Supplier Due Payment", ...defaultMeta, requiresBranch: true },
+  },
+
+     {
+    path: "supplier-due-payment/",
+    component: () => import('@/modules/inventory/pages/supplier_payment/Index.vue'),
+    meta: { title: "Supplier Due Payment", ...defaultMeta, requiresBranch: true },
+  },
 
 
   

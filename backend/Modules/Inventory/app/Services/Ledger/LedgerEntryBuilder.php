@@ -43,11 +43,19 @@ class LedgerEntryBuilder
 
         $entries = [];
 
-        if (!empty($data['due'])) {
+        if (!empty($data['subtotal'])) {
             $entries[] = $this->makeEntry(
                 $this->type,
-                $data['due'],
-                'in'
+                $data['subtotal'],
+                'out'
+            );
+        }
+
+        if (!empty($data['tax_amount'])) {
+            $entries[] = $this->makeEntry(
+                'tex_amount',
+                $data['tax_amount'],
+                'out'
             );
         }
 
@@ -55,17 +63,27 @@ class LedgerEntryBuilder
             $entries[] = $this->makeEntry(
                 'advance_adjust',
                 $data['advance_adjust'],
-                'out'
+                'in'
             );
         }
 
-        if (!empty($data['payment'])) {
+        if (!empty($data['paid_amount'])) {
             $entries[] = $this->makeEntry(
                 'payment',
-                $data['payment'],
-                'out'
+                $data['paid_amount'],
+                'in'
             );
         }
+
+        if (!empty($data['adjustment'])) {
+            $adjustment = $data['adjustment'] + $data['discount_amount'];
+            $entries[] = $this->makeEntry(
+                'adjustment',
+                $adjustment,
+                'in'
+            );
+        }
+        // \Log::debug( $entries);exit();
 
         return $entries;
     }
@@ -82,13 +100,14 @@ class LedgerEntryBuilder
         $refundAmount     = (float) ($data['advance'] ?? 0);
         $adjustDueAmount  = (float) ($data['due_adjusted'] ?? 0);
         $cashRefundAmount = (float) ($data['cash_return'] ?? 0);
+        $totalRefund      = (float) ($data['total_refund_amount'] ?? 0);
         // dd( $cashRefundAmount);
 
         if ($adjustDueAmount > 0) {
             $entries[] = $this->makeEntry(
                 'return_due_adjust',
                 $adjustDueAmount,
-                'out'
+                'in'
             );
         }
 
@@ -96,7 +115,7 @@ class LedgerEntryBuilder
             $entries[] = $this->makeEntry(
                 'return_cash_refund',
                 $cashRefundAmount,
-                'out'
+                'in'
             );
         }
 
@@ -106,6 +125,31 @@ class LedgerEntryBuilder
             $entries[] = $this->makeEntry(
                 'return_advance',
                 $refundAmount,
+                'in'
+            );
+        }
+
+        return $entries;
+    }
+
+    public function buildPayment(array $data, string $type){
+        $this->set($data, $type);
+        $entries = [];
+        $adjustment     = (float) ($data['adjustment'] ?? 0);
+        $payment        = (float) ($data['payment'] ?? 0);
+
+         if ($payment > 0) {
+            $entries[] = $this->makeEntry(
+                'due_payment',
+                $payment,
+                'in'
+            );
+        }
+
+        if ($adjustment > 0) {
+            $entries[] = $this->makeEntry(
+                'due_payment_adjust',
+                $adjustment,
                 'in'
             );
         }

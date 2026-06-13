@@ -6,7 +6,7 @@ import { toast } from 'vue3-toastify'
 
 
 //  Setup
-const title = 'Purchase'
+const title = 'Sale Return'
 const bUrl = 'inventory/sale-return'
 
 const {
@@ -52,16 +52,15 @@ onMounted(() => {
                     :fields="[
                       { key: 'sl', label: 'SL' },
                       { key: 'invoice_no', label: 'Invoice No', align: 'center'  },
-                      { key: 'invoice_date', label: 'date', align: 'center'  },
-                      { key: 'supplier.name', label: 'Supplier' },
+                      { key: 'return_date', label: 'date', align: 'center'  },
+                      { key: 'customer.name', label: 'Customer' },
                       
-                      { key: 'total_amount', label: 'Total', align: 'right'  },
-                      { key: 'discount_amount', label: 'discount', align: 'right'  },
-                      { key: 'tax_amount', label: 'Tex', align: 'right'  },
-                      { key: 'net_total', label: 'Sub Total', align: 'right'  },
-                      { key: 'supplier_adjust', label: 'Adjustment', align: 'right'  },
-                      { key: 'paid_amount', label: 'Paid', align: 'right'  },
-                      { key: 'due_amount', label: 'due', align: 'right'  },
+                      { key: 'total_return_amount', label: 'Total Return', align: 'right'  },
+                      
+                      { key: 'adjusted_due_amount', label: 'Due Adjustment', align: 'right'  },
+                      { key: 'cash_refund_amount', label: 'Cash Refund', align: 'right'  },
+                      { key: 'customer_advance', label: 'Advance', align: 'right'  },
+                     
                       
                       
                       { key: 'actions', label: 'Actions' }
@@ -76,7 +75,10 @@ onMounted(() => {
                             <BButton variant="outline-primary"  >
                               <i class="fa fa-table"></i>
                             </BButton>
-                              <BButton variant="primary" class="dropdown-toggle dropdown_toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <BButton variant="outline-danger"  @click="askDelete(rowItem.id)">
+                              <i class="fa fa-trash"></i>
+                            </BButton>
+                              <!-- <BButton variant="primary" class="dropdown-toggle dropdown_toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                               </BButton>
 
                             <ul class="dropdown-menu" >
@@ -86,7 +88,7 @@ onMounted(() => {
                               </li>
                                     <li> <div class="dropdown-divider"></div></li>
                                <li><a class="dropdown-item" href=""  @click.prevent="askDelete(rowItem.id)"><i class="fa fa-trash"></i> Delete</a></li>
-                            </ul>
+                            </ul> -->
                         
                         </div>
                    </template>

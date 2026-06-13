@@ -244,19 +244,14 @@ const customerDue = computed(() =>
 
 const customerDueAdjusted = computed(() => {
 
-  const wastageSaleAmount =
-    form.value.items.reduce((s, i) =>
-      s +
-      num(i.wastage_qty) *
-      num(i.unit_sale_price),
-    0
-  )
 
-  const totalRefund = refundTotal.value + wastageSaleAmount
+  const totalRefund = refundTotal.value;
+
 
   const dueAdjust = customerDue.value >= totalRefund ? totalRefund :  customerDue.value
   form.value.due_adjusted = dueAdjust;
   
+
   return  dueAdjust
 })
 
@@ -312,29 +307,35 @@ const syncSplit = (source) => {
 /* ----------------------------------
 | SUBMIT
 ---------------------------------- */
+
 const errors = ref([])
 const submit = async () => {
   form.value.return_date = dbDataFormat(form.value.return_date)
-   let message = `${title} created successfully`;
-   try {
-      if (form.value.id) {
-         message = `${title} updated successfully`;
-        await update(form.value.id, form.value, false, false)
-      }else{
-        await create(form.value, '', false, false)
-      }
 
-    sessionStorage.setItem('saleReturnToastMessage', JSON.stringify({ 
-      message: message, 
-      type: 'success' 
-    }))
+  let message = `${title} created successfully`
 
-      router.push(`/${bUrl}`)
-   }catch (error) {
+  try {
+    if (form.value.id) {
+      message = `${title} updated successfully`
+      await update(form.value.id, form.value, false, false)
+    } else {
+      await create(form.value, '', false, false)
+    }
+
+    sessionStorage.setItem(
+      'saleReturnToastMessage',
+      JSON.stringify({
+        message,
+        type: 'success'
+      })
+    )
+
+    router.push(`/${bUrl}`)
+  } catch (error) {
     errors.value = formErrors.value
   }
-  await create(form.value)
 }
+
 
 
 </script>

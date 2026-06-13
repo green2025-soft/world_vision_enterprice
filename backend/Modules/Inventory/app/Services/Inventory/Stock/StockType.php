@@ -30,4 +30,13 @@ class StockType
             self::WASTAGE,
         ]);
     }
+
+    public static function reverseType(string $type): ?string
+    {
+        return match ($type) {
+            self::SALE_RETURN     => self::SALE,
+            self::PURCHASE_RETURN => self::PURCHASE,
+            default              => null,
+        };
+    }
 }

@@ -35,4 +35,17 @@ class StockBalanceService
     {
         // 🔥 Later improve (optional)
     }
+
+    public function updateCurrentStock(int $productId,int $branchId, float $qty): void 
+    {
+        StockBalance::updateOrCreate(
+            [
+                'product_id' => $productId,
+                'branch_id'  => $branchId,
+            ],
+            [
+                'current_stock' => $qty,
+            ]
+        );
+    }
 }

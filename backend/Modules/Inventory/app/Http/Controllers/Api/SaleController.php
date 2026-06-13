@@ -7,7 +7,7 @@ use Modules\Inventory\Models\Sale;
 use Modules\Inventory\Http\Requests\SaleRequest;
 use Illuminate\Http\Request;
 use Modules\Inventory\Models\CustomerLedger;
-use Modules\Inventory\Services\Transaction\SaleService;
+use Modules\Inventory\Services\Inventory\Transaction\SaleService;
 
 class SaleController extends BaseApiController
 {
@@ -38,7 +38,7 @@ class SaleController extends BaseApiController
             $request['invoice_no'] = $this->generateInvoiceNo();
         }
         if(!isset($request['']))
-
+            
         $createData = $this->saleService->storeOrUpdate($request->all());
         return $this->createdResponse($createData);
     }
@@ -65,7 +65,7 @@ class SaleController extends BaseApiController
 
     public function show($id)
     {
-        $sales = $this->model::with(['items.product','items.currentStock', 'customer'])->findOrFail($id);
+        $sales = $this->model::with(['items.product','items.currentStock', 'customer', 'stockMovements'])->findOrFail($id);
         $customerBalance = CustomerLedger::where('customer_id', $sales->customer_id)
         ->where('branch_id', $sales->branch_id) 
         ->selectRaw('SUM(debit - credit) as balance')
@@ -75,18 +75,21 @@ class SaleController extends BaseApiController
             $sales->customer->balance = (float) $customerBalance;
         }
 
-            $sales->items->transform(function ($item) {
+
+            $sales->items->transform(function ($item) use ($sales) {
+            $consumedQuantity = $sales->stockMovements->where('product_id', $item->product_id)->sum('consumed_quantity');
                 return [
-                    'id'            => $item->id,
-                    'product_id'    => $item->product_id,
-                    'name'          => $item->product?->name,
-                    'sku'           => $item->product?->sku,
-                    'quantity'      => $item->quantity,
-                    'purchase_price' => $item->unit_price, 
-                    'unit_price'    => $item->unit_price,
-                    'cost_price'    => $item->cost_price,
-                    'sale_price'    => $item->sale_price,
-                    'current_stock' => $item->currentStock?->current_stock
+                    'id'                => $item->id,
+                    'product_id'        => $item->product_id,
+                    'name'              => $item->product?->name,
+                    'sku'               => $item->product?->sku,
+                    'quantity'          => $item->quantity,
+                    'purchase_price'    => $item->unit_price, 
+                    'unit_price'        => $item->unit_price,
+                    'cost_price'        => $item->cost_price,
+                    'sale_price'        => $item->sale_price,
+                    'current_stock'     => $item->currentStock?->current_stock,
+                    'consumed_quantity' => $consumedQuantity,
                 ];
             });
 
@@ -121,6 +124,22 @@ class SaleController extends BaseApiController
             $query->where('customer_id', $request->customer_id);
         }
 
-        return $this->listResponse($query->smartPaginate());
+        $invoices = $query->smartPaginate();
+
+        $invoices->getCollection()->transform(function ($invoice) {
+
+            $consumedMap = $invoice->stockMovements
+                ->groupBy('product_id')
+                ->map(fn ($rows) => $rows->sum('consumed_quantity'));
+
+            $invoice->items->transform(function ($item) use ($consumedMap) {
+                $item->consumed_quantity = $consumedMap[$item->product_id] ?? 0;
+                return $item;
+            });
+
+            return $invoice;
+        });
+
+        return $this->listResponse($invoices);
     }
 }

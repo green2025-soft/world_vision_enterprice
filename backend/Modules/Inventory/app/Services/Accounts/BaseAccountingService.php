@@ -48,17 +48,31 @@ abstract class BaseAccountingService
         $meta = $this->getAccountingType($type);
         
 
-        // $this->accountingService()->createEntryFromModule(
-        //     moduleName: $meta['module'],
-        //     sourceType: $meta['source'],
-        //     sourceId: $data['reference_id'] ?? null,
-        //     data: $data
-        // );
+        $this->accountingService()->createEntryFromModule(
+            moduleName: $meta['module'],
+            sourceType: $meta['source'],
+            sourceId: $data['reference_id'] ?? null,
+            data: $data
+        );
+    }
+
+
+    public function deleteEntry(array $data): void
+    {
+        $this->deleteLedger($data);
+
+        $this->accountingService()->deleteEntryFromModule(
+            moduleName: $data['module'],
+            sourceType: $data['source'],
+            sourceId: $data['sourceId']
+        );
     }
 
     abstract protected function getBuilderData(array $data, string $type): array;
 
     abstract protected function handleLedger(array $builderData, array $data, string $type);
+
+    abstract protected function deleteLedger( array $data);
 
     abstract protected function getAccountingType(string $type): array;
 }

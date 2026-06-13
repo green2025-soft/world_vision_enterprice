@@ -21,4 +21,12 @@ abstract class CustomerAccountingService extends BaseAccountingService
             ->customer()
             ->store($builderData);
     }
+
+     protected function deleteLedger(array $data)
+    {
+        return $this->ledgerService
+            ->customer()
+            ->delete($data);
+    }
+
 }
