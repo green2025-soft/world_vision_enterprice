@@ -11,13 +11,13 @@ class PurchaseReturnType extends ReturnType
     {
         $trade = $this->trade($item, $input, $ratio);
 
-        $totalRefundPrice = $trade['total_return_price'] + ($item['unit_sale_price'] * $item['wastage_qty']);
+        $totalRefundPrice = $trade['total_return_price'] + ($item['unit_purchase_price'] * $item['wastage_qty']);
 
         return array_merge(
             $this->base($item, $input),
             $trade,
             [
-                'unit_sale_price'           => $item['unit_sale_price'],
+                'unit_purchase_price'       => $item['unit_purchase_price'],
                 'purchase_item_id'          => $item['purchase_item_id'],
                 'total_refund_price'        => $totalRefundPrice,
             ]

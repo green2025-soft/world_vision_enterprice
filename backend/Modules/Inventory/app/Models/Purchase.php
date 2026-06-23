@@ -27,7 +27,10 @@ class Purchase extends InvBaseModel
         return $this->hasMany(PurchaseItem::class, 'purchase_id');
     }
 
-
+    public function stockMovements()
+    {
+        return $this->hasMany(StockMovement::class, 'reference_id')->where('movement_type', 'purchase');
+    }
 
 
 }

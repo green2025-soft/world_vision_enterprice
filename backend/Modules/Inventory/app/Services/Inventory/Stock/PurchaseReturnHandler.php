@@ -26,7 +26,6 @@ class PurchaseReturnHandler
            $newQty = $item['return_qty'] + $item['wastage_qty'];
            $difference = $newQty - $oldQty;
 
-           $this->consumption->updateStock(StockType::PURCHASE_RETURN, $item['product_id'], $source->branch_id, $source->purchase_id, abs($difference));
 
             // SALE RETURN
             if (($item['return_qty'] ?? 0) > 0) {
@@ -40,12 +39,6 @@ class PurchaseReturnHandler
                     'cost_price' => $item['cost_price'],
                     'unit_price' => $item['return_unit_price'],
                 ]);
-
-                $this->consumption->restore(
-                    $item['product_id'],
-                    $item['return_qty'],
-                    $source->branch_id
-                );
                 
                 $this->balance->apply(StockType::PURCHASE_RETURN, $applyItem, $source->branch_id);
             }
@@ -61,12 +54,14 @@ class PurchaseReturnHandler
                     'product_id' => $item['product_id'],
                     'quantity'   => $item['wastage_qty'],
                     'cost_price' => $item['cost_price'],
-                    'unit_price' => $item['unit_sale_price'],
+                    'unit_price' => $item['unit_purchase_price'],
                 ]);
 
                 
                 $this->balance->apply(StockType::WASTAGE, $applyItem, $source->branch_id);
             }
+
+             $this->consumption->updateStock(StockType::PURCHASE_RETURN, $item['product_id'], $source->branch_id, $source->purchase_id, abs($difference));
         }
     }
 }

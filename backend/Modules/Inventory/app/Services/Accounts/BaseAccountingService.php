@@ -46,8 +46,6 @@ abstract class BaseAccountingService
     protected function postAccounting(array $data, string $type)
     {
         $meta = $this->getAccountingType($type);
-        
-
         $this->accountingService()->createEntryFromModule(
             moduleName: $meta['module'],
             sourceType: $meta['source'],

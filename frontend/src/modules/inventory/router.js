@@ -47,6 +47,30 @@ const routes = {
   },
 
   {
+    path: "purchases/:id",
+    component: () => import('@/modules/inventory/pages/purchase/Invoice.vue'),
+    meta: { title: "Purchase Invoice", ...defaultMeta, requiresBranch: true },
+    props: true
+  },
+
+  {
+    path: "purchase-return",
+    component: () => import('@/modules/inventory/pages/purchase_return/Index.vue'),
+    meta: { title: "Purchase Return", ...defaultMeta, requiresBranch: true },
+  },
+    {
+    path: "purchase-return/create",
+    component: () => import('@/modules/inventory/pages/purchase_return/Create.vue'),
+    meta: { title: "Purchase Return", ...defaultMeta, requiresBranch: true },
+  },
+  {
+    path: "purchase-return/:id",
+    component: () => import('@/modules/inventory/pages/purchase_return/Invoice.vue'),
+    meta: { title: "Purchase Invoice", ...defaultMeta, requiresBranch: true },
+    props: true
+  },
+
+  {
     path: "sales",
     component: () => import('@/modules/inventory/pages/sales/Index.vue'),
     meta: { title: "Sales", ...defaultMeta, requiresBranch: true },

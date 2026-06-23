@@ -141,12 +141,13 @@ abstract class BaseTransaction {
         $tradingData = $this->tradingComondData($model, $data, $totals);
         $cashRefund = $totals['cash_refund_amount'];
         $tradingData['amount']                  = $cashRefund;
+        $tradingData['inventory']            = $totals['inventory'];
 
         $tradingData['stock_wastage']           = $totals['wastage_amount'];
         $tradingData['due_adjusted']            = $totals['adjusted_due_amount'];
         $tradingData['cash_return']             = $cashRefund;
  
-        $tradingData['returned_stock']          = $totals['inventory'];
+        $tradingData['returned_stock']          = $totals['returned_stock'];
         $tradingData['inventory_wastage']       = $totals['wastage_amount'];
         
 

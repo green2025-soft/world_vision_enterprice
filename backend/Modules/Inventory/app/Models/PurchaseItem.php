@@ -22,5 +22,9 @@ class PurchaseItem extends InvBaseModel
         return $this->belongsTo(Branch::class, 'branch_id');
     }
 
+     public function currentStock(){
+        return $this->belongsTo(StockBalance::class, 'product_id', 'product_id');
+    }
+
     
 }

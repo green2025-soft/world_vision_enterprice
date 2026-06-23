@@ -39,6 +39,7 @@ Route::middleware(['auth:sanctum'])->prefix('v1/inventory')->name('inventory.')-
 
     Route::apiResource('purchases', PurchaseController::class);
     Route::apiResource('purchase-return', PurchaseReturnController::class);
+    Route::get('purchase-invoice-items', [PurchaseController::class, 'invoiceItems'])->name('purchase-invoice-items');
     Route::get('sale-invoice-items', [SaleController::class, 'invoiceItems'])->name('sale-invoice-items');
     Route::apiResource('sales', SaleController::class);
     Route::apiResource('sale-return', SaleReturnController::class);

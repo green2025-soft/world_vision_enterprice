@@ -73,9 +73,9 @@ onMounted(() => {
                
                    <template #actions="{ rowItem }">
                          <div class="btn-group dropleft">
-                            <BButton variant="outline-primary"  >
+                            <RouterLink :to="`/inventory/purchases/${rowItem.id}`"  class="btn btn-sm btn-outline-primary"  >
                               <i class="fa fa-table"></i>
-                            </BButton>
+                            </RouterLink>
                               <BButton variant="primary" class="dropdown-toggle dropdown_toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                               </BButton>
 

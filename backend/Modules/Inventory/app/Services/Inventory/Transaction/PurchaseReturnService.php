@@ -22,14 +22,18 @@ class PurchaseReturnService extends BaseTransaction{
 
     protected function after($model, $items, $data, $totals, bool $isUpdate)
     {
+        
         $accountData = $this->returnData($model, $data, $totals);
-    
         
-        $accountData['purchase_return']            = $totals['total_return_amount'];
-        $accountData['purchase_adjustment']        = $totals['wastage_amount_purchase'];
         
-        $accountData['supplier_advance']        = $totals['supplier_advance'];
-        $accountData['advance']                 = $totals['supplier_advance'];
+        $accountData['purchase_return']             = $totals['total_refund_amount'];
+        $accountData['purchase_adjustment']         = $totals['demurrage_stock'];
+        
+        $accountData['supplier_advance']            = $totals['supplier_advance'];
+        $accountData['advance']                     = $totals['supplier_advance'];
+        $accountData['adjusted_due_amount ']        = $totals['supplier_advance'];
+        $accountData['inventory_shrinkage_loss']    = $totals['demurrage_stock'];
+        
         
         $this->typeAccountResolver->resolve($this->type)->recordTransaction($accountData, $this->type);
         

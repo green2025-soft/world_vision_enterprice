@@ -114,4 +114,36 @@ class PurchaseController extends BaseApiController
         $this->purchaseService->delete($id);
         return $this->deletedResponse();
     }
+
+    public function invoiceItems(Request $request){
+        $query = $this->indexQuery()
+            ->where('branch_id', $request['branch_id'])
+            ->with([
+                'supplier:id,name,phone,address',
+                'items.product',
+                'items.currentStock',
+                'stockMovements'
+            ]);
+        if ($request->supplier_id) {
+            $query->where('supplier_id', $request->supplier_id);
+        }
+
+        $invoices = $query->smartPaginate();
+
+        $invoices->getCollection()->transform(function ($invoice) {
+
+            $consumedMap = $invoice->stockMovements
+                ->groupBy('product_id')
+                ->map(fn ($rows) => $rows->sum('consumed_quantity'));
+
+            $invoice->items->transform(function ($item) use ($consumedMap) {
+                $item->consumed_quantity = $consumedMap[$item->product_id] ?? 0;
+                return $item;
+            });
+
+            return $invoice;
+        });
+
+        return $this->listResponse($invoices);
+    }
 }
