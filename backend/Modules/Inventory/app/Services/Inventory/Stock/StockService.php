@@ -59,6 +59,5 @@ class StockService
     public function reverse(string $type, int $referenceId, $model=''): void
     {
         $this->movement->reverse($type, $referenceId, $model);
-        $this->balance->reverse($type, $referenceId);
     }
 }

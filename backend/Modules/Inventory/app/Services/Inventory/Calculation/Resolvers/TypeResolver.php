@@ -2,6 +2,7 @@
 
 namespace Modules\Inventory\Services\Inventory\Calculation\Resolvers;
 
+use Modules\Inventory\Models\StockTransfer;
 use Modules\Inventory\Services\Inventory\Calculation\Types\PurchaseType;
 use Modules\Inventory\Services\Inventory\Calculation\Types\SaleReturnType;
 use Modules\Inventory\Services\Inventory\Calculation\Types\PurchaseReturnType;
@@ -20,6 +21,8 @@ class TypeResolver {
             'purchase_return' => app(PurchaseReturnType::class),
 
             'sale_return' => app(SaleReturnType::class),
+
+            'transfer' => app(StockTransfer::class),
 
             default => throw new \Exception("Invalid type"),
         };

@@ -46,18 +46,18 @@ class StockMovementService
 
     public function reverse(string $type, int $referenceId, $model=''): void
     {
-        $movements = StockMovement::where('reference_id', $referenceId)->get();
-        
-        foreach ($movements as $movement) {
+        $movements  = StockMovement::where(['reference_id'=> $referenceId, 'movement_type'=> $type, 'branch_id'=>$model->branch_id])->get();
+        if ($movements->isEmpty()) {
+            throw new Exception("No stock movement found for this transaction.");
+        }
 
-            if (StockType::isStockIn($movement->movement_type)
-                && ($movement->consumed_quantity ?? 0) > 0) {
-                throw new Exception("Cannot reverse consumed stock");
+        foreach ($movements as $movement) {
+            if (($movement->consumed_quantity ?? 0) > 0) {
+                throw new Exception("Cannot delete: stock has already been consumed.");
             }
-             
             if(($type =='sale_return' || $type =='purchase_return') &&  $model){
                 $revRefKey = $type=='sale_return'?'sale_id':'purchase_id';
-                 $this->consumption->updateStock(StockType::SALE_RETURN, $movement->product_id,$movement->branch_id, $model->$revRefKey, $movement->quantity, 'minus');
+                $this->consumption->updateStock($type, $movement->product_id,$movement->branch_id, $model->$revRefKey, $movement->quantity, 'minus');
             }
             
             $movement->delete();
@@ -76,4 +76,7 @@ class StockMovementService
             ->whereIn('movement_type', $type)
             ->sum('quantity');
     }
+
+
+
 }

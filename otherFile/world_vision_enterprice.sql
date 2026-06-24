@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 23, 2026 at 12:27 PM
+-- Generation Time: Jun 24, 2026 at 12:30 PM
 -- Server version: 8.0.30
 -- PHP Version: 7.4.9
 
@@ -2044,8 +2044,7 @@ INSERT INTO `inv_purchase_returns` (`id`, `invoice_no`, `purchase_id`, `supplier
 (30, 'PRT-2606-0001', 113, 9, '2026-06-18', 480.00, 730.00, 50.00, 600.00, 80.00, NULL, 1, 1, 'approved', '2026-06-18 00:16:08', '2026-06-18 00:16:08'),
 (31, 'PRT-2606-0002', 118, 11, '2026-06-18', 480.00, 730.00, 50.00, 600.00, 80.00, NULL, 1, 1, 'approved', '2026-06-18 05:13:51', '2026-06-18 05:13:51'),
 (33, 'PRT-2606-0003', 118, 11, '2026-06-18', 480.00, 730.00, 0.00, 700.00, 30.00, NULL, 1, 1, 'approved', '2026-06-18 05:44:22', '2026-06-18 05:44:22'),
-(36, 'PRT-2606-0004', 118, 11, '2026-06-18', 500.00, 750.00, 0.00, 750.00, 0.00, NULL, 1, 1, 'approved', '2026-06-18 05:47:59', '2026-06-18 05:47:59'),
-(39, 'PRT-2606-0005', 119, 12, '2026-06-18', 480.00, 730.00, 50.00, 600.00, 80.00, NULL, 1, 1, 'approved', '2026-06-18 06:03:05', '2026-06-18 06:03:05');
+(36, 'PRT-2606-0004', 118, 11, '2026-06-18', 500.00, 750.00, 0.00, 750.00, 0.00, NULL, 1, 1, 'approved', '2026-06-18 05:47:59', '2026-06-18 05:47:59');
 
 -- --------------------------------------------------------
 
@@ -2078,8 +2077,7 @@ INSERT INTO `inv_purchase_return_items` (`id`, `purchase_return_id`, `purchase_i
 (30, 30, 159, 7, 2.00, 1.00, 250.00, 240.00, 480.00, 730.00, 250.00, 1, '2026-06-18 00:16:08', '2026-06-18 00:16:08'),
 (31, 31, 164, 6, 2.00, 1.00, 250.00, 240.00, 480.00, 730.00, 250.00, 1, '2026-06-18 05:13:51', '2026-06-18 05:13:51'),
 (33, 33, 164, 6, 2.00, 1.00, 250.00, 240.00, 480.00, 730.00, 250.00, 1, '2026-06-18 05:44:22', '2026-06-18 05:44:22'),
-(36, 36, 164, 6, 2.00, 1.00, 250.00, 250.00, 500.00, 750.00, 250.00, 1, '2026-06-18 05:47:59', '2026-06-18 05:47:59'),
-(39, 39, 165, 7, 2.00, 1.00, 250.00, 240.00, 480.00, 730.00, 250.00, 1, '2026-06-18 06:03:05', '2026-06-18 06:03:05');
+(36, 36, 164, 6, 2.00, 1.00, 250.00, 250.00, 500.00, 750.00, 250.00, 1, '2026-06-18 05:47:59', '2026-06-18 05:47:59');
 
 -- --------------------------------------------------------
 
@@ -2378,9 +2376,28 @@ INSERT INTO `inv_stock_movements` (`id`, `product_id`, `movement_type`, `quantit
 (398, 6, 'wastage', 1, NULL, 250.00, 250.00, 33, 1, 'fifo', '2026-06-18 05:44:22', '2026-06-18 05:44:22'),
 (401, 6, 'purchase_return', 2, NULL, 250.00, 250.00, 36, 1, 'fifo', '2026-06-18 05:47:59', '2026-06-18 05:47:59'),
 (402, 6, 'wastage', 1, NULL, 250.00, 250.00, 36, 1, 'fifo', '2026-06-18 05:47:59', '2026-06-18 05:47:59'),
-(403, 7, 'purchase', 10, 3, 250.00, 250.00, 119, 1, 'fifo', '2026-06-18 06:02:44', '2026-06-18 06:03:05'),
-(404, 7, 'purchase_return', 2, NULL, 250.00, 240.00, 39, 1, 'fifo', '2026-06-18 06:03:05', '2026-06-18 06:03:05'),
+(403, 7, 'purchase', 10, 1, 250.00, 250.00, 119, 1, 'fifo', '2026-06-18 06:02:44', '2026-06-24 03:11:31'),
 (405, 7, 'wastage', 1, NULL, 250.00, 250.00, 39, 1, 'fifo', '2026-06-18 06:03:05', '2026-06-18 06:03:05');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inv_stock_transfers`
+--
+
+CREATE TABLE `inv_stock_transfers` (
+  `id` bigint UNSIGNED NOT NULL,
+  `transfer_no` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `from_branch_id` bigint UNSIGNED NOT NULL,
+  `to_branch_id` bigint UNSIGNED NOT NULL,
+  `transfer_date` date NOT NULL,
+  `total_amount` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `note` text COLLATE utf8mb4_unicode_ci,
+  `created_by` bigint UNSIGNED DEFAULT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'completed',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -2504,10 +2521,7 @@ INSERT INTO `inv_supplier_ledgers` (`id`, `supplier_id`, `date`, `transaction_ty
 (127, 11, '2026-06-18', 'return_advance', 30.00, 0.00, 1410.00, 33, 'PRT-2606-0003', NULL, 1, '2026-06-18 05:44:23', '2026-06-18 05:44:23'),
 (128, 11, '2026-06-18', 'return_cash_refund', 750.00, 0.00, 2160.00, 36, 'PRT-2606-0004', NULL, 1, '2026-06-18 05:47:59', '2026-06-18 05:47:59'),
 (129, 12, '2026-06-18', 'purchase', 0.00, 2500.00, -2500.00, 119, 'INV-2026-06-0003', NULL, 1, '2026-06-18 06:02:44', '2026-06-18 06:02:44'),
-(130, 12, '2026-06-18', 'payment', 2450.00, 0.00, -50.00, 119, 'INV-2026-06-0003', NULL, 1, '2026-06-18 06:02:44', '2026-06-18 06:02:44'),
-(131, 12, '2026-06-18', 'return_due_adjust', 50.00, 0.00, 0.00, 39, 'PRT-2606-0005', NULL, 1, '2026-06-18 06:03:05', '2026-06-18 06:03:05'),
-(132, 12, '2026-06-18', 'return_cash_refund', 600.00, 0.00, 600.00, 39, 'PRT-2606-0005', NULL, 1, '2026-06-18 06:03:05', '2026-06-18 06:03:05'),
-(133, 12, '2026-06-18', 'return_advance', 80.00, 0.00, 680.00, 39, 'PRT-2606-0005', NULL, 1, '2026-06-18 06:03:05', '2026-06-18 06:03:05');
+(130, 12, '2026-06-18', 'payment', 2450.00, 0.00, -50.00, 119, 'INV-2026-06-0003', NULL, 1, '2026-06-18 06:02:44', '2026-06-18 06:02:44');
 
 -- --------------------------------------------------------
 
@@ -2739,7 +2753,9 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (64, '2026_06_06_092611_create_inv_customer_payments_table', 16),
 (65, '2026_06_11_092611_create_inv_supplier_payments_table', 17),
 (66, '2026_06_13_065811_create_inv_purchase_returns_table', 18),
-(67, '2026_06_13_065835_create_inv_purchase_return_items_table', 18);
+(67, '2026_06_13_065835_create_inv_purchase_return_items_table', 18),
+(68, '2026_06_24_065835_create_inv_stock_transfers_table', 19),
+(69, '2026_06_24_065836_create_inv_stock_transfer_items_table', 19);
 
 -- --------------------------------------------------------
 
@@ -3023,7 +3039,7 @@ INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `n
 (13, 'Modules\\Core\\Models\\User', 1, 'api-token', '677c9a19b21d9b1bd2483e0f4820d02dc4d1ec0dcf297ade4fb9a80fcd7dc8bf', '[\"*\"]', '2025-11-06 00:54:32', NULL, '2025-08-24 22:26:44', '2025-11-06 00:54:32'),
 (14, 'Modules\\Core\\Models\\User', 1, 'api-token', 'fb1bed7e3778362e45bcfcc9f1dde0ad28cf25965db2086df0116a58be1422cb', '[\"*\"]', '2026-06-13 00:20:00', NULL, '2025-11-23 23:25:46', '2026-06-13 00:20:00'),
 (15, 'Modules\\Core\\Models\\User', 1, 'api-token', '152533449addd4e9f50fd9f6334e290d6245f448bec22e51670512b4efbf31b4', '[\"*\"]', '2026-06-08 04:03:24', NULL, '2026-04-29 23:28:59', '2026-06-08 04:03:24'),
-(16, 'Modules\\Core\\Models\\User', 1, 'api-token', 'dd3b02f79e8e996fe8a7c9b7db4da8b727fb23ee686c6909eaa3cee8231ed24a', '[\"*\"]', '2026-06-23 06:24:39', NULL, '2026-06-13 00:42:29', '2026-06-23 06:24:39');
+(16, 'Modules\\Core\\Models\\User', 1, 'api-token', 'dd3b02f79e8e996fe8a7c9b7db4da8b727fb23ee686c6909eaa3cee8231ed24a', '[\"*\"]', '2026-06-24 05:50:05', NULL, '2026-06-13 00:42:29', '2026-06-24 05:50:05');
 
 -- --------------------------------------------------------
 
@@ -3227,6 +3243,23 @@ INSERT INTO `settings` (`id`, `key`, `value`, `type`, `created_at`, `updated_at`
 (8, 'icon_logo', '/storage/setting/yWrDoPxPUnaZnxgJk2KKZq6tgRgcw3PXGvvHKhbX.jpg', 'text', '2025-08-24 02:49:42', '2025-08-24 06:36:47'),
 (9, 'currency_symbol', NULL, 'text', '2025-08-24 02:49:42', '2025-08-24 06:36:33'),
 (10, 'symbol_position', NULL, 'text', '2025-08-24 02:49:42', '2025-08-24 06:36:33');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stock_transfer_items`
+--
+
+CREATE TABLE `stock_transfer_items` (
+  `id` bigint UNSIGNED NOT NULL,
+  `stock_transfer_id` bigint UNSIGNED NOT NULL,
+  `product_id` bigint UNSIGNED NOT NULL,
+  `quantity` decimal(12,2) NOT NULL DEFAULT '0.00',
+  `unit_cost` decimal(12,4) NOT NULL DEFAULT '0.0000',
+  `total_cost` decimal(12,4) NOT NULL DEFAULT '0.0000',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -3559,6 +3592,15 @@ ALTER TABLE `inv_stock_movements`
   ADD KEY `inv_stock_movements_branch_id_foreign` (`branch_id`);
 
 --
+-- Indexes for table `inv_stock_transfers`
+--
+ALTER TABLE `inv_stock_transfers`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `inv_stock_transfers_transfer_no_unique` (`transfer_no`),
+  ADD KEY `inv_stock_transfers_from_branch_id_foreign` (`from_branch_id`),
+  ADD KEY `inv_stock_transfers_to_branch_id_foreign` (`to_branch_id`);
+
+--
 -- Indexes for table `inv_suppliers`
 --
 ALTER TABLE `inv_suppliers`
@@ -3712,6 +3754,14 @@ ALTER TABLE `sessions`
 ALTER TABLE `settings`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `settings_key_unique` (`key`);
+
+--
+-- Indexes for table `stock_transfer_items`
+--
+ALTER TABLE `stock_transfer_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `stock_transfer_items_stock_transfer_id_foreign` (`stock_transfer_id`),
+  ADD KEY `stock_transfer_items_product_id_foreign` (`product_id`);
 
 --
 -- Indexes for table `users`
@@ -3929,6 +3979,12 @@ ALTER TABLE `inv_stock_movements`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=406;
 
 --
+-- AUTO_INCREMENT for table `inv_stock_transfers`
+--
+ALTER TABLE `inv_stock_transfers`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `inv_suppliers`
 --
 ALTER TABLE `inv_suppliers`
@@ -3974,7 +4030,7 @@ ALTER TABLE `jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `modules`
@@ -4017,6 +4073,12 @@ ALTER TABLE `roles`
 --
 ALTER TABLE `settings`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `stock_transfer_items`
+--
+ALTER TABLE `stock_transfer_items`
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -4247,6 +4309,13 @@ ALTER TABLE `inv_stock_movements`
   ADD CONSTRAINT `inv_stock_movements_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `inv_products` (`id`) ON DELETE CASCADE;
 
 --
+-- Constraints for table `inv_stock_transfers`
+--
+ALTER TABLE `inv_stock_transfers`
+  ADD CONSTRAINT `inv_stock_transfers_from_branch_id_foreign` FOREIGN KEY (`from_branch_id`) REFERENCES `branches` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `inv_stock_transfers_to_branch_id_foreign` FOREIGN KEY (`to_branch_id`) REFERENCES `branches` (`id`) ON DELETE CASCADE;
+
+--
 -- Constraints for table `inv_suppliers`
 --
 ALTER TABLE `inv_suppliers`
@@ -4323,6 +4392,13 @@ ALTER TABLE `permission_groups`
 ALTER TABLE `role_has_permissions`
   ADD CONSTRAINT `role_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `role_has_permissions_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `stock_transfer_items`
+--
+ALTER TABLE `stock_transfer_items`
+  ADD CONSTRAINT `stock_transfer_items_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `inv_products` (`id`) ON DELETE RESTRICT,
+  ADD CONSTRAINT `stock_transfer_items_stock_transfer_id_foreign` FOREIGN KEY (`stock_transfer_id`) REFERENCES `inv_stock_transfers` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

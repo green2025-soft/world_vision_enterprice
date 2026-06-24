@@ -111,7 +111,7 @@ onMounted(async () => {
 
         </div>
         
-
+{{ objData }}
         <!-- Product Table -->
         <div class="table-responsive mb-2">
             <table class="table table-bordered align-middle">
@@ -183,6 +183,7 @@ onMounted(async () => {
                     </table>
 
                 </div>
+                
             </div>
 
         </div>

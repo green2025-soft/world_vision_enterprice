@@ -5,22 +5,21 @@ use Modules\Core\Http\Controllers\Api\BaseApiController;
 
 
 use Illuminate\Http\Request;
-use Modules\Inventory\Http\Requests\PurchaseReturnRequest;
-use Modules\Inventory\Models\CustomerLedger;
-use Modules\Inventory\Models\PurchaseReturn;
-use Modules\Inventory\Models\SupplierLedger;
-use Modules\Inventory\Services\Inventory\Transaction\PurchaseReturnService;
+use Modules\Inventory\Http\Requests\StockTransferRequest;
+use Modules\Inventory\Models\StockTransfer;
 
-class PurchaseReturnController extends BaseApiController
+use Modules\Inventory\Services\Inventory\Transaction\StockTransferService;
+
+class StockTransferController extends BaseApiController
 {
-    protected string $title = 'Purchase Return';
+    protected string $title = 'Stock Transfer';
 
-    protected PurchaseReturnService $purchaseReturnService;
+    protected StockTransferService $stockTransferService;
 
-    public function __construct(PurchaseReturnService $purchaseReturnService)
+    public function __construct(StockTransferService $stockTransferService)
     {
-        $this->purchaseReturnService  = $purchaseReturnService;
-        $this->model = PurchaseReturn::class;
+        $this->stockTransferService  = $stockTransferService;
+        $this->model = StockTransfer::class;
     }
 
     public function index(Request $request)
@@ -33,25 +32,25 @@ class PurchaseReturnController extends BaseApiController
         return $this->listResponse($query->smartPaginate());
     }
 
-    public function store(PurchaseReturnRequest $request)
+    public function store(StockTransferRequest $request)
     {
         $request->validated();
-        if (empty($validated['invoice_no'])) {
-            $request['invoice_no'] = $this->generateInvoiceNo();
+        if (empty($validated['transfer_no'])) {
+            $request['transfer_no'] = $this->generateInvoiceNo();
         }
         if(!isset($request['']))
 
-        $createData = $this->purchaseReturnService->storeOrUpdate($request->all());
+        $createData = $this->stockTransferService->storeOrUpdate($request->all());
         return $this->createdResponse($createData);
     }
 
         protected function generateInvoiceNo(): string
         {
-            $prefix = 'PRT-' . date('ym') . '-';
+            $prefix = 'TRF-' . date('ym') . '-';
 
-            $lastInvoiceNo = $this->model::where('invoice_no', 'like', $prefix . '%')
-                ->latest('invoice_no')
-                ->value('invoice_no');
+            $lastInvoiceNo = $this->model::where('transfer_no', 'like', $prefix . '%')
+                ->latest('transfer_no')
+                ->value('transfer_no');
 
             $nextNumber = 1;
 
@@ -71,7 +70,7 @@ class PurchaseReturnController extends BaseApiController
 
     }
 
-    public function update(PurchaseReturnRequest $request, $id)
+    public function update(StockTransferRequest $request, $id)
     {
         $request->validated();
         $updated = $this->purchaseReturnService->storeOrUpdate($request->all(), $id);

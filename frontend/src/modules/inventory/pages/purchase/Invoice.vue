@@ -417,9 +417,7 @@ onMounted(async () => {
         margin-top:100px;
     }
 
-    .print-spacer{
-        height:200px;
-    }
+  
 
 }
 

@@ -39,4 +39,6 @@ class StockType
             default              => null,
         };
     }
+
+   
 }

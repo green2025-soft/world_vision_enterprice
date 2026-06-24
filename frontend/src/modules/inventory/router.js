@@ -120,10 +120,16 @@ const routes = {
     meta: { title: "Supplier Due Payment", ...defaultMeta, requiresBranch: true },
   },
 
-     {
+  {
     path: "supplier-due-payment/",
     component: () => import('@/modules/inventory/pages/supplier_payment/Index.vue'),
     meta: { title: "Supplier Due Payment", ...defaultMeta, requiresBranch: true },
+  },
+
+   {
+    path: "stock-transfers/create",
+    component: () => import('@/modules/inventory/pages/stock_transfer/Create.vue'),
+    meta: { title: "Product Stock Transfer", ...defaultMeta, requiresBranch: true },
   },
 
 
