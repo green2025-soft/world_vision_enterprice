@@ -24,14 +24,14 @@ abstract class BaseTransaction {
      public function storeOrUpdate(array $data, ?int $id = null)
     {
         return DB::transaction(function () use ($data, $id) {
-            
+           
              // 1. CALCULATION
             $calc = app(CalculationService::class)->calculate(
                 $data['items'],
                 $data,
                 $this->type, 
             );
-
+     
             $items  = $calc['items'];
             $totals = $calc['totals'];
 
@@ -40,19 +40,21 @@ abstract class BaseTransaction {
                 : $this->create($data, $totals);
 
             // 3. ITEM SAVE (ONLY DB LAYER)
+            
             app(ItemService::class)->replace(
                 $model,
                 $items,
                 $this->relationKey()
             );
 
+        
              // 4. STOCK ENGINE
             app(StockService::class)->handle(
                 $this->type,
                 $model,
                 $items
             );
-
+            
             // 5. POST ACTION (ACCOUNTING ETC)
             $this->after($model, $items, $data, $totals, $id !== null);
 
@@ -95,6 +97,7 @@ abstract class BaseTransaction {
         DB::transaction(function () use ($id) {
             $class = $this->modelClass();
             $model = $class::with('items')->findOrFail($id);
+            
             // \Log::debug($this->type);
             
             app(StockService::class)

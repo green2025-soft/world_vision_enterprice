@@ -13,7 +13,9 @@ class StockService
         protected StockMovementService $movement,
         protected StockConsumptionService $consumption,
         protected PurchaseReturnHandler $purchaseReturn,
-        protected SaleReturnHandler $sale_return
+        protected SaleReturnHandler $sale_return,
+        protected StockTransferHandler $stockTransfer,
+        protected ProductWastageHandler $productWastage
     ) {}
 
 
@@ -22,7 +24,9 @@ class StockService
         return match ($type) {
             'purchase_return'   => $this->purchaseReturn->handle($source, $items),
             'sale_return'       => $this->sale_return->handle($source, $items),
-            default             => $this->process($type, $source, $items)
+            'transfer'          => $this->stockTransfer->handle($type, $source, $items),
+            'wastage'           => $this->productWastage->handle($type, $source, $items),
+            default             => $this->process($type, $source, $items),
         };
     }
 
@@ -47,8 +51,6 @@ class StockService
                 );
             }
 
-        
-
             // 4. BALANCE LAST
            $currentStock = $this->consumption->currentStock($productId, $branchId);
            $this->balance->updateCurrentStock($productId, $branchId,  $currentStock);
@@ -58,6 +60,19 @@ class StockService
 
     public function reverse(string $type, int $referenceId, $model=''): void
     {
-        $this->movement->reverse($type, $referenceId, $model);
+        
+        if($type =='transfer'){
+            $outModel = $model; 
+            $outModel->branch_id = $model->from_branch_id;
+
+            $this->movement->reverse('transfer_out', $referenceId, $outModel);
+            
+            $inModel = $model; 
+            $inModel->branch_id = $model->to_branch_id;
+            $this->movement->reverse('transfer_in', $referenceId, $inModel);
+
+        }else{
+            $this->movement->reverse($type, $referenceId, $model);
+        }
     }
 }

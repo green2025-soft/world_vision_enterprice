@@ -80,4 +80,58 @@ class AccountingManagerService
             $this->entryService->deleteEntry($entry->id);
         }
     }
+
+    public function setockTransferJournalEntry(string $moduleName, string $sourceType, int $sourceId, array $data): void
+    {
+
+        $map = AccountModule::where('module_name', $moduleName)->firstOrFail();
+
+        if (!$map->status) return;
+        $linkInKyes = ['inventory_transfer_in', 'git_transfer_in'];
+        $fromLinks  = [];
+        $toLinks    = [];
+        foreach ($map->accounts as $account) {
+            $component = $account['component'];
+            $amountKey = $account['amount_source_key'] ?? strtolower(str_replace(' ', '_', $component));
+            $amount = floatval($data['amount'] ?? 0);
+            if ($amount <= 0) continue;
+
+            // ✅ Account from user input
+            $accountHeadId = $account->account_head_id;
+            
+            $lines = [
+                'account_head_id' => $accountHeadId,
+                'debit'           => $account['is_debit'] ? $amount : 0,
+                'credit'          => !$account['is_debit'] ? $amount : 0,
+                'description'     => $account['description'] ?? null,
+            ];
+            if(isset($linkInKyes[$amountKey])){
+                 $toLinks[] = $lines;
+            }else{
+                $fromLinks[] = $lines;
+            }
+        }
+
+        if (empty($fromLinks) || empty($toLinks)) return;
+        $lines = [];
+        $moduleName =  $sourceType.' Voucher'; 
+        
+        $commendData = [
+            'date'         => now(),
+            'voucher_type' => $moduleName,
+            'module'       => $moduleName,
+            'source_type'  => $sourceType,
+            'source_id'    => $sourceId,
+            'narration'    => $moduleName,
+        ];
+        $toBranchData = $fromBranchData =  $commendData;
+        $toBranchData['lines'] = $toLinks;
+        $toBranchData['branch_id'] = $data['to_branch_id'];
+
+        $fromBranchData['lines'] = $fromLinks;
+        $fromBranchData['branch_id'] = $data['from_branch_id'];
+
+        $this->entryService->createEntry($fromBranchData);
+        $this->entryService->createEntry($toBranchData);
+    }
 }

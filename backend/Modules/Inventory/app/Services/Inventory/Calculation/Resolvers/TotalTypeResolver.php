@@ -7,6 +7,7 @@ use Modules\Inventory\Services\Inventory\Calculation\Types\Total\SaleTotal;
 use Modules\Inventory\Services\Inventory\Calculation\Types\Total\SaleReturnTotal;
 use Modules\Inventory\Services\Inventory\Calculation\Types\Total\PurchaseReturnTotal;
 use Modules\Inventory\Services\Inventory\Calculation\Types\Total\StockTransferTotal;
+use Modules\Inventory\Services\Inventory\Calculation\Types\Total\ProductWastageTotal;
 
 class TotalTypeResolver {
 
@@ -20,6 +21,7 @@ class TotalTypeResolver {
             'purchase_return'   => app(PurchaseReturnTotal::class),
             'sale_return'       => app(SaleReturnTotal::class),
             'transfer'          => app(StockTransferTotal::class),
+            'wastage'           => app(ProductWastageTotal::class),
 
             default => throw new \Exception("Invalid type"),
         };

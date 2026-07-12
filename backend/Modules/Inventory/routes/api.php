@@ -16,6 +16,8 @@ use Modules\Inventory\Http\Controllers\Api\SaleReturnController;
 use Modules\Inventory\Http\Controllers\Api\PurchaseReturnController;
 use Modules\Inventory\Http\Controllers\Api\CustomerPaymentController;
 use Modules\Inventory\Http\Controllers\Api\SupplierPaymentController;
+use Modules\Inventory\Http\Controllers\Api\StockTransferController;
+use Modules\Inventory\Http\Controllers\Api\ProductWastageController;
 
 Route::middleware(['auth:sanctum'])->prefix('v1/inventory')->name('inventory.')->group(function () {
 // Route::middleware(['auth:sanctum', 'admin'])->prefix('v1/inventory')->name('inventory')->group(function () {
@@ -45,5 +47,8 @@ Route::middleware(['auth:sanctum'])->prefix('v1/inventory')->name('inventory.')-
     Route::apiResource('sale-return', SaleReturnController::class);
     Route::apiResource('customer-payment', CustomerPaymentController::class);
     Route::apiResource('supplier-payment', SupplierPaymentController::class);
+
+    Route::apiResource('stock-transfers', StockTransferController::class);
+    Route::apiResource('product-wastages', ProductWastageController::class);
 
 });

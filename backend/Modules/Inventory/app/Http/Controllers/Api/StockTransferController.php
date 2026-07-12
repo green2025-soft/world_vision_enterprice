@@ -25,8 +25,9 @@ class StockTransferController extends BaseApiController
     public function index(Request $request)
     {
          $query = $this->indexQuery()
-            ->where('branch_id', $request['branch_id'])
-            ->with('supplier:id,name,phone,address')
+            // ->where('from_branch_id', $request['from_branch_id'])
+            // ->orWhere('to_branch_id', $request['to_branch_id'])
+            ->with('fromBranch:id,name,contact_no', 'toBranch:id,name,contact_no')
             ;
 
         return $this->listResponse($query->smartPaginate());
@@ -73,13 +74,13 @@ class StockTransferController extends BaseApiController
     public function update(StockTransferRequest $request, $id)
     {
         $request->validated();
-        $updated = $this->purchaseReturnService->storeOrUpdate($request->all(), $id);
+        $updated = $this->stockTransferService->storeOrUpdate($request->all(), $id);
         return $this->updatedResponse($updated);
     }
 
     public function destroy($id)
     {
-        $this->purchaseReturnService->delete($id);
+        $this->stockTransferService->delete($id);
         return $this->deletedResponse();
     }
 

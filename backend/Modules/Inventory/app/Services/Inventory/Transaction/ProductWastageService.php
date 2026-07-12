@@ -3,36 +3,37 @@
 namespace Modules\Inventory\Services\Inventory\Transaction;
 
 use Modules\Accounting\Services\AccountingManagerService;
-use Modules\Inventory\Models\StockTransfer;
+use Modules\Inventory\Models\ProductWastage;
+
 use Modules\Inventory\Services\Inventory\BaseTransaction;
 
 
-class StockTransferService extends BaseTransaction{
-    protected string $type = 'transfer';
+class ProductWastageService extends BaseTransaction{
+    protected string $type = 'wastage';
 
    
     protected function modelClass()
     {
-        return StockTransfer::class;
+        return ProductWastage::class;
     }
 
      protected function relationKey()
     {
-        return 'stock_transfer_id';
+        return 'product_wastage_id';
     }
 
     protected function after($model, $items, $data, $totals, bool $isUpdate)
     {
         
         $accountData = [
-            'amount'            => $totals['total_cost'],
-            'from_branch_id'    => $data['from_branch_id'],
-            'to_branch_id'      => $data['to_branch_id']
+            'inventory_wastage' => $totals['total_cost'],
+            'stock_wastage'     => $totals['total_cost'],
+            'branch_id'         => $data['branch_id'],
         ];
         
-        $this->accountingService()->setockTransferJournalEntry(
-            moduleName: 'Stock Transfer Voucher',
-            sourceType: 'stock_transfer',
+        $this->accountingService()->createEntryFromModule(
+            moduleName: 'Product Wastage Voucher',
+            sourceType: 'Product Wastage',
             sourceId: $model->id,
             data: $accountData
         );
@@ -46,8 +47,8 @@ class StockTransferService extends BaseTransaction{
        
 
          $this->accountingService()->deleteEntryFromModule(
-            moduleName: 'Stock Transfer Voucher',
-            sourceType: 'stock_transfer',
+             moduleName: 'Product Wastage Voucher',
+            sourceType: 'Product Wastage',
             sourceId: $model->id,
         );
         

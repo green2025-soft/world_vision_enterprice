@@ -3,7 +3,7 @@
 
 namespace Modules\Inventory\Services\Inventory\Calculation\Types\Total;
 
-class StockTransferTotal {
+class ProductWastageTotal {
 
 
     public function calculate(array $items, array $input): array{

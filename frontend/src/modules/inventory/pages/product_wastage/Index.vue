@@ -6,8 +6,8 @@ import { toast } from 'vue3-toastify'
 
 
 //  Setup
-const title = 'Stock Transfer'
-const bUrl = 'inventory/stock-transfers'
+const title = 'Product Wastage'
+const bUrl = 'inventory/product-wastages'
 
 const {
   askDelete,
@@ -21,12 +21,12 @@ const {
 const dataTableRef = ref(null)
 
 onMounted(() => {
-    const toastMessage = sessionStorage.getItem('stockTransferToastMessage')
+    const toastMessage = sessionStorage.getItem('productWastageToastMessage')
     if (toastMessage) {
        const { message, type } = JSON.parse(toastMessage)
        toast.success(message)
     }
-  sessionStorage.removeItem('stockTransferToastMessage')
+  sessionStorage.removeItem('productWastageToastMessage')
 
 })
 
@@ -51,13 +51,12 @@ onMounted(() => {
            ref="dataTableRef"
                     :fields="[
                       { key: 'sl', label: 'SL' },
-                      { key: 'transfer_no', label: 'Transfer No', align: 'center'  },
-                      { key: 'transfer_date', label: 'date', align: 'center',   isChange: true,},
-                      { key: 'from_branch.name', label: 'Tranasfer From' },
-                      { key: 'to_branch.name', label: 'Tranasfer To' },
+                      { key: 'wastage_no', label: 'Wastage No', align: 'center'  },
+                      { key: 'wastage_date', label: 'date', align: 'center',   isChange: true,},
+                     
                       { key: 'total_amount', label: 'Amount', align: 'center'},
                       
-                      
+                    
                       
                       { key: 'actions', label: 'Actions' }
                     ]"
@@ -65,15 +64,16 @@ onMounted(() => {
                     :isBranch="true"
                   >
                 
-                    <template #cell-transfer_date="{ item }">
+                    <template #cell-wastage_date="{ item }">
                       
-                      {{ userDateFormat(item.transfer_date) }}
+                      {{ userDateFormat(item.wastage_date) }}
                     </template>
                    <template #actions="{ rowItem }">
                          <div class="btn-group dropleft">
-                            <BButton variant="outline-primary"  >
+                          <RouterLink :to="`/${bUrl}/${rowItem.id}`"  class="btn btn-sm btn-outline-primary"  >
                               <i class="fa fa-table"></i>
-                            </BButton>
+                            </RouterLink>
+                            
                             <BButton variant="outline-danger"  @click="askDelete(rowItem.id)">
                               <i class="fa fa-trash"></i>
                             </BButton>

@@ -21,6 +21,7 @@ public function __construct(
             if (!$productId) {
                 throw new \Exception("Product ID missing");
             }
+            
             $result[] = $this->typeResolver->resolve($type)->build($item, $input, $ratio);
             
         }

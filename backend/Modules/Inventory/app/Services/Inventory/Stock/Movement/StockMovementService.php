@@ -50,7 +50,6 @@ class StockMovementService
         if ($movements->isEmpty()) {
             throw new Exception("No stock movement found for this transaction.");
         }
-
         foreach ($movements as $movement) {
             if (($movement->consumed_quantity ?? 0) > 0) {
                 throw new Exception("Cannot delete: stock has already been consumed.");

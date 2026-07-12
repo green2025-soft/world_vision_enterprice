@@ -4,7 +4,7 @@ namespace Modules\Inventory\Services\Inventory\Stock\Movement;
 
 use Modules\Inventory\Models\StockMovement;
 use Exception;
-use Modules\Inventory\Services\Stock\StockType;
+use Modules\Inventory\Services\Inventory\Stock\StockType;
 
 class StockConsumptionService
 {
@@ -123,11 +123,18 @@ class StockConsumptionService
     }
 
 
-    public function currentStock(int $productId, int $branchId): float
+  public function currentStock(int $productId, int $branchId): float
     {
-        return (float) StockMovement::where('product_id', $productId)
+        $stockIn = StockMovement::where('product_id', $productId)
             ->where('branch_id', $branchId)
-            ->where('movement_type', StockType::PURCHASE)
-            ->sum(\DB::raw('quantity - consumed_quantity'));
+            ->whereIn('movement_type', StockType::stockInTypes())
+            ->sum('quantity');
+
+        $stockOut = StockMovement::where('product_id', $productId)
+            ->where('branch_id', $branchId)
+            ->whereIn('movement_type', StockType::stockOutTypes())
+            ->sum('quantity');
+
+        return (float) ($stockIn - $stockOut);
     }
 }

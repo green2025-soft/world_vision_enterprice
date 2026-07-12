@@ -11,6 +11,27 @@ class StockType
     public const TRANSFER = 'transfer';
     public const WASTAGE = 'wastage';
     public const ADJUSTMENT = 'adjustment';
+    public const TRANSFER_IN = 'transfer_in';
+    public const TRANSFER_OUT = 'transfer_out';
+
+    public static function stockInTypes(){
+        return [
+            self::PURCHASE,
+            self::TRANSFER_IN,
+            self::SALE_RETURN,
+        ];
+    }
+
+       public static function stockOutTypes(){
+        return [
+            self::SALE,
+            self::TRANSFER_OUT,
+            self::PURCHASE_RETURN,
+            self::WASTAGE,
+        ];
+    }
+
+
 
     public static function isStockIn(string $type): bool
     {

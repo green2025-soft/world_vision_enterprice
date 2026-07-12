@@ -131,6 +131,33 @@ const routes = {
     component: () => import('@/modules/inventory/pages/stock_transfer/Create.vue'),
     meta: { title: "Product Stock Transfer", ...defaultMeta, requiresBranch: true },
   },
+  {
+    path: "stock-transfers",
+    component: () => import('@/modules/inventory/pages/stock_transfer/Index.vue'),
+    meta: { title: "Product Stock Transfer", ...defaultMeta, requiresBranch: true },
+  },
+
+
+   {
+    path: "product-wastages/create",
+    component: () => import('@/modules/inventory/pages/product_wastage/Create.vue'),
+    meta: { title: "Product Wastage", ...defaultMeta, requiresBranch: true },
+  },
+
+  {
+    path: "product-wastages",
+    component: () => import('@/modules/inventory/pages/product_wastage/Index.vue'),
+    meta: { title: "Product Wastage", ...defaultMeta, requiresBranch: true },
+  },
+
+    {
+    path: "product-wastages/:id",
+    component: () => import('@/modules/inventory/pages/product_wastage/Invoice.vue'),
+    meta: { title: "Product Wastage Invoice", ...defaultMeta, requiresBranch: true },
+    props: true
+  },
+
+  
 
 
   

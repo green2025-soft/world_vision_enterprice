@@ -112,7 +112,11 @@ const props = defineProps({
   extraParams: {
     type: Object,
     default: () => ({})
-  }
+  },
+  optionFilter: {
+  type: Function,
+  default: null
+}
 })
 
 const emit = defineEmits([
@@ -208,8 +212,11 @@ const fetchData = async () => {
       ...props.extraParams
     })
 
-    const data = res?.data ?? []
+    let data = res?.data ?? []
 
+  if (props.optionFilter) {
+    data = data.filter(props.optionFilter)
+  }
     lastPage.value =
       res?.pagination?.last_page || 1
 
