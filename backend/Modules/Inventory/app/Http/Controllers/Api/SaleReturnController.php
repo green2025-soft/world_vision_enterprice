@@ -66,33 +66,7 @@ class SaleReturnController extends BaseApiController
 
     public function show($id)
     {
-        $sales = $this->model::with(['items.product','items.currentStock', 'customer'])->findOrFail($id);
-        $customerBalance = CustomerLedger::where('customer_id', $sales->customer_id)
-        ->where('branch_id', $sales->branch_id) 
-        ->selectRaw('SUM(debit - credit) as balance')
-        ->value('balance') ?? 0;
-         // Attach balance to customer
-        if ($sales->customer) {
-            $sales->customer->balance = (float) $customerBalance;
-        }
-
-            $sales->items->transform(function ($item) {
-                return [
-                    'id'            => $item->id,
-                    'product_id'    => $item->product_id,
-                    'name'          => $item->product?->name,
-                    'sku'           => $item->product?->sku,
-                    'quantity'      => $item->quantity,
-                    'purchase_price' => $item->unit_price, 
-                    'unit_price'    => $item->unit_price,
-                    'cost_price'    => $item->cost_price,
-                    'sale_price'    => $item->sale_price,
-                    'current_stock' => $item->currentStock?->current_stock
-                ];
-            });
-
-        return $this->successResponse($sales);
-
+        return $this->showData($id, ['items','items.product','items.currentStock', 'customer', 'sale']);
     }
 
     public function update(SaleReturnRequest $request, $id)

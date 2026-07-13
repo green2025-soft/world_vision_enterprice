@@ -22,10 +22,13 @@ class SaleReturn extends InvBaseModel
         return $this->belongsTo(Customer::class, 'customer_id');
     }
 
+    public function sale(){
+        return $this->belongsTo(Sale::class, 'sale_id');
+    }
+
     public function items()
     {
         return $this->hasMany(SaleReturnItem::class, 'sale_return_id');
     }
-
     
 }

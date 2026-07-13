@@ -20,7 +20,7 @@ const props = defineProps({
 
 const { 
   getOne, 
-} = useResourceApiClient('inventory/purchase-return', title, true)
+} = useResourceApiClient('inventory/sale-return', title, true)
 
 const objData= ref('');
 
@@ -65,24 +65,24 @@ onMounted(async () => {
                 </div>
             </div>
             <div class="col-md-12 text-center">
-                <h5> <strong class="invoice-badge">PURCHASE RETURN</strong></h5>
+                <h5> <strong class="invoice-badge">SALES RETURN</strong></h5>
             </div>
         </div>
 
-        <!-- Supplier & Invoice Info -->
+        <!-- Customer & Invoice Info -->
         <div class="row g-3 mb-4">
 
             <div class="col-md-6">
                 <div class="info-box">
                     <div class="section-title">
                         <i class="fas fa-truck me-1"></i>
-                        Supplier Information
+                        Customer Information
                     </div>
 
-                    <strong>{{ objData?.supplier?.name }}</strong><br>
-                    {{ objData?.supplier?.address }}
-                    Phone: {{ objData?.supplier?.phone }}<br>
-                    Email:  {{ objData?.supplier?.email }}
+                    <strong>{{ objData?.customer?.name }}</strong><br>
+                    {{ objData?.customer?.address }}
+                    Phone: {{ objData?.customer?.phone }}<br>
+                    Email:  {{ objData?.customer?.email }}
                 </div>
             </div>
 
@@ -103,7 +103,7 @@ onMounted(async () => {
                         </tr>
                         <tr>
                             <td><strong>Reference Inv:</strong></td>
-                            <td class="text-end"> {{ objData?.purchase?.invoice_no }}</td>
+                            <td class="text-end"> {{ objData?.sale?.invoice_no }}</td>
                         </tr>
                     </table>
                 </div>
@@ -126,8 +126,7 @@ onMounted(async () => {
                 </thead>
 
                 <tbody>
-               <tr v-for="(item, index) in objData.items" :key="index">
-                
+                <tr v-for="(item, index) in objData.items" :key="index">
                       <td class="text-center">{{ ++index }}</td>
                       <td> {{ item?.product?.name }} ({{ item?.product?.sku }})</td>
                       <td class="text-end">{{ item.return_qty }}</td>
@@ -170,22 +169,18 @@ onMounted(async () => {
                             <td>Due Adjusted </td>
                             <td class="text-end">{{ formatCurrency(objData.adjusted_due_amount) }}</td>
                         </tr>
-                        <tr v-if="objData.supplier_advance >0">
-                            <td>Supplier Advance </td>
-                            <td class="text-end">{{ formatCurrency(objData.supplier_advance) }}</td>
+                        <tr v-if="objData.customer_advance >0">
+                            <td>Customer Advance </td>
+                            <td class="text-end">{{ formatCurrency(objData.customer_advance) }}</td>
                         </tr>
 
                         <tr class="grand-total">
                             <td>Total Return Amount</td>
                             <td class="text-end">{{ formatCurrency(objData.total_refund_amount) }}</td>
                         </tr>
-                    
                     </table>
-
                 </div>
-                
             </div>
-
         </div>
         <div class="print-spacer"></div>
         <!-- Signature -->
@@ -193,7 +188,7 @@ onMounted(async () => {
             <div class="col-md-6">
                 <div class="signature">
                     <div class="signature-line"></div>
-                    Supplier Signature
+                    Customer Signature
                 </div>
             </div>
 
@@ -204,19 +199,11 @@ onMounted(async () => {
                 </div>
             </div>
         </div>
-
-      
-
     </div>
-
-
-            
         </div>
       </div>
 </template>
 <style scoped>
-
-
 
 /* MAIN WRAPPER */
 
@@ -374,16 +361,13 @@ onMounted(async () => {
     table{
         page-break-inside:auto;
     }
-
     tr{
         page-break-inside:avoid;
         page-break-after:auto;
     }
-
     thead{
         display:table-header-group;
     }
-
     tfoot{
         display:table-footer-group;
     }
@@ -401,5 +385,4 @@ onMounted(async () => {
     }
 
 }
-
 </style>

@@ -100,6 +100,13 @@ const routes = {
     meta: { title: "Edit Sale Return", ...defaultMeta, requiresBranch: true },
   },
 
+    {
+    path: "sale-return/:id",
+    component: () => import('@/modules/inventory/pages/sales_return/Invoice.vue'),
+    meta: { title: "Sale Invoice", ...defaultMeta, requiresBranch: true },
+    props: true
+  },
+
 
    {
     path: "customer-due-payment/create",

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, defineProps } from 'vue'
+import { ref, onMounted, defineProps, computed  } from 'vue'
 import { useResourceApiClient } from '@/composables/resourceApiClient'
 import { formatDateWithFormat,  formatCurrency, printADiv, useImageUrl } from '@/utilities/methods'
 import { useSettingsStore } from '@/store/settings-store'
@@ -35,6 +35,12 @@ onMounted(async () => {
    
 })
 
+const totalQuantity = computed(() => {
+  return (objData.value?.items || []).reduce(
+    (sum, item) => sum + Number(item.quantity || 0),
+    0
+  )
+})
 </script>
 <template>
       <div class="container-fluid">
@@ -127,6 +133,23 @@ onMounted(async () => {
 
                 </tbody>
             </table>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-4 ml-auto">
+                <table class="table table-bordered align-middle">
+                    <tbody>
+                    <tr>
+                        <th width="60%"> Total Items </th>
+                        <td class="text-end">{{ totalQuantity }}</td>
+                    </tr>
+                    <tr>
+                        <th> Total Cost </th>
+                        <td class="text-end text-danger font-weight-bold"> {{ formatCurrency(objData.total_amount) }} </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         
