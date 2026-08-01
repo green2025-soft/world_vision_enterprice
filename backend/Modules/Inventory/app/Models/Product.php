@@ -56,4 +56,12 @@ protected $table = 'inv_products';
             ->where('branch_id', $branchId);
     }
 
+     public function stockMovements()
+    {
+        return $this->hasMany(
+            StockMovement::class,
+            'product_id'
+        );
+    }
+
 }

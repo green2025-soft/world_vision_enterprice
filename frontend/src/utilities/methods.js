@@ -490,10 +490,10 @@ export function numberToWords(amount) {
   return words + ' Only';
 }
 
-export function formatCurrency(value, decimals = 2) {
+export function formatCurrency(value, decimals = 2, symbol = '৳') {
   let number = Number(value)
   if (isNaN(number)) number = 0
-  return '৳'+number.toFixed(decimals)
+  return symbol+number.toFixed(decimals)
 }
 
 export function clampPercent(value) {

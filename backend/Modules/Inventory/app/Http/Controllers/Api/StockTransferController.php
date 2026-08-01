@@ -67,7 +67,7 @@ class StockTransferController extends BaseApiController
 
     public function show($id)
     {
-        return $this->showData($id, ['items','items.product','items.currentStock', 'supplier', 'purchase']);
+        return $this->showData($id, ['fromBranch', 'toBranch', 'user','items','items.product','items.currentStock']);
 
     }
 

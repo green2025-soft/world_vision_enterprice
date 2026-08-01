@@ -7,6 +7,7 @@ use Modules\Inventory\Models\Supplier;
 use Modules\Inventory\Http\Requests\SupplierRequest;
 use Illuminate\Http\Request;
 use Modules\Inventory\Models\SupplierLedger;
+use Modules\Inventory\Services\LedgerService;
 use Modules\Inventory\Services\SupplierPreviousDueService;
 
 class SupplierController extends BaseApiController
@@ -96,6 +97,32 @@ class SupplierController extends BaseApiController
      return $this->listResponse($suppliers);
 
 
+    }
+
+
+    public function ledger(Request $request, LedgerService $service)
+    {
+        $request->validate([
+            'supplier_id' => 'required|integer|min:1',
+            'branch_id'   => 'required|integer|min:1',
+            'from_date'   => 'required|date',
+            'to_date'     => 'required|date|after_or_equal:from_date',
+        ]);
+
+        $filters = [
+            'party_key' => 'supplier_id',
+            'party_id'  => $request->supplier_id,
+            'branch_id' => $request->branch_id,
+            'from_date' => $request->from_date,
+            'to_date'   => $request->to_date,
+        ];
+        $data = $service->getLedger(
+            SupplierLedger::class,
+            $filters
+        );
+
+        return $this->successResponse($data);
+        
     }
 
  

@@ -10,7 +10,10 @@ const props = defineProps({
   bUrl: { type: String, required: true },
   paginationLimit: { type: Number, default: 5 },
   hidePrint: { type: Boolean, default: false },
-  isBranch: { type: Boolean, default: false }
+  isBranch: { type: Boolean, default: false },
+  enableSearch: {type: Boolean,default: true},
+   // Extra parameters
+  extraParams: {type: Object,default: () => ({})}
 });
 
 const filterText = shallowRef('');
@@ -22,7 +25,7 @@ let searchTimeout = null;
 watch(filterText, () => {
   clearTimeout(searchTimeout);
   searchTimeout = setTimeout(() => {
-    currentPage.value = 1; // search করলে first page দেখাও
+    currentPage.value = 1; // search first page দ
     fetchData();
   }, 500); // 500ms delay
 });
@@ -43,7 +46,8 @@ async function fetchData() {
     const response = await gePaginationList({
       page: currentPage.value,
       per_page: perPage.value,
-      search: filterText.value
+      search: filterText.value,
+       ...props.extraParams
     });
     tableData.value = response.data;
     pagination.value = response.pagination;
@@ -115,16 +119,16 @@ defineExpose({
   <div>
     <!-- Filter & Print -->
     <div class="row mb-3">
-      <BCol lg="5">
+      <BCol lg="5"  v-if="props.enableSearch">
         <BInputGroup>
-          <BFormInput v-model="filterText" type="search" size="sm" placeholder="Type to Search" />
+          <BFormInput v-model="filterText" id="" type="search" size="sm" placeholder="Type to Search" />
           <BButton variant="warning" @click="filterText = ''">
             <i class="fas fa-search text-white"></i>
           </BButton>
         </BInputGroup>
       </BCol>
 
-      <BCol lg="7" class="text-end">
+      <BCol :lg="props.enableSearch ? 7 : 12" class="text-end">
         <BButton v-if="!hidePrint" variant="primary" size="sm" @click="printADiv('dataTablePrint')">
           <i class="fas fa-print"></i> Print
         </BButton>

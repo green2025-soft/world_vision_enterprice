@@ -4,52 +4,37 @@ namespace Modules\Inventory\Services\Inventory\Stock;
 
 class StockType
 {
-    public const PURCHASE = 'purchase';
-    public const SALE = 'sale';
-    public const SALE_RETURN = 'sale_return';
-    public const PURCHASE_RETURN = 'purchase_return';
-    public const TRANSFER = 'transfer';
-    public const WASTAGE = 'wastage';
-    public const ADJUSTMENT = 'adjustment';
-    public const TRANSFER_IN = 'transfer_in';
-    public const TRANSFER_OUT = 'transfer_out';
+    public const PURCHASE         = 'purchase';
+    public const SALE             = 'sale';
+    public const PURCHASE_RETURN  = 'purchase_return';
+    public const SALE_RETURN      = 'sale_return';
+    public const TRANSFER_IN      = 'transfer_in';
+    public const TRANSFER_OUT     = 'transfer_out';
+    public const ADJUSTMENT_IN    = 'adjustment_in';
+    public const ADJUSTMENT_OUT   = 'adjustment_out';
+    public const DAMAGE           = 'damage';
+    public const WASTAGE          = 'wastage';
 
-    public static function stockInTypes(){
+    public static function stockIn(): array
+    {
         return [
             self::PURCHASE,
             self::TRANSFER_IN,
             self::SALE_RETURN,
+            self::ADJUSTMENT_IN,
         ];
     }
 
-       public static function stockOutTypes(){
+    public static function stockOut(): array
+    {
         return [
             self::SALE,
             self::TRANSFER_OUT,
             self::PURCHASE_RETURN,
+            self::ADJUSTMENT_OUT,
+            self::DAMAGE,
             self::WASTAGE,
         ];
-    }
-
-
-
-    public static function isStockIn(string $type): bool
-    {
-        return in_array($type, [
-            self::PURCHASE,
-            self::SALE_RETURN,
-            self::ADJUSTMENT,
-            self::TRANSFER, // optional
-        ]);
-    }
-
-    public static function isStockOut(string $type): bool
-    {
-        return in_array($type, [
-            self::SALE,
-            self::PURCHASE_RETURN,
-            self::WASTAGE,
-        ]);
     }
 
     public static function reverseType(string $type): ?string

@@ -18,6 +18,7 @@ use Modules\Inventory\Http\Controllers\Api\CustomerPaymentController;
 use Modules\Inventory\Http\Controllers\Api\SupplierPaymentController;
 use Modules\Inventory\Http\Controllers\Api\StockTransferController;
 use Modules\Inventory\Http\Controllers\Api\ProductWastageController;
+use Modules\Inventory\Http\Controllers\Api\StockReports;
 
 Route::middleware(['auth:sanctum'])->prefix('v1/inventory')->name('inventory.')->group(function () {
 // Route::middleware(['auth:sanctum', 'admin'])->prefix('v1/inventory')->name('inventory')->group(function () {
@@ -29,12 +30,14 @@ Route::middleware(['auth:sanctum'])->prefix('v1/inventory')->name('inventory.')-
     Route::apiResource('product-sets', ProductSetController::class);
 
     Route::get('suppliers/balances/{id?}', [SupplierController::class, 'getSupplierBalances'])->name('suppliers.balances');
+    Route::get('suppliers/ledger', [SupplierController::class, 'ledger'])->name('suppliers.ledger');
     Route::apiResource('suppliers', SupplierController::class);
     Route::apiResource('supplier-advance', SupplierAdvanceController::class);
     Route::get('supplier-advance/{id}/balance', [SupplierAdvanceController::class, 'supplierBalance'])->name('supplier-advance.balances');
 
 
     Route::get('customers/balances/{id?}', [CustomerController::class, 'getCustomerrBalances'])->name('customers.balances');
+    Route::get('customers/ledger', [CustomerController::class, 'ledger'])->name('customers.ledger');
     Route::apiResource('customers', CustomerController::class);
     Route::apiResource('customer-advance', CustomerAdvanceController::class);
     Route::get('customer-advance/{id}/balance', [CustomerAdvanceController::class, 'customerBalance'])->name('customer-advance.balances');
@@ -50,5 +53,11 @@ Route::middleware(['auth:sanctum'])->prefix('v1/inventory')->name('inventory.')-
 
     Route::apiResource('stock-transfers', StockTransferController::class);
     Route::apiResource('product-wastages', ProductWastageController::class);
+
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::controller(StockReports::class)->group(function(){
+            Route::get('product-stocks', 'index')->name('product-stocks');
+        });
+    });
 
 });

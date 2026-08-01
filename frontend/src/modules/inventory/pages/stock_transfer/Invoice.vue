@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, defineProps } from 'vue'
+import { ref, onMounted, defineProps, computed  } from 'vue'
 import { useResourceApiClient } from '@/composables/resourceApiClient'
 import { formatDateWithFormat,  formatCurrency, printADiv, useImageUrl } from '@/utilities/methods'
 import { useSettingsStore } from '@/store/settings-store'
@@ -8,7 +8,7 @@ const route = useRoute()
 const router = useRouter()
 const settingsStore = useSettingsStore()
 
-const title = 'Sales Return'
+const title = 'Stock Transfers'
 const isSpinner = ref(false)
 
 const props = defineProps({
@@ -20,7 +20,7 @@ const props = defineProps({
 
 const { 
   getOne, 
-} = useResourceApiClient('inventory/sale-return', title, true)
+} = useResourceApiClient('inventory/stock-transfers', title, true)
 
 const objData= ref('');
 
@@ -35,6 +35,12 @@ onMounted(async () => {
    
 })
 
+const totalQuantity = computed(() => {
+  return (objData.value?.items || []).reduce(
+    (sum, item) => sum + Number(item.quantity || 0),
+    0
+  )
+})
 </script>
 <template>
       <div class="container-fluid">
@@ -49,8 +55,8 @@ onMounted(async () => {
     <div class="invoice-wrapper" id="invoicePrint">
 
         <!-- Header -->
-        <div class="row align-items-center mb-4">
-            <div class="col-md-12 mb-3">
+        <div class="row align-items-center mb-3">
+            <div class="col-md-12">
                 <div class="d-flex align-items-center">
                     <div class="company-logo me-3">
                         <img width="70" height="70" :src="useImageUrl(settingsStore.data.app_logo)" />
@@ -64,53 +70,72 @@ onMounted(async () => {
                     </div>
                 </div>
             </div>
-            <div class="col-md-12 text-center">
-                <h5> <strong class="invoice-badge">SALES RETURN</strong></h5>
-            </div>
+         
         </div>
-
-        <!-- Customer & Invoice Info -->
-        <div class="row g-3 mb-4">
-
+         <hr>
+        <div class="col-md-12 text-center mb-3">
+            <h5> <strong class="invoice-badge"><i class="fas fa-exchange-alt"></i> BRANCH TO BRANCH STOCK TRANSFER</strong></h5>
+        </div>
+        <!-- ================= TRANSFER INFO ================= -->
+        <div class="row mb-3 transfeerInfo">
             <div class="col-md-6">
-                <div class="info-box">
-                    <div class="section-title">
-                        <i class="fas fa-truck me-1"></i>
-                        Customer Information
-                    </div>
-
-                    <strong>{{ objData?.customer?.name }}</strong><br>
-                    {{ objData?.customer?.address }}
-                    Phone: {{ objData?.customer?.phone }}<br>
-                    Email:  {{ objData?.customer?.email }}
-                </div>
+                <table class="table table-bordered table-sm">
+                    <tr>
+                        <th width="40%">Transfer No</th>
+                        <td>{{objData.transfer_no}}</td>
+                    </tr>
+                    <tr>
+                        <th>Transfer Date</th>
+                        <td>{{formatDateWithFormat(objData.transfer_date, 'd M, Y')}}</td>
+                    </tr>
+                    
+                </table>
             </div>
-
-            <div class="col-md-6" id="invoiceDetails">
-                <div class="info-box">
-                    <div class="section-title">
-                        <i class="fas fa-info-circle me-1"></i>
-                        Invoice Details
-                    </div>
-                    <table class="table table-borderless table-sm">
-                        <tr>
-                            <td><strong>Date: </strong></td>
-                            <td class="text-end"> {{formatDateWithFormat(objData.return_date, 'd M, Y')}}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Return No:</strong></td>
-                            <td class="text-end"> {{ objData.invoice_no }}</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Reference Inv:</strong></td>
-                            <td class="text-end"> {{ objData?.sale?.invoice_no }}</td>
-                        </tr>
-                    </table>
-                </div>
+            <div class="col-md-6">
+                <table class="table table-bordered table-sm">
+                    <tr>
+                        <th width="40%">Status</th>
+                        <td>{{objData.status}} </td>
+                    </tr>
+                    <tr>
+                        <th>Transfer By</th>
+                        <td> {{objData?.user?.name}} </td>
+                    </tr>
+                </table>
             </div>
-
         </div>
-        
+        <!-- ================= BRANCH INFORMATION ================= -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-store"></i> From Branch
+                    </div>
+                    <div class="card-body">
+                        <h5>{{ objData?.from_branch?.name}}</h5>
+                        <p class="mb-0">Contact : {{ objData?.from_branch?.contact_no}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header ">
+                        <i class="fas fa-store"></i> To Branch
+                    </div>
+                    <div class="card-body">
+                          <h5>{{ objData?.to_branch?.name}}</h5>
+                        <p class="mb-0">Contact : {{ objData?.to_branch?.contact_no}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       
+
+
+            
+
+          
 
         <!-- Product Table -->
         <div class="table-responsive mb-2">
@@ -119,76 +144,61 @@ onMounted(async () => {
                 <tr>
                     <th width="40" class="text-center">#</th>
                     <th>Product Name</th>
-                    <th width="120" class="text-end">Return Qty</th>
-                    <th width="120" class="text-end">Wastage Qty</th>
-                    <th width="100" class="text-end">Amount</th>
+                    <th width="100" class="text-end">Qty</th>
+                    <th width="120" class="text-end">Unit Cost</th>
+                    <th width="120" class="text-end">Total</th>
                 </tr>
                 </thead>
 
                 <tbody>
-                <tr v-for="(item, index) in objData.items" :key="index">
+               <tr v-for="(item, index) in objData.items" :key="index">
+                
                       <td class="text-center">{{ ++index }}</td>
                       <td> {{ item?.product?.name }} ({{ item?.product?.sku }})</td>
-                      <td class="text-end">{{ item.return_qty }}</td>
-                      <td class="text-end">{{ item.wastage_qty }}</td>
-                      <td class="text-end">{{ item.total_refund_price}}</td>
+                      <td class="text-end">{{ (item.quantity) }}</td>
+                      <td class="text-end">{{ formatCurrency(item.unit_cost) }}</td>
+                      <td class="text-end">{{ formatCurrency(item.total_cost)}}</td>
+                      
                   </tr>
 
                 </tbody>
             </table>
         </div>
 
-        <!-- Summary -->
-        <div class="row">
-
-            <div class="col-md-6 mt-2">
-                <div class="note-box" v-if="objData.remarks">
-                    <strong>Notes:</strong>
-                    <hr>
-                    {{ objData.remarks }}
-                    
-                </div>
+        <!-- ================= SUMMARY ================= -->
+        <div class="row mb-3">
+            <div class="col-md-7">
+                <h6 class="fw-bold">
+                    <i class="fas fa-sticky-note text-warning"></i> Remarks
+                </h6>
+                <p>{{ objData.note }}</p>
             </div>
-
-            <div class="col-md-6">
-                <div class="summary-card">
-
-                   
-              
-
-                    <table class="table summary-table mb-0">
-
-                       
-
-                        <tr v-if="objData.cash_refund_amount >0">
-                            <td>Cash Return </td>
-                            <td class="text-end">{{ formatCurrency(objData.cash_refund_amount) }}</td>
-                        </tr>
-
-                        <tr v-if="objData.adjusted_due_amount >0">
-                            <td>Due Adjusted </td>
-                            <td class="text-end">{{ formatCurrency(objData.adjusted_due_amount) }}</td>
-                        </tr>
-                        <tr v-if="objData.customer_advance >0">
-                            <td>Customer Advance </td>
-                            <td class="text-end">{{ formatCurrency(objData.customer_advance) }}</td>
-                        </tr>
-
-                        <tr class="grand-total">
-                            <td>Total Return Amount</td>
-                            <td class="text-end">{{ formatCurrency(objData.total_refund_amount) }}</td>
-                        </tr>
-                    </table>
-                </div>
+            <div class="col-md-5">
+                <table class="table table-bordered align-middle">
+                    <tbody>
+                    <tr>
+                        <th width="60%"> Total Items </th>
+                        <td class="text-end">{{ totalQuantity }}</td>
+                    </tr>
+                    <tr>
+                        <th> Total Cost </th>
+                        <td class="text-end text-danger font-weight-bold"> {{ formatCurrency(objData.total_amount) }} </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
+
+      
+
+        
         <div class="print-spacer"></div>
         <!-- Signature -->
         <div class="row signature-section">
             <div class="col-md-6">
                 <div class="signature">
                     <div class="signature-line"></div>
-                    Customer Signature
+                    Supplier Signature
                 </div>
             </div>
 
@@ -199,17 +209,25 @@ onMounted(async () => {
                 </div>
             </div>
         </div>
+
+      
+
     </div>
+
+
+            
         </div>
       </div>
 </template>
 <style scoped>
 
+
+
 /* MAIN WRAPPER */
 
 .invoice-badge{
-    background:#fee2e2;
-    color:#dc2626;
+    background:rgb(13 110 253 / 12%);
+    color:#0d6efd;
     padding:10px 20px;
     border-radius:8px;
     font-weight:700;
@@ -233,7 +251,7 @@ onMounted(async () => {
 .invoice-title{
     font-size:32px;
     font-weight:700;
-    color:#dc2626;
+    color:#0d6efd;
     margin-bottom:5px;
 }
 
@@ -246,8 +264,8 @@ onMounted(async () => {
     width:70px;
     height:70px;
     border-radius:8px;
-    background:#dc2626;
-    color:#fff;
+    background:#0d6efd;
+    color:rgb(13 110 253 / 12%);
     display:flex;
     align-items:center;
     justify-content:center;
@@ -259,7 +277,7 @@ onMounted(async () => {
 .section-title{
     font-size:15px;
     font-weight:600;
-    color:#dc2626;
+    color:#0d6efd;
     margin-bottom:10px;
     text-transform:uppercase;
 }
@@ -300,7 +318,7 @@ onMounted(async () => {
     background:#dbeafe;
     font-weight:700;
     font-size:18px;
-    color:#dc2626;
+    color:#0d6efd;
 }
 
 /* NOTE */
@@ -334,6 +352,11 @@ onMounted(async () => {
     height:60px;
 }
 
+.transfeerInfo td, .transfeerInfo th{
+    padding: 3px 6px;
+    border-width: 1px !important;
+}
+
 /* PRINT */
 
 @media print{
@@ -361,13 +384,16 @@ onMounted(async () => {
     table{
         page-break-inside:auto;
     }
+
     tr{
         page-break-inside:avoid;
         page-break-after:auto;
     }
+
     thead{
         display:table-header-group;
     }
+
     tfoot{
         display:table-footer-group;
     }
@@ -385,4 +411,5 @@ onMounted(async () => {
     }
 
 }
+
 </style>

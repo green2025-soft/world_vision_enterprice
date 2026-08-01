@@ -120,6 +120,13 @@ const routes = {
     meta: { title: "Customer Due Payment", ...defaultMeta, requiresBranch: true },
   },
 
+   {
+    path: "customer-due-payment/:id",
+    component: () => import('@/modules/inventory/pages/customer_payment/Invoice.vue'),
+    meta: { title: "Customer Due Payment Invoice", ...defaultMeta, requiresBranch: true },
+    props: true
+  },
+
   
    {
     path: "supplier-due-payment/create",
@@ -133,6 +140,13 @@ const routes = {
     meta: { title: "Supplier Due Payment", ...defaultMeta, requiresBranch: true },
   },
 
+  {
+    path: "supplier-due-payment/:id",
+    component: () => import('@/modules/inventory/pages/supplier_payment/Invoice.vue'),
+    meta: { title: "Supplier Due Payment Invoice", ...defaultMeta, requiresBranch: true },
+    props: true
+  },
+
    {
     path: "stock-transfers/create",
     component: () => import('@/modules/inventory/pages/stock_transfer/Create.vue'),
@@ -142,6 +156,13 @@ const routes = {
     path: "stock-transfers",
     component: () => import('@/modules/inventory/pages/stock_transfer/Index.vue'),
     meta: { title: "Product Stock Transfer", ...defaultMeta, requiresBranch: true },
+  },
+
+     {
+    path: "stock-transfers/:id",
+    component: () => import('@/modules/inventory/pages/stock_transfer/Invoice.vue'),
+    meta: { title: "Product Stock Transfer Invoice", ...defaultMeta, requiresBranch: true },
+    props: true
   },
 
 
@@ -163,6 +184,19 @@ const routes = {
     meta: { title: "Product Wastage Invoice", ...defaultMeta, requiresBranch: true },
     props: true
   },
+
+  {
+    path: "customers/ledger",
+    component: () => import('@/modules/inventory/pages/CustomerLedger.vue'),
+    meta: { title: "Customer Ledger", ...defaultMeta, requiresBranch: true },
+  },
+
+    {
+    path: "suppliers/ledger",
+    component: () => import('@/modules/inventory/pages/SupplierLedger.vue'),
+    meta: { title: "Supplier Ledger", ...defaultMeta, requiresBranch: true },
+  },
+
 
   
 

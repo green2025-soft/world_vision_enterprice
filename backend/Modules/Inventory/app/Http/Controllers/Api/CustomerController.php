@@ -8,6 +8,7 @@ use Modules\Inventory\Http\Requests\CustomerRequest;
 use Illuminate\Http\Request;
 use Modules\Inventory\Models\CustomerLedger;
 use Modules\Inventory\Services\CustomerPreviousDueService;
+use Modules\Inventory\Services\LedgerService;
 
 class CustomerController extends BaseApiController
 {
@@ -86,6 +87,30 @@ class CustomerController extends BaseApiController
 
      return $this->listResponse($customers);
 
+    }
 
+    public function ledger(Request $request, LedgerService $service)
+    {
+        $request->validate([
+            'customer_id' => 'required|integer|min:1',
+            'branch_id'   => 'required|integer|min:1',
+            'from_date'   => 'required|date',
+            'to_date'     => 'required|date|after_or_equal:from_date',
+        ]);
+
+        $filters = [
+            'party_key' => 'customer_id',
+            'party_id'  => $request->customer_id,
+            'branch_id' => $request->branch_id,
+            'from_date' => $request->from_date,
+            'to_date'   => $request->to_date,
+        ];
+        $data = $service->getLedger(
+            CustomerLedger::class,
+            $filters
+        );
+
+        return $this->successResponse($data);
+        
     }
 }

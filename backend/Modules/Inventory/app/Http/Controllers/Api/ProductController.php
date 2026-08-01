@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Modules\Inventory\Models\PriceList;
 use Modules\Inventory\Models\StockBalance;
 
-use Illuminate\Support\Facades\DB;
 
 class ProductController extends BaseApiController
 {
@@ -23,7 +22,7 @@ class ProductController extends BaseApiController
     public function index(Request $request)
     {
         $query = $this->indexQuery()
-            ->where('branch_id', $request['branch_id'])
+            // ->where('branch_id', $request['branch_id'])
             ->with('category:id,name', 'unit:id,name,short_code', 'brand:id,name');
 
         return $this->listResponse($query->smartPaginate());
@@ -89,7 +88,7 @@ class ProductController extends BaseApiController
             $query->where('category_id',$categoryId); 
         }
         $query->select('id','name', 'sku', 'category_id', 'unit_id', 'brand_id', 're_order', 'image', 'made_by', 'specification')
-        ->where('branch_id', $branchId)
+        // ->where('branch_id', $branchId)
         
         ->with(['category:id,name', 'unit:id,name,short_code', 'brand:id,name'])
         ->addSelect([

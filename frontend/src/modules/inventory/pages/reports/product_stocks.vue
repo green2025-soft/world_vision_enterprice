@@ -1,32 +1,29 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useResourceApiClient } from '@/composables/resourceApiClient'
-import { userDateFormat } from '@/utilities/methods'
-import { toast } from 'vue3-toastify'
+import { userDateFormat, useForm, dbDataFormat } from '@/utilities/methods'
+
 
 
 //  Setup
-const title = 'Product Wastage'
-const bUrl = 'inventory/product-wastages'
+const title = 'Product Stock'
+const bUrl = 'inventory/reports/product-stocks'
 
 const {
-  askDelete,
-  confirmDelete,
-  confirmDeleteModal,
-
+gePaginationList
 } = useResourceApiClient(bUrl, title, true)
 
 
+const { form } = useForm({
+  product_id: null,
+  from_date: new Date(),
+  to_date: new Date(),
+})
 
-const dataTableRef = ref(null)
+
+
 
 onMounted(() => {
-    const toastMessage = sessionStorage.getItem('productWastageToastMessage')
-    if (toastMessage) {
-       const { message, type } = JSON.parse(toastMessage)
-       toast.success(message)
-    }
-  sessionStorage.removeItem('productWastageToastMessage')
 
 })
 
@@ -34,14 +31,14 @@ onMounted(() => {
 </script>
 
 <template>
-     <ConfirmDelete ref="confirmDeleteModal"  @confirm="() => confirmDelete(() => dataTableRef.refresh())" />
+    
      <div class="container-fluid">
         <div class="container ">
     <div class="card card-outline card-info">
         <div class="card-header">
              <h2 class="card-title"><i class="fas fa-tasks"></i> {{ title }}</h2>
             <div class="card-tools">
-              <RouterLink class="btn btn-primary btn-sm" :to="`/${bUrl}/create`"><i class="fas fa-plus"></i> Add New</RouterLink>
+              <!-- <RouterLink class="btn btn-primary btn-sm" :to="`/${bUrl}/create`"><i class="fas fa-plus"></i> Add New</RouterLink> -->
             </div>
         </div>
         <div class="card-body">
@@ -51,29 +48,30 @@ onMounted(() => {
            ref="dataTableRef"
                     :fields="[
                       { key: 'sl', label: 'SL' },
-                      { key: 'wastage_no', label: 'Wastage No', align: 'center'  },
-                      { key: 'wastage_date', label: 'date', align: 'center',   isChange: true,},
-                     
+                      { key: 'transfer_no', label: 'Transfer No', align: 'center'  },
+                      { key: 'transfer_date', label: 'date', align: 'center',   isChange: true,},
+                      { key: 'from_branch.name', label: 'Tranasfer From' },
+                      { key: 'to_branch.name', label: 'Tranasfer To' },
                       { key: 'total_amount', label: 'Amount', align: 'center'},
                       
-                    
+                      
                       
                       { key: 'actions', label: 'Actions' }
                     ]"
                     :bUrl="bUrl"
                     :isBranch="true"
+                    :enableSearch="false"
                   >
                 
-                    <template #cell-wastage_date="{ item }">
+                    <template #cell-transfer_date="{ item }">
                       
-                      {{ userDateFormat(item.wastage_date) }}
+                      {{ userDateFormat(item.transfer_date) }}
                     </template>
                    <template #actions="{ rowItem }">
                          <div class="btn-group dropleft">
                             <RouterLink :to="`/${bUrl}/${rowItem.id}`"  class="btn btn-sm btn-outline-primary"  >
                               <i class="fa fa-table"></i>
                             </RouterLink>
-                            
                             <BButton variant="outline-danger"  @click="askDelete(rowItem.id)">
                               <i class="fa fa-trash"></i>
                             </BButton>
