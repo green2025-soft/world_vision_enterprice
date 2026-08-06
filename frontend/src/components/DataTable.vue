@@ -25,7 +25,7 @@ let searchTimeout = null;
 watch(filterText, () => {
   clearTimeout(searchTimeout);
   searchTimeout = setTimeout(() => {
-    currentPage.value = 1; // search first page দ
+    currentPage.value = 1; // search first page 
     fetchData();
   }, 500); // 500ms delay
 });

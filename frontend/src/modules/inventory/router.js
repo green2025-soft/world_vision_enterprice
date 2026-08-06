@@ -2,7 +2,17 @@ import Index from "./pages/Index.vue";
 import Pos from "./pages/sales/Pos.vue";
 import Page404 from "@/components/Page404.vue"; // You can replace if module specific 404
 
- const lazy = (view) => () => import(`@/modules/inventory/pages/${view}.vue`);
+const pages = import.meta.glob("./pages/**/*.vue");
+
+const lazy = (view) => {
+    const component = pages[`./pages/${view}.vue`];
+
+    if (!component) {
+        throw new Error(`Component not found: ./pages/${view}.vue`);
+    }
+
+    return component;
+};
 
 
 const defaultAuth = true;
@@ -13,6 +23,8 @@ const makeRoute = (path, component, title, requiresBranch = true) => ({
   component,
   meta: { title, ...defaultMeta, requiresBranch },
 });
+
+
 
 const routes = {
   path: "/inventory",
@@ -29,16 +41,9 @@ const routes = {
    makeRoute("customer-advance", lazy("CustomerAdvance"), "Customer Advance"),
    makeRoute("products", lazy("Product"), "Product"),
    makeRoute("product-sets", lazy("ProductSet"), "Product Set"),
-  {
-    path: "purchases",
-    component: () => import('@/modules/inventory/pages/purchase/Index.vue'),
-    meta: { title: "Purchase", ...defaultMeta, requiresBranch: true },
-  },
-  {
-    path: "purchases/create",
-    component: () => import('@/modules/inventory/pages/purchase/Create.vue'),
-    meta: { title: "Create Purchase", ...defaultMeta, requiresBranch: true },
-  },
+   makeRoute("purchases", lazy("purchase/Index"), "Purchase"),
+   makeRoute("purchases/create", lazy("purchase/Create"), "Create Purchase"),
+
   {
     path: "purchases/:id/edit",
     component: () => import('@/modules/inventory/pages/purchase/Create.vue'),
@@ -184,19 +189,18 @@ const routes = {
     meta: { title: "Product Wastage Invoice", ...defaultMeta, requiresBranch: true },
     props: true
   },
+   makeRoute("customers/ledger", lazy("CustomerLedger"), "Customer Ledger"),
+   makeRoute("suppliers/ledger", lazy("SupplierLedger"), "Supplier Ledger"),
+
 
   {
-    path: "customers/ledger",
-    component: () => import('@/modules/inventory/pages/CustomerLedger.vue'),
-    meta: { title: "Customer Ledger", ...defaultMeta, requiresBranch: true },
-  },
+    path: "reports",
+    children: [
+       makeRoute("product-stocks", lazy("reports/ProductStocks"), "All Stock Report"),
+       makeRoute("product-stock-ledger", lazy("reports/ProductStockLedger"), "Product Stock Ledger"),
+    ]
 
-    {
-    path: "suppliers/ledger",
-    component: () => import('@/modules/inventory/pages/SupplierLedger.vue'),
-    meta: { title: "Supplier Ledger", ...defaultMeta, requiresBranch: true },
-  },
-
+  }
 
   
 

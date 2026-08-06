@@ -37,6 +37,48 @@ class StockType
         ];
     }
 
+    public static function isStockIn(string $type): bool
+    {
+        return in_array($type, self::stockIn());
+    }
+
+    public static function isStockOut(string $type): bool
+    {
+        return in_array($type, self::stockOut());
+    }
+
+
+    public static function stockInTypes(): array
+    {
+        return self::stockIn();
+    }
+
+    public static function stockTypesByName(): array
+    {
+        return [
+            self::PURCHASE         => 'Purchase',
+            self::SALE             => 'Sale',
+            self::PURCHASE_RETURN  => 'Purchase Return',
+            self::SALE_RETURN      => 'Sale Return',
+            self::TRANSFER_IN      => 'Transfer In',
+            self::TRANSFER_OUT     => 'Transfer Out',
+            self::ADJUSTMENT_IN    => 'Adjustment In',
+            self::ADJUSTMENT_OUT   => 'Adjustment Out',
+            self::DAMAGE           => 'Damage',
+            self::WASTAGE          => 'Wastage',
+        ];
+    }
+
+     public static function getTypeName(string $type): string
+    {
+        return self::stockTypesByName()[$type] ?? ucfirst(str_replace('_', ' ', $type));
+    }
+
+    public static function stockOutTypes(): array
+    {
+        return self::stockOut();
+    }
+
     public static function reverseType(string $type): ?string
     {
         return match ($type) {

@@ -12,4 +12,9 @@ class Customer extends InvBaseModel
     ];
 
     protected array $searchable = ['name', 'phone', 'email'];
+
+    public function ledgers()
+    {
+        return $this->hasMany(CustomerLedger::class, 'customer_id');
+    }
 }

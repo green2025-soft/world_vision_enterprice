@@ -46,6 +46,10 @@ export function useResourceApiClient(baseUrl, title = 'Resource', isBranch = fal
       const res = await api.get(fullBaseUrl, { requiresAuth: true, params, tosterMessage: false })
       return res
     } catch (err) {
+       if (err.response?.status === 422) {        
+        
+        formErrors.value = err.response.data.errors
+      }
       throw err
     } finally {
       isLoading.value = false

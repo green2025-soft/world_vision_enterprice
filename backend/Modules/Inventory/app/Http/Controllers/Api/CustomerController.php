@@ -59,6 +59,8 @@ class CustomerController extends BaseApiController
 
     public function getCustomerrBalances(Request $request, $id=null){
          $branchId = $request->input('branch_id');
+         $customerId = $request->input('customer_id');
+         $id = $id??$customerId;
          
           $query = $this->indexQuery()
             ->where('branch_id', $branchId);
@@ -113,4 +115,44 @@ class CustomerController extends BaseApiController
         return $this->successResponse($data);
         
     }
+
+    public function customerDueList(Request $request)
+    {
+        $branchId = $request->input('branch_id');
+        $customerId = $request->input('customer_id');
+
+        $customers = $this->indexQuery()
+            ->where('branch_id', $branchId)
+            ->where('status', 1)
+            ->when($customerId, function ($query) use ($customerId) {
+                $query->where('id', $customerId);
+            })
+            ->withSum([
+                'ledgers as debit_total' => function ($query) use ($branchId) {
+                    $query->where('branch_id', $branchId);
+                }
+            ], 'debit')
+            ->withSum([
+                'ledgers as credit_total' => function ($query) use ($branchId) {
+                    $query->where('branch_id', $branchId);
+                }
+            ], 'credit')
+            ->smartPaginate();
+
+        $customers->getCollection()->transform(function ($customer) {
+            $customer->balance = ($customer->debit_total ?? 0) - ($customer->credit_total ?? 0);
+            return $customer;
+        });
+
+        $customers->setCollection(
+            $customers->getCollection()->filter(function ($customer) {
+                return $customer->balance > 0;
+            })->values()
+        );
+
+        return $this->listResponse($customers);
+    }
+
+
+
 }

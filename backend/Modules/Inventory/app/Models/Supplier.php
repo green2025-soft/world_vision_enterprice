@@ -23,6 +23,11 @@ class Supplier extends InvBaseModel
             ->groupBy('supplier_id');
     }
 
+      public function ledgers()
+    {
+        return $this->hasMany(SupplierLedger::class, 'customer_id');
+    }
+
   
 
 }

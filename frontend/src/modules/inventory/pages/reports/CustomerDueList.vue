@@ -1,29 +1,32 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useResourceApiClient } from '@/composables/resourceApiClient'
-import { userDateFormat, useForm, dbDataFormat } from '@/utilities/methods'
-
+import { useForm, formatDate } from '@/utilities/methods'
+import { toast } from 'vue3-toastify'
 
 
 //  Setup
-const title = 'Product Stock'
-const bUrl = 'inventory/reports/product-stocks'
+const title = 'Customer Due List'
+const bUrl = 'inventory/purchases'
 
 const {
-gePaginationList
+  askDelete,
+  confirmDelete,
+  confirmDeleteModal,
+
 } = useResourceApiClient(bUrl, title, true)
 
 
-const { form } = useForm({
-  product_id: null,
-  from_date: new Date(),
-  to_date: new Date(),
-})
 
-
-
+const dataTableRef = ref(null)
 
 onMounted(() => {
+    const toastMessage = sessionStorage.getItem('purchaseToastMessage')
+    if (toastMessage) {
+       const { message, type } = JSON.parse(toastMessage)
+       toast.success(message)
+    }
+  sessionStorage.removeItem('purchaseToastMessage')
 
 })
 
@@ -31,14 +34,14 @@ onMounted(() => {
 </script>
 
 <template>
-    
+     <ConfirmDelete ref="confirmDeleteModal"  @confirm="() => confirmDelete(() => dataTableRef.refresh())" />
      <div class="container-fluid">
         <div class="container ">
     <div class="card card-outline card-info">
         <div class="card-header">
              <h2 class="card-title"><i class="fas fa-tasks"></i> {{ title }}</h2>
             <div class="card-tools">
-              <!-- <RouterLink class="btn btn-primary btn-sm" :to="`/${bUrl}/create`"><i class="fas fa-plus"></i> Add New</RouterLink> -->
+              <RouterLink class="btn btn-primary btn-sm" :to="`/${bUrl}/create`"><i class="fas fa-plus"></i> Add New</RouterLink>
             </div>
         </div>
         <div class="card-body">
@@ -48,34 +51,32 @@ onMounted(() => {
            ref="dataTableRef"
                     :fields="[
                       { key: 'sl', label: 'SL' },
-                      { key: 'transfer_no', label: 'Transfer No', align: 'center'  },
-                      { key: 'transfer_date', label: 'date', align: 'center',   isChange: true,},
-                      { key: 'from_branch.name', label: 'Tranasfer From' },
-                      { key: 'to_branch.name', label: 'Tranasfer To' },
-                      { key: 'total_amount', label: 'Amount', align: 'center'},
+                      { key: 'invoice_no', label: 'Invoice No', align: 'center'  },
+                      { key: 'invoice_date', label: 'date', align: 'center'  },
+                      { key: 'supplier.name', label: 'Supplier' },
                       
+                      { key: 'total_amount', label: 'Total', align: 'right'  },
+                      { key: 'discount_amount', label: 'discount', align: 'right'  },
+                      { key: 'tax_amount', label: 'Tex', align: 'right'  },
+                      { key: 'net_total', label: 'Sub Total', align: 'right'  },
+                      { key: 'supplier_adjust', label: 'Adjustment', align: 'right'  },
+                      { key: 'paid_amount', label: 'Paid', align: 'right'  },
+                      { key: 'due_amount', label: 'due', align: 'right'  },
                       
                       
                       { key: 'actions', label: 'Actions' }
                     ]"
                     :bUrl="bUrl"
                     :isBranch="true"
-                    :enableSearch="false"
                   >
                 
-                    <template #cell-transfer_date="{ item }">
-                      
-                      {{ userDateFormat(item.transfer_date) }}
-                    </template>
+               
                    <template #actions="{ rowItem }">
                          <div class="btn-group dropleft">
-                            <RouterLink :to="`/${bUrl}/${rowItem.id}`"  class="btn btn-sm btn-outline-primary"  >
+                            <RouterLink :to="`/inventory/purchases/${rowItem.id}`"  class="btn btn-sm btn-outline-primary"  >
                               <i class="fa fa-table"></i>
                             </RouterLink>
-                            <BButton variant="outline-danger"  @click="askDelete(rowItem.id)">
-                              <i class="fa fa-trash"></i>
-                            </BButton>
-                              <!-- <BButton variant="primary" class="dropdown-toggle dropdown_toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              <BButton variant="primary" class="dropdown-toggle dropdown_toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                               </BButton>
 
                             <ul class="dropdown-menu" >
@@ -85,7 +86,7 @@ onMounted(() => {
                               </li>
                                     <li> <div class="dropdown-divider"></div></li>
                                <li><a class="dropdown-item" href=""  @click.prevent="askDelete(rowItem.id)"><i class="fa fa-trash"></i> Delete</a></li>
-                            </ul> -->
+                            </ul>
                         
                         </div>
                    </template>

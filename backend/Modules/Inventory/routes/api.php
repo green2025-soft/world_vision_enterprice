@@ -36,8 +36,11 @@ Route::middleware(['auth:sanctum'])->prefix('v1/inventory')->name('inventory.')-
     Route::get('supplier-advance/{id}/balance', [SupplierAdvanceController::class, 'supplierBalance'])->name('supplier-advance.balances');
 
 
-    Route::get('customers/balances/{id?}', [CustomerController::class, 'getCustomerrBalances'])->name('customers.balances');
-    Route::get('customers/ledger', [CustomerController::class, 'ledger'])->name('customers.ledger');
+    Route::controller(CustomerController::class)->prefix('customers')->name('customers.')->group(function(){
+        Route::get('balances/{id?}', 'getCustomerrBalances')->name('balances');
+        Route::get('ledger', 'ledger')->name('ledger');
+        Route::get('due-list', 'customerDueList')->name('due-list');
+    });
     Route::apiResource('customers', CustomerController::class);
     Route::apiResource('customer-advance', CustomerAdvanceController::class);
     Route::get('customer-advance/{id}/balance', [CustomerAdvanceController::class, 'customerBalance'])->name('customer-advance.balances');
@@ -57,6 +60,7 @@ Route::middleware(['auth:sanctum'])->prefix('v1/inventory')->name('inventory.')-
     Route::prefix('reports')->name('reports.')->group(function () {
         Route::controller(StockReports::class)->group(function(){
             Route::get('product-stocks', 'index')->name('product-stocks');
+            Route::get('product-stock-ledger', 'productStockLedger')->name('product-stock-ledger');
         });
     });
 

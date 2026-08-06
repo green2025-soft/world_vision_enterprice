@@ -37,6 +37,20 @@ class StockReports extends BaseApiController
         return $this->successResponse($stockReport->getStockReport($filters));
     }
 
+    public function productStockLedger(Request $request, StockReportService $stockReport)
+    {
+
+        $filters = $request->validate([
+            'product_id' => 'required|integer|exists:inv_products,id',
+            'branch_id'  => 'required|integer|min:1',
+            'from_date'  => 'required|date',
+            'to_date'    => 'required|date|after_or_equal:from_date',
+        ]);
+
+        return $this->successResponse($stockReport->getProductLedger($filters));
+
+    }
+
    
 
  

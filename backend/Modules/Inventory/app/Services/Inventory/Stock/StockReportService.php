@@ -2,6 +2,7 @@
 
 namespace Modules\Inventory\Services\Inventory\Stock;
 
+use Carbon\Carbon;
 use Modules\Inventory\Models\Product;
 use Modules\Inventory\Models\StockMovement;
 
@@ -94,7 +95,7 @@ class StockReportService
         ->selectRaw("COALESCE(SUM(quantity),0)")
             ->whereColumn('product_id','inv_products.id')
             ->where('branch_id',$filters['branch_id'])
-            ->whereBetween('created_at',[$filters['from_date'],$filters['to_date']])
+            ->whereBetween('created_at',[Carbon::parse($filters['from_date'])->startOfDay(), Carbon::parse($filters['to_date'])->endOfDay()])
             ->whereIn('movement_type',$types);
     }
 
@@ -141,6 +142,102 @@ class StockReportService
             'items' => []
         ];
     }
+
+
+    public function getProductLedger(array $filters)
+    {
+        $productId = $filters['product_id'];
+         $product = Product::where('id', $productId)->with([
+                'category:id,name',
+                'brand:id,name',
+                'unit:id,name',
+            ])->first();
+            
+
+        // Opening
+        $opening = StockMovement::query()
+            ->where('product_id', $productId)
+            ->where('branch_id', $filters['branch_id'])
+            ->whereDate('created_at', '<', $filters['from_date'])
+            ->get();
+
+
+        $openingQty = $opening->sum(function ($item) {
+
+            if (StockType::isStockIn($item->movement_type)) {
+                return $item->quantity;
+            }
+
+            if (StockType::isStockOut($item->movement_type)) {
+                return -$item->quantity;
+            }
+
+            return 0;
+        });
+
+
+        // Movement list
+        $movements = StockMovement::query()
+            ->with([
+                'product:id,name,sku,category_id,brand_id,unit_id',
+                'product.category:id,name',
+                'product.brand:id,name',
+                'product.unit:id,name',
+            ])
+            ->where('product_id', $productId)
+            ->where('branch_id', $filters['branch_id'])
+            ->whereBetween('created_at', [
+                Carbon::parse($filters['from_date'])->startOfDay(),
+                Carbon::parse($filters['to_date'])->endOfDay()
+            ])
+            ->orderBy('created_at')
+            ->get();
+
+
+        $balance = $openingQty;
+
+
+        $items = $movements->map(function ($movement) use (&$balance) {
+            $isStockIn = StockType::isStockIn($movement->movement_type);
+
+            $qty =  $isStockIn
+                ? $movement->quantity
+                : -$movement->quantity;
+
+
+            $balance += $qty;
+
+           
+
+            return [
+                'id'            => $movement->id,
+                'date'          => dbDateFormat($movement->created_at),
+                'created_at'    => $movement->created_at,
+                'type'          => $movement->movement_type,
+                'type_name'     => StockType::getTypeName($movement->movement_type),
+                'quantity'      => $movement->quantity,
+                'in_out_qty'    => $qty,
+                'is_stock_in'   => $isStockIn,
+                'balance'       => $balance,
+                'product'       => $movement->product,
+            ];
+        });
+
+
+        return [
+            'product' => $product,
+            'opening' => [
+                'quantity' => $openingQty
+            ],
+
+            'items' => $items,
+
+            'closing' => [
+                'quantity' => $balance
+            ]
+        ];
+    }
+
 
 
 }
