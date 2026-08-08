@@ -40,6 +40,7 @@ const { gePaginationList} = useResourceApiClient(props.bUrl, '', props.isBranch)
 
 // Fetch data from API
 const isLoading = ref(false);
+const apiResponse = ref({});
 async function fetchData() {
   try {
     isLoading.value = true;
@@ -49,6 +50,7 @@ async function fetchData() {
       search: filterText.value,
        ...props.extraParams
     });
+    apiResponse.value = response;
     tableData.value = response.data;
     pagination.value = response.pagination;
   } catch (err) {
@@ -152,6 +154,13 @@ defineExpose({
         <template #cell(actions)="data">
         <slot name="actions" :rowItem="data.item" />
       </template>
+        <!-- Optional custom foot -->
+      <template v-if="$slots['custom-foot']" #custom-foot>
+        <slot 
+            name="custom-foot"
+            :response="apiResponse"
+        />
+    </template>
     </BTable>
 
     <!-- Pagination -->

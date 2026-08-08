@@ -16,6 +16,20 @@ onMounted(async () => {
 })
 
 const navItems = computed(() => {
+
+  // =========================================
+  // Module Dashboard
+  // =========================================
+  const moduleDashboardMenu = {
+    type: 'link',
+    text: 'Module Dashboard',
+    to: '/core/module-dashboard',
+    icon: 'fas fa-th-large'
+  }
+
+  // =========================================
+  // Inventory Dashboard
+  // =========================================
   const staticMenu = {
     type: 'link',
     text: 'Dashboard',
@@ -23,47 +37,81 @@ const navItems = computed(() => {
     icon: 'fas fa-tachometer-alt'
   }
 
-  
+  // =========================================
+  // Inventory Module
+  // =========================================
+  const core = menuStore.menus.find(
+    menu => menu.module_slug === 'inventory'
+  )
 
-  const core = menuStore.menus.find(m => m.module_slug === 'inventory')
-  if (!core || !core.menus) return [staticMenu] // fallback to only static menu
-
-  const dynamicMenus = core.menus.map(menu => {
-  const hasChildren = Array.isArray(menu.children) && menu.children.length > 0
-
-  if (hasChildren) {
-    return {
-      type: 'dropdown',
-      text: menu.title || 'Untitled',
-      icon: menu.icon || 'fas fa-folder',
-      children: menu.children
-        .filter(child => !!child.route)
-        .map(child => ({
-          text: child.title || 'Subitem',
-          to: `/${child.route.replace(/^\/+/, '')}`,
-          icon: child.icon || 'fas fa-dot-circle'
-        }))
-    }
-  }else{
-  return {
-      type: 'link',
-      text: menu.title || 'Untitled',
-      icon: menu.icon || 'fas fa-circle'
-    }
+  // Inventory module না থাকলেও
+  // এই দুইটা menu অবশ্যই থাকবে
+  if (!core || !Array.isArray(core.menus)) {
+    return [
+      moduleDashboardMenu,
+      staticMenu
+    ]
   }
-  
-}).filter(Boolean)
 
+  // =========================================
+  // Dynamic Inventory Menus
+  // =========================================
+  const dynamicMenus = core.menus
+    .map(menu => {
 
-  return [staticMenu, ...dynamicMenus]
+      const hasChildren =
+        Array.isArray(menu.children) &&
+        menu.children.length > 0
+
+      // Dropdown
+      if (hasChildren) {
+        return {
+          type: 'dropdown',
+          text: menu.title || 'Untitled',
+          icon: menu.icon || 'fas fa-folder',
+
+          children: menu.children
+            .filter(child => child.route)
+            .map(child => ({
+              type: 'link',
+              text: child.title || 'Subitem',
+              to: `/${child.route.replace(/^\/+/, '')}`,
+              icon: child.icon || 'fas fa-dot-circle'
+            }))
+        }
+      }
+
+      // Normal link
+      return {
+        type: 'link',
+        text: menu.title || 'Untitled',
+        to: menu.route
+          ? `/${menu.route.replace(/^\/+/, '')}`
+          : null,
+        icon: menu.icon || 'fas fa-circle'
+      }
+    })
+    .filter(menu => menu.to || menu.children?.length)
+
+  // =========================================
+  // Final Menu
+  // =========================================
+  return [
+    moduleDashboardMenu,
+    staticMenu,
+    ...dynamicMenus
+  ]
 })
-
 </script>
 
 <template>
   <DashboardLayout v-model="sidenavCollapsed">
+
     <template #sideNav>
-      <SideNav :items="navItems" @itemClick="sidenavCollapsed = true" />
+      <SideNav
+        :items="navItems"
+        @itemClick="sidenavCollapsed = true"
+      />
     </template>
 
     <template #header>
@@ -76,5 +124,6 @@ const navItems = computed(() => {
     <template #content>
       <RouterView />
     </template>
+
   </DashboardLayout>
 </template>

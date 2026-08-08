@@ -138,20 +138,38 @@ class CustomerController extends BaseApiController
                 }
             ], 'credit')
             ->smartPaginate();
+        
 
         $customers->getCollection()->transform(function ($customer) {
-            $customer->balance = ($customer->debit_total ?? 0) - ($customer->credit_total ?? 0);
+
+            $customer->debit_total = (float) ($customer->debit_total ?? 0);
+            $customer->credit_total = (float) ($customer->credit_total ?? 0);
+
+            $customer->balance = 
+                 $customer->credit_total - $customer->debit_total ;
+
             return $customer;
         });
 
+
+        // remove customers without due
         $customers->setCollection(
-            $customers->getCollection()->filter(function ($customer) {
-                return $customer->balance > 0;
-            })->values()
+            $customers->getCollection()
+                ->filter(fn($customer) => $customer->balance > 0)
+                ->values()
         );
 
-        return $this->listResponse($customers);
+         $summary = [
+            'credit_total' => $customers->sum('credit_total'),
+            'debit_total'  => $customers->sum('debit_total'),
+            'balance'      => $customers->sum('balance'),
+        ];
+
+
+        return $this->listResponse($customers, ['summary' => $summary]);
     }
+
+
 
 
 

@@ -70,29 +70,33 @@ trait ApiResponse
         return $this->respond(false, $message, 422, null, ['errors' => $errors]);
     }
 
-   public function paginated($collection, string $message = 'Success'): JsonResponse
+   public function paginated($collection, string $message = 'Success',  array $extra = []): JsonResponse
     {
         if ($collection instanceof \Illuminate\Contracts\Pagination\Paginator) {
-
-            return $this->respond(true, $message, 200, $collection->items(), [
+            $pagination = [
                 'pagination' => [
                     'total' => $collection->total(),
                     'per_page' => $collection->perPage(),
                     'current_page' => $collection->currentPage(),
                     'last_page' => $collection->lastPage(),
                 ],
-            ]);
+            ];
+            $extraData = array_merge($pagination, $extra);
+            return $this->respond(true, $message, 200, $collection->items(), $extraData);
         }
 
-        // Fallback for empty or incorrect data — use default pagination metadata
-        return $this->respond(true, $message, 200, [], [
-            'pagination' => [
+        $pagination = [
+                'pagination' => [
                 'total' => 0,
                 'per_page' => 0, 
                 'current_page' => 1,
                 'last_page' => 1,
-            ],
-        ]);
+                ],
+            ];
+            $extraData = array_merge($pagination, $extra);
+
+        // Fallback for empty or incorrect data — use default pagination metadata
+        return $this->respond(true, $message, 200, [], $extraData);
     }
 
 

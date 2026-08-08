@@ -6,8 +6,8 @@ import { useForm, formatCurrency } from '@/utilities/methods'
 
 
 //  Setup
-const title = 'Customer Due List'
-const bUrl = '/inventory/customers/due-list'
+const title = 'Supplier Due List'
+const bUrl = '/inventory/suppliers/due-list'
 
 const {
 
@@ -15,12 +15,10 @@ const {
 } = useResourceApiClient(bUrl, title, true)
 
 
-
 const dataTableRef = ref(null)
 
 onMounted(() => {
 })
-
 
 </script>
 
@@ -41,7 +39,7 @@ onMounted(() => {
           <DataTable ref="dataTableRef"
                     :fields="[
                       { key: 'sl', label: 'SL' },
-                      { key: 'name', label: 'Customer Name'  },
+                      { key: 'name', label: 'Supplier Name'  },
                       { key: 'phone', label: 'Phone', align: 'center'  },
                       { key: 'credit_total', label: 'Total Payment', align: 'right'  },
                       { key: 'balance', label: 'Total Due', align: 'right'  },
@@ -64,8 +62,4 @@ onMounted(() => {
 
   </div>
     </div>
-
-    
-
-
 </template>

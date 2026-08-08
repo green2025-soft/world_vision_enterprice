@@ -125,5 +125,57 @@ class SupplierController extends BaseApiController
         
     }
 
+    public function supplierDueList(Request $request)
+    {
+        $branchId = $request->input('branch_id');
+        $supplierId = $request->input('supplier_id');
+
+        $suppliers = $this->indexQuery()
+            ->where('branch_id', $branchId)
+            ->where('status', 1)
+            ->when($supplierId, function ($query) use ($supplierId) {
+                $query->where('id', $supplierId);
+            })
+            ->withSum([
+                'ledgers as debit_total' => function ($query) use ($branchId) {
+                    $query->where('branch_id', $branchId);
+                }
+            ], 'debit')
+            ->withSum([
+                'ledgers as credit_total' => function ($query) use ($branchId) {
+                    $query->where('branch_id', $branchId);
+                }
+            ], 'credit')
+            ->smartPaginate();
+        
+
+        $suppliers->getCollection()->transform(function ($supplier) {
+
+            $supplier->debit_total = (float) ($supplier->debit_total ?? 0);
+            $supplier->credit_total = (float) ($supplier->credit_total ?? 0);
+
+            $supplier->balance = 
+                 $supplier->credit_total - $supplier->debit_total ;
+
+            return $supplier;
+        });
+
+
+        // remove Supplier without due
+        $suppliers->setCollection(
+            $suppliers->getCollection()
+                ->filter(fn($supplier) => $supplier->balance > 0)
+                ->values()
+        );
+
+         $summary = [
+            'credit_total' => $suppliers->sum('credit_total'),
+            'debit_total'  => $suppliers->sum('debit_total'),
+            'balance'      => $suppliers->sum('balance'),
+        ];
+
+        return $this->listResponse($suppliers, ['summary' => $summary]);
+    }
+
  
 }

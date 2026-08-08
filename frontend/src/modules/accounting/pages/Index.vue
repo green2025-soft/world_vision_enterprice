@@ -16,6 +16,14 @@ onMounted(async () => {
 })
 
 const navItems = computed(() => {
+
+  const moduleDashboardMenu = {
+    type: 'link',
+    text: 'Module Dashboard',
+    to: '/core/module-dashboard',
+    icon: 'fas fa-th-large'
+  }
+
   const staticMenu = {
     type: 'link',
     text: 'Dashboard',
@@ -23,51 +31,63 @@ const navItems = computed(() => {
     icon: 'fas fa-tachometer-alt'
   }
 
-  
+  const core = menuStore.menus.find(
+    m => m.module_slug === 'accounting'
+  )
 
-  const core = menuStore.menus.find(m => m.module_slug === 'accounting')
-  if (!core || !core.menus) return [staticMenu] // fallback to only static menu
+  let dynamicMenus = []
 
-  const dynamicMenus = core.menus.map(menu => {
-  const hasChildren = Array.isArray(menu.children) && menu.children.length > 0
+  if (core && Array.isArray(core.menus)) {
 
-  
+    dynamicMenus = core.menus.map(menu => {
 
-  if (hasChildren) {
-      
-    return {
-      type: 'dropdown',
-      text: menu.title || 'Untitled',
-      icon: menu.icon || 'fas fa-folder',
-      children: menu.children
-        .filter(child => !!child.route)
-        .map(child => ({
-          text: child.title || 'Subitem',
-          to: `/${child.route.replace(/^\/+/, '')}`,
-          icon: child.icon || 'fas fa-dot-circle'
-        }))
-    }
-  }else{
-  return {
-      type: 'link',
-      text: menu.title || 'Untitled',
-      to: `/${menu.route?.replace(/^\/+/, '')}`,
-      icon: menu.icon || 'fas fa-circle'
-    }
+      const hasChildren =
+        Array.isArray(menu.children) &&
+        menu.children.length > 0
+
+      if (hasChildren) {
+        return {
+          type: 'dropdown',
+          text: menu.title || 'Untitled',
+          icon: menu.icon || 'fas fa-folder',
+
+          children: menu.children
+            .filter(child => !!child.route)
+            .map(child => ({
+              text: child.title || 'Subitem',
+              to: `/${child.route.replace(/^\/+/, '')}`,
+              icon: child.icon || 'fas fa-dot-circle'
+            }))
+        }
+      }
+
+      return {
+        type: 'link',
+        text: menu.title || 'Untitled',
+        to: menu.route
+          ? `/${menu.route.replace(/^\/+/, '')}`
+          : '#',
+        icon: menu.icon || 'fas fa-circle'
+      }
+    })
   }
-  
-}).filter(Boolean)
 
-
-  return [staticMenu, ...dynamicMenus]
+  return [
+    moduleDashboardMenu,
+    staticMenu,
+    ...dynamicMenus
+  ]
 })
-
 </script>
 
 <template>
   <DashboardLayout v-model="sidenavCollapsed">
+
     <template #sideNav>
-      <SideNav :items="navItems" @itemClick="sidenavCollapsed = true" />
+      <SideNav
+        :items="navItems"
+        @itemClick="sidenavCollapsed = true"
+      />
     </template>
 
     <template #header>
@@ -80,6 +100,6 @@ const navItems = computed(() => {
     <template #content>
       <RouterView />
     </template>
+
   </DashboardLayout>
 </template>
-

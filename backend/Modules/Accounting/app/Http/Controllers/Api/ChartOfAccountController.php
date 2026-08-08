@@ -89,6 +89,8 @@ class ChartOfAccountController extends BaseApiController
 
     public function codeNo($parentId, $isController = false)
     {
+       $parent =  AccountHead::findOrFail($parentId);
+       return  AccountHead::nextChildCode($parent);
         return DB::transaction(function () use ($parentId, $isController) {
             // Step 1: Parent must exist
             $parent = AccountHead::findOrFail($parentId);

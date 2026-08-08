@@ -16,9 +16,9 @@ class BaseApiController extends Controller
     /**
      * Return paginated list response
      */
-    protected function listResponse($paginated)
+    protected function listResponse($paginated, $extra = [])
     {
-        return $this->paginated($paginated, "{$this->title} list fetched successfully.");
+        return $this->paginated($paginated, "{$this->title} list fetched successfully.", $extra);
     }
 
     protected function allItems(){

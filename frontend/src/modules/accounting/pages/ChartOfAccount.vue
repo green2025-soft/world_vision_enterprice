@@ -84,7 +84,8 @@ async function saveItem() {
             </thead>
             <tbody>
               
-              <template v-for="item in allData" :key="item.id">
+              <template v-for="(item, index) in allData" :key="item.id">
+                
                 <ChartRow
                   :item="item"
                   :depth="0"
@@ -115,6 +116,9 @@ async function saveItem() {
   <!-- Slot: Input fields -->
   <BaseFormGroup label="Name" labelCols="3"  required>
     <BFormInput v-model="form.name" />
+  </BaseFormGroup>
+  <BaseFormGroup  v-if="form.id" label="Code" labelCols="3"  required>
+    <BFormInput v-model="form.code" />
   </BaseFormGroup>
   <BaseFormGroup label="Remarks" labelCols="3" >
     <BFormTextarea v-model="form.remarks" />

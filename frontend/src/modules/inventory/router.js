@@ -192,12 +192,13 @@ const routes = {
    makeRoute("customers/ledger", lazy("CustomerLedger"), "Customer Ledger"),
    makeRoute("suppliers/ledger", lazy("SupplierLedger"), "Supplier Ledger"),
 
-
   {
     path: "reports",
     children: [
        makeRoute("product-stocks", lazy("reports/ProductStocks"), "All Stock Report"),
        makeRoute("product-stock-ledger", lazy("reports/ProductStockLedger"), "Product Stock Ledger"),
+       makeRoute("customer-due-list", lazy("reports/CustomerDueList"), "Customer Due List"),
+       makeRoute("supplier-due-list", lazy("reports/SupplierDueList"), "Supplier Due List"),
     ]
 
   }

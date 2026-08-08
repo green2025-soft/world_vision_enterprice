@@ -25,7 +25,7 @@ class Supplier extends InvBaseModel
 
       public function ledgers()
     {
-        return $this->hasMany(SupplierLedger::class, 'customer_id');
+        return $this->hasMany(SupplierLedger::class, 'supplier_id');
     }
 
   

@@ -4,13 +4,13 @@
   paddingLeft: `${depth * 20}px`,
   background: item.parent_id == null ? '#f5f7f9' : '#fff'
 }">
-      <strong v-if="hasChildren"><template v-if="depth>0">↳</template> <template v-else>&nbsp;</template> {{ item.code }} </strong>
-      <span v-else>↳ {{ item.code }}</span>
+      <strong @click="$emit('edit', item)" v-if="hasChildren"><template v-if="depth>0">↳</template> <template v-else>&nbsp;</template> {{ item.code }} </strong>
+      <span @click="$emit('edit', item)" v-else>↳ {{ item.code }}</span>
     </td>
 
-    <td :style="{background: item.parent_id == null ? '#f5f7f9' : '#fff'}">
-      <strong v-if="hasChildren">{{ item.name.toUpperCase() }}</strong>
-      <span v-else>{{ item.name }}</span>
+    <td :style="{background: item.parent_id == null ? '#f5f7f9' : '#fff'}" >
+      <strong @click="$emit('edit', item)" v-if="hasChildren">{{ item.name.toUpperCase() }}</strong>
+      <span @click="$emit('edit', item)" v-else>{{ item.name }}</span>
     </td>
 
     <td class="text-center" :style="{background: item.parent_id == null ? '#f5f7f9' : '#fff'}">
@@ -18,7 +18,7 @@
         ✅ Yes
       </template>
       <template v-else>❌ No</template>
-      {{ item.type }}
+      
       
     </td>
 
@@ -28,10 +28,10 @@
 
     <td class="text-center" :style="{background: item.parent_id == null ? '#f5f7f9' : '#fff'}">
       <div class="btn-group dropleft">
-        <BButton variant="outline-primary" @click="$emit('edit', item)" v-if="item.parent_id">
+        <BButton variant="outline-primary" @click="$emit('edit', item)" >
           <i class="fa fa-edit"></i>
         </BButton>
-        <BButton variant="outline-success" @click="$emit('add-child', item)">
+        <BButton variant="outline-success" v-if="depth < 4" @click="$emit('add-child', item)">
           <i class="fa fa-plus"></i>
         </BButton>
       </div>

@@ -29,8 +29,14 @@ Route::middleware(['auth:sanctum'])->prefix('v1/inventory')->name('inventory.')-
     Route::get('products-overview/{id?}', [ProductController::class, 'getInventoryProducts'])->name('products-overview');
     Route::apiResource('product-sets', ProductSetController::class);
 
-    Route::get('suppliers/balances/{id?}', [SupplierController::class, 'getSupplierBalances'])->name('suppliers.balances');
-    Route::get('suppliers/ledger', [SupplierController::class, 'ledger'])->name('suppliers.ledger');
+
+
+    Route::controller(SupplierController::class)->prefix('suppliers')->name('suppliers.')->group(function(){
+        Route::get('balances/{id?}', 'getSupplierBalances')->name('balances');
+        Route::get('ledger', 'ledger')->name('ledger');
+        Route::get('due-list', 'supplierDueList')->name('due-list');
+    });
+
     Route::apiResource('suppliers', SupplierController::class);
     Route::apiResource('supplier-advance', SupplierAdvanceController::class);
     Route::get('supplier-advance/{id}/balance', [SupplierAdvanceController::class, 'supplierBalance'])->name('supplier-advance.balances');
