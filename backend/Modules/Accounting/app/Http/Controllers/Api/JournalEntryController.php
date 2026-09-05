@@ -5,15 +5,15 @@ use Modules\Core\Http\Controllers\Api\BaseApiController;
 
 use Modules\Accounting\Models\JournalEntry;
 use Modules\Accounting\Http\Requests\JournalEntryRequest;
-use Modules\Accounting\Services\AccountEntryService;
+use Modules\Accounting\Services\JournalEntryService;
 
 class JournalEntryController extends BaseApiController
 {
     protected string $title = 'Journal Entry';
 
-    protected AccountEntryService $service;
+    protected JournalEntryService $service;
 
-    public function __construct(AccountEntryService $service)
+    public function __construct(JournalEntryService $service)
     {
         $this->model = JournalEntry::class;
         $this->service = $service;
@@ -21,19 +21,19 @@ class JournalEntryController extends BaseApiController
 
     public function index()
     {
-        $query = $this->indexQuery()->with('details.accountHead');
+        $query = $this->indexQuery()->with('details.ledgerAccount');
         return $this->listResponse($query->smartPaginate());
     }
 
     public function store(JournalEntryRequest $request)
     {
-        $entry = $this->service->createEntry($request->validated());
-        return $this->createdResponse($entry->load('details.accountHead'));
+        $entry = $this->service->create($request->validated());
+        return $this->createdResponse($entry->load('details.ledgerAccount'));
     }
 
     public function show($id)
     {
-        return $this->showData($id, ['details.accountHead']);
+        return $this->showData($id, ['details.ledgerAccount', 'branch']);
     }
 
     public function update(JournalEntryRequest $request, $id)
@@ -47,8 +47,8 @@ class JournalEntryController extends BaseApiController
         }
 
         
-        $entry = $this->service->updateEntry($id, $request->validated());
-        return $this->updatedResponse($entry->load('details.accountHead'));
+        $entry = $this->service->update($id, $request->validated());
+        return $this->updatedResponse($entry->load('details.ledgerAccount'));
     }
 
     public function destroy($id)
@@ -60,9 +60,10 @@ class JournalEntryController extends BaseApiController
                 'message' => 'This journal entry is auto-generated and cannot be edited.',
             ], 403);
         }
-        $this->service->deleteEntry($id);
+        $this->service->delete($id);
         return $this->deletedResponse();
     }
+
     public function generateReferenceNo(){
 
         return $this->successResponse($this->service->generateReferenceNo());

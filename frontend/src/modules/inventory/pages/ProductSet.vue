@@ -94,7 +94,7 @@ onMounted(async () => {
 
   <!-- Main Table -->
   <div class="container-fluid">
-    <div class="container">
+    <div class="">
       <div class="card card-outline card-info">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h2 class="card-title"><i class="fas fa-box"></i> {{ title }}</h2>

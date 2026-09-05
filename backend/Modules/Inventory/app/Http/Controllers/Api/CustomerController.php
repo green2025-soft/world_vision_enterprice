@@ -7,19 +7,20 @@ use Modules\Inventory\Models\Customer;
 use Modules\Inventory\Http\Requests\CustomerRequest;
 use Illuminate\Http\Request;
 use Modules\Inventory\Models\CustomerLedger;
-use Modules\Inventory\Services\CustomerPreviousDueService;
+use Modules\Inventory\Services\DueAdvance\CustomerPreviousDueService;
+
 use Modules\Inventory\Services\LedgerService;
+
+use Modules\Inventory\Services\Accounts\TypeAccountResolver;
 
 class CustomerController extends BaseApiController
 {
     protected string $title = 'Customer';
 
-     protected CustomerPreviousDueService $customerPreviousDueService;
-
-    public function __construct(CustomerPreviousDueService $customerPreviousDueService)
+     
+    public function __construct(protected CustomerPreviousDueService $customerPreviousDueService)
     {
         $this->model = Customer::class;
-        $this->customerPreviousDueService = $customerPreviousDueService;
     }
 
     public function index(Request $request)
@@ -33,8 +34,9 @@ class CustomerController extends BaseApiController
     public function store(CustomerRequest $request)
     {
         $request->validated();
-         $request['previous_due'] = $request['previous_due']?$request['previous_due']:0.00;
-         $createData = $this->customerPreviousDueService->createWithAccounting($request->all());
+        $request['previous_due'] = $request['previous_due']?$request['previous_due']:0.00;
+
+         $createData = $this->customerPreviousDueService->storeOrUpdate($request->all());
          return $this->createdResponse($createData);
     }
 
@@ -46,13 +48,15 @@ class CustomerController extends BaseApiController
     public function update(CustomerRequest $request, Customer $customer)
     {
         $request->validated();
-        $updated = $this->customerPreviousDueService->updateWithAccounting($customer, $request->all());
+        $updated =$this->customerPreviousDueService->storeOrUpdate($request->all(), $customer->id); 
         return $this->updatedResponse($updated);
     }
 
+  
+
     public function destroy(Customer $customer)
     {
-        $this->customerPreviousDueService->deleteWithAccounting($customer);
+        $this->customerPreviousDueService->delete($customer);
         return $this->deletedResponse();
     }
 

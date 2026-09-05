@@ -89,11 +89,11 @@ class ChartOfAccountController extends BaseApiController
 
     public function codeNo($parentId, $isController = false)
     {
-       $parent =  AccountHead::findOrFail($parentId);
-       return  AccountHead::nextChildCode($parent);
+       $parent =  $this->model::findOrFail($parentId);
+       return  $this->model::nextChildCode($parent);
         return DB::transaction(function () use ($parentId, $isController) {
             // Step 1: Parent must exist
-            $parent = AccountHead::findOrFail($parentId);
+            $parent = $this->model::findOrFail($parentId);
 
             $childIds = $this->getAllDescendantIds($parentId);
             
@@ -105,12 +105,12 @@ class ChartOfAccountController extends BaseApiController
                 $newCode = str_pad($newCodeInt, 5, '0', STR_PAD_LEFT);
             } else {
                 
-                $lastCode = AccountHead::whereIn('id', $childIds)->max('code');
+                $lastCode = $this->model::whereIn('id', $childIds)->max('code');
                 $newCodeInt = (int)$lastCode + 1;
                 $newCode = str_pad($newCodeInt, 5, '0', STR_PAD_LEFT);
             }
 
-            $exists = AccountHead::where('code', $newCode)->exists();
+            $exists = $this->model::where('code', $newCode)->exists();
 
             if ($exists) {
                 return $this->codeNo($parentId, $isController);
@@ -124,7 +124,7 @@ class ChartOfAccountController extends BaseApiController
     {
         $ids = [];
 
-        $children = AccountHead::where('parent_id', $parentId)->get();
+        $children = $this->model::where('parent_id', $parentId)->get();
 
         foreach ($children as $child) {
             $ids[] = $child->id;
@@ -138,10 +138,12 @@ class ChartOfAccountController extends BaseApiController
 
 
     public function accountHeads($id=''){
-        $query = $this->indexQuery()->whereNotNull('parent_id')->where('status',1);
+        
         if ($id){
               return $this->showData($id);
         }
+        // $query = $this->indexQuery()->whereNotNull('parent_id')->where('status',1);
+        $query = $this->model::levelFive();
         return $this->listResponse($query->smartPaginate());
     }
 
@@ -149,6 +151,11 @@ class ChartOfAccountController extends BaseApiController
 
     public function voucherTypes(){
         $query = VoucherType::whereNotNull('is_manual');
+        return $this->listResponse($query->smartPaginate());
+    }
+
+    public function transactionAccounts(){
+        $query = $this->model::levelFive()->where('is_transaction',1);
         return $this->listResponse($query->smartPaginate());
     }
 }

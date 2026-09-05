@@ -61,7 +61,7 @@ async function saveItem() {
 <template>
      <ConfirmDelete ref="confirmDeleteModal"  @confirm="() => confirmDelete(() => dataTableRef.refresh())" />
      <div class="container-fluid">
-        <div class="container ">
+        <div class=" ">
     <div class="card card-outline card-info">
         <div class="card-header">
              <h2 class="card-title"><i class="fas fa-tasks"></i> {{ title }}</h2>

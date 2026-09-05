@@ -7732,6 +7732,52 @@
               "response": []
             },
             {
+              "name": "Transaction Accounts",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let response = pm.response.json();\r\n\r\npm.test(\"User Created\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response).to.have.property('status', true);\r\n    pm.expect(response).to.have.property('data');\r\n    pm.expect(response.data).to.have.property('email');\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/accounting/transaction-accounts",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounting",
+                    "transaction-accounts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
               "name": "Voucher Type",
               "event": [
                 {
@@ -8514,6 +8560,53 @@
               "response": []
             },
             {
+              "name": "Available Module",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let response = pm.response.json();\r\n\r\npm.test(\"User Created\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response).to.have.property('status', true);\r\n    pm.expect(response).to.have.property('data');\r\n    pm.expect(response.data).to.have.property('email');\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/accounting/account-modules/available",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "accounting",
+                    "account-modules",
+                    "available"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
               "name": "Create",
               "event": [
                 {
@@ -8583,28 +8676,10 @@
                 {
                   "listen": "test",
                   "script": {
-                    "exec": [
-                      "let response = pm.response.json();\r",
-                      "\r",
-                      "pm.test(\"User Created\", function () {\r",
-                      "    pm.response.to.have.status(201);\r",
-                      "    pm.expect(response).to.have.property('status', true);\r",
-                      "    pm.expect(response).to.have.property('data');\r",
-                      "    pm.expect(response.data).to.have.property('email');\r",
-                      "});"
-                    ],
                     "type": "text/javascript",
-                    "packages": {}
-                  }
-                },
-                {
-                  "listen": "prerequest",
-                  "script": {
                     "exec": [
-                      ""
-                    ],
-                    "type": "text/javascript",
-                    "packages": {}
+                      "let response = pm.response.json();\r\n\r\npm.test(\"User Created\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response).to.have.property('status', true);\r\n    pm.expect(response).to.have.property('data');\r\n    pm.expect(response.data).to.have.property('email');\r\n});"
+                    ]
                   }
                 }
               ],
@@ -8616,8 +8691,7 @@
                 "header": [
                   {
                     "key": "Authorization",
-                    "value": "Bearer {{bearer_token}}",
-                    "type": "text"
+                    "value": "Bearer {{bearer_token}}"
                   }
                 ],
                 "body": {
@@ -8630,14 +8704,14 @@
                   }
                 },
                 "url": {
-                  "raw": "{{base_url}}/accounting/account-modules/1",
+                  "raw": "{{base_url}}/accounting/account-modules/sales",
                   "host": [
                     "{{base_url}}"
                   ],
                   "path": [
                     "accounting",
                     "account-modules",
-                    "1"
+                    "sales"
                   ]
                 }
               },
@@ -8763,6 +8837,3775 @@
                   "path": [
                     "accounting",
                     "account-modules",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HRM",
+      "item": [
+        {
+          "name": "Departments",
+          "item": [
+            {
+              "name": "Department List",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/departments?search=",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "departments"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Department View",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/departments/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "departments",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Department Create",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Test\",\r\n    \"short_name\": \"Test\",\r\n    \"status\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/departments",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "departments"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Department Update",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Test1\",\r\n    \"short_name\": \"Test1\",\r\n    \"status\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/departments/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "departments",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Department Delete",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/departments/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "departments",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Designations",
+          "item": [
+            {
+              "name": "Designation List",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/designations?search=Test",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "designations"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": "Test",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Designation View",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/designations/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "designations",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Designation Create",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Test\",\r\n    \"short_name\": \"Test\",\r\n    \"status\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/designations",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "designations"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Designation Update",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let response = pm.response.json();\r\n\r\npm.test(\"User Created\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response).to.have.property('status', true);\r\n    pm.expect(response).to.have.property('data');\r\n    pm.expect(response.data).to.have.property('email');\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Test\",\r\n    \"short_name\": \"Test\",\r\n    \"status\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/designations/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "designations",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Designations Delete",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/designations/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "designations",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Genders",
+          "item": [
+            {
+              "name": "Gender List",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/genders?search=",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "genders"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Gender View",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/genders/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "genders",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Gender Create",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Male\",\r\n    \"short_name\": \"M\",\r\n    \"status\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/genders",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "genders"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Gender Update",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Male\",\r\n    \"short_name\": \"M\",\r\n    \"status\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/genders/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "genders",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Gender Delete",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/genders/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "genders",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Religions",
+          "item": [
+            {
+              "name": "Religion List",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/religions?search=",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "religions"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Religion View",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/religions/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "religions",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Religion Create",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Islam\",\r\n    \"short_name\": \"Islam\",\r\n    \"status\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/religions",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "religions"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Religion Update",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Islam\",\r\n    \"short_name\": \"Islam\",\r\n    \"status\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/religions/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "religions",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Religion Delete",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/religions/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "religions",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Shifts",
+          "item": [
+            {
+              "name": "Shift List",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/shifts?search=",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "shifts"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Shift View",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/shifts/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "shifts",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Shift Create",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Day Shift\",\r\n    \"short_name\": \"Day\",\r\n    \"status\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/shifts",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "shifts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Shifts Update",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Day Shift\",\r\n    \"short_name\": \"Day\",\r\n    \"status\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/shifts/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "shifts",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Shifts Delete",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/shifts/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "shifts",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Employee Category",
+          "item": [
+            {
+              "name": "Employee Category List",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/employee-categories?search=",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "employee-categories"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Employee Category View",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/employee-categories/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "employee-categories",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Employee Category Create",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Cat-1\",\r\n    \"short_name\": \"Cat-1\",\r\n    \"status\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/employee-categories",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "employee-categories"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Employee Category Update",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Cat-1\",\r\n    \"short_name\": \"Cat-1\",\r\n    \"status\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/employee-categories/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "employee-categories",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Employee Category Delete",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/employee-categories/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "employee-categories",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Employee Types",
+          "item": [
+            {
+              "name": "Employee Type List",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/employee-types?search=",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "employee-types"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Employee Type View",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/employee-types/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "employee-types",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Employee Type Create",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Permanent\",\r\n    \"short_name\": \"Permanent\",\r\n    \"status\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/employee-types",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "employee-types"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Employee Type Update",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Permanent\",\r\n    \"short_name\": \"Permanent\",\r\n    \"status\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/employee-types/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "employee-types",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Employee Type Delete",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/employee-types/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "employee-types",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Employee Status",
+          "item": [
+            {
+              "name": "Employee Status List",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/employee-status?search=",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "employee-status"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Employee Status View",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/employee-status/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "employee-status",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Employee Status Create",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Permanent\",\r\n    \"short_name\": \"Permanent\",\r\n    \"status\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/employee-status",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "employee-status"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Employee Status Update",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Active\",\r\n    \"short_name\": \"Active\",\r\n    \"status\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/employee-status/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "employee-status",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Employee Status Delete",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/employee-status/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "employee-status",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Blood Group",
+          "item": [
+            {
+              "name": "Blood Group List",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/blood-group?search=",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "blood-group"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Blood Group View",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/blood-group/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "blood-group",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Blood Group Create",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let response = pm.response.json();\r\n\r\npm.test(\"User Created\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response).to.have.property('status', true);\r\n    pm.expect(response).to.have.property('data');\r\n    pm.expect(response.data).to.have.property('email');\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "name",
+                      "value": " AB+",
+                      "type": "text"
+                    },
+                    {
+                      "key": "short_name",
+                      "value": "AB+",
+                      "type": "text"
+                    },
+                    {
+                      "key": "status",
+                      "value": "1",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/blood-group",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "blood-group"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Blood Group Update",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"A+\",\r\n    \"short_name\": \"A+\",\r\n    \"status\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/blood-group/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "blood-group",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Blood Group Delete",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/blood-group/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "blood-group",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Employees",
+          "item": [
+            {
+              "name": "Employee List",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let response = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"User Created\", function () {\r",
+                      "    pm.response.to.have.status(201);\r",
+                      "    pm.expect(response).to.have.property('status', true);\r",
+                      "    pm.expect(response).to.have.property('data');\r",
+                      "    pm.expect(response.data).to.have.property('email');\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/employees?search=",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "employees"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Employee View",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let response = pm.response.json();\r\n\r\npm.test(\"User Created\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response).to.have.property('status', true);\r\n    pm.expect(response).to.have.property('data');\r\n    pm.expect(response.data).to.have.property('email');\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/employees/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "employees",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Employee Create",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let response = pm.response.json();\r\n\r\npm.test(\"User Created\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response).to.have.property('status', true);\r\n    pm.expect(response).to.have.property('data');\r\n    pm.expect(response.data).to.have.property('email');\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "multipart/form-data"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": " application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"first_name\": \"John\",\r\n    \"last_name\": \"Doe\",\r\n    \"father_name\": \"Robert Doe\",\r\n    \"mother_name\": \"Sarah Doe\",\r\n    \"spouse_name\": \"Jane Doe\",\r\n    \"email\": \"john.doe@company.com\",\r\n    \"phone\": \"+8801712345678\",\r\n    \"present_address\": \"123 Main Street, Dhaka\",\r\n    \"permanent_address\": \"456 Village Road, Chittagong\",\r\n    \"city\": \"Dhaka\",\r\n    \"state\": \"Dhaka Division\",\r\n    \"country\": \"Bangladesh\",\r\n    \"postal_code\": \"1212\",\r\n    \"department_id\": 1,\r\n    \"designation_id\": 1,\r\n    \"branch_id\": 1,\r\n    \"gender_id\": 1,\r\n    \"religion_id\": 1,\r\n    \"nationality\": \"Bangladeshi\",\r\n    \"marital_status\": \"Married\",\r\n    \"date_of_birth\": \"1990-05-15\",\r\n    \"joining_date\": \"2024-01-01\",\r\n    \"confirmation_date\": \"2024-07-01\",\r\n    \"termination_date\": null,\r\n    \"shift_id\": 1,\r\n    \"probation_period\": \"6\",\r\n    \"tin_no\": \"123456789012\",\r\n    \"national_id\": \"1234567890123456\",\r\n    \"passport_number\": \"AB1234567\",\r\n    \"passport_expiry_date\": \"2030-12-31\",\r\n    \"employee_category_id\": 1,\r\n    \"employee_type_id\": 1,\r\n    \"employee_status_id\": 1,\r\n    \"blood_group_id\": 1,\r\n    \"profile_picture\": \"profile_photos/john_doe.jpg\",\r\n    \"remarks\": \"Senior developer with 5 years experience\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/employees",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "employees"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Employee Update",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let response = pm.response.json();\r\n\r\npm.test(\"User Created\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response).to.have.property('status', true);\r\n    pm.expect(response).to.have.property('data');\r\n    pm.expect(response.data).to.have.property('email');\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"first_name\": \"John\",\r\n    \"last_name\": \"Doe\",\r\n    \"father_name\": \"Robert Doe\",\r\n    \"mother_name\": \"Sarah Doe\",\r\n    \"spouse_name\": \"Jane Doe\",\r\n    \"email\": \"john.doe@company.com\",\r\n    \"phone\": \"+8801712345678\",\r\n    \"present_address\": \"123 Main Street, Dhaka\",\r\n    \"permanent_address\": \"456 Village Road, Chittagong\",\r\n    \"city\": \"Dhaka\",\r\n    \"state\": \"Dhaka Division\",\r\n    \"country\": \"Bangladesh\",\r\n    \"postal_code\": \"1212\",\r\n    \"department_id\": 1,\r\n    \"designation_id\": 1,\r\n    \"branch_id\": 1,\r\n    \"gender_id\": 1,\r\n    \"religion_id\": 1,\r\n    \"nationality\": \"Bangladeshi\",\r\n    \"marital_status\": \"Married\",\r\n    \"date_of_birth\": \"1990-05-15\",\r\n    \"joining_date\": \"2024-01-01\",\r\n    \"confirmation_date\": \"2024-07-01\",\r\n    \"termination_date\": null,\r\n    \"shift_id\": 1,\r\n    \"probation_period\": \"6\",\r\n    \"tin_no\": \"123456789012\",\r\n    \"national_id\": \"1234567890123456\",\r\n    \"passport_number\": \"AB1234567\",\r\n    \"passport_expiry_date\": \"2030-12-31\",\r\n    \"employee_category_id\": 1,\r\n    \"employee_type_id\": 1,\r\n    \"employee_status_id\": 1,\r\n    \"blood_group_id\": 1,\r\n    \"profile_picture\": \"profile_photos/john_doe.jpg\",\r\n    \"remarks\": \"Senior developer with 5 years experience\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/employees/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "employees",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Employee Delete",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let response = pm.response.json();\r\n\r\npm.test(\"User Created\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response).to.have.property('status', true);\r\n    pm.expect(response).to.have.property('data');\r\n    pm.expect(response.data).to.have.property('email');\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/employees/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "employees",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Leave Category",
+          "item": [
+            {
+              "name": "Leave Category List",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let response = pm.response.json();\r\n\r\npm.test(\"User Created\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response).to.have.property('status', true);\r\n    pm.expect(response).to.have.property('data');\r\n    pm.expect(response.data).to.have.property('email');\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/leave-categories?search=",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "leave-categories"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Leave Category View",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let response = pm.response.json();\r\n\r\npm.test(\"User Created\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response).to.have.property('status', true);\r\n    pm.expect(response).to.have.property('data');\r\n    pm.expect(response.data).to.have.property('email');\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/leave-categories/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "leave-categories",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Leave Category Create",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let response = pm.response.json();\r\n\r\npm.test(\"User Created\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response).to.have.property('status', true);\r\n    pm.expect(response).to.have.property('data');\r\n    pm.expect(response.data).to.have.property('email');\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Cat-1\",\r\n    \"short_name\": \"Cat-1\",\r\n    \"leave_limit\": 10,\r\n    \"status\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/leave-categories",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "leave-categories"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Leave Category Update",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let response = pm.response.json();\r\n\r\npm.test(\"User Created\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response).to.have.property('status', true);\r\n    pm.expect(response).to.have.property('data');\r\n    pm.expect(response.data).to.have.property('email');\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"Cat-1\",\r\n    \"short_name\": \"Cat-1\",\r\n    \"leave_limit\": 10,\r\n    \"status\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/leave-categories/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "leave-categories",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Leave Category Delete",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let response = pm.response.json();\r\n\r\npm.test(\"User Created\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response).to.have.property('status', true);\r\n    pm.expect(response).to.have.property('data');\r\n    pm.expect(response.data).to.have.property('email');\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/leave-categories/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "leave-categories",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Leave Manager",
+          "item": [
+            {
+              "name": "Leave List",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let response = pm.response.json();\r\n\r\npm.test(\"User Created\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response).to.have.property('status', true);\r\n    pm.expect(response).to.have.property('data');\r\n    pm.expect(response.data).to.have.property('email');\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/leaves?search=",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "leaves"
+                  ],
+                  "query": [
+                    {
+                      "key": "search",
+                      "value": ""
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Leave View",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let response = pm.response.json();\r\n\r\npm.test(\"User Created\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response).to.have.property('status', true);\r\n    pm.expect(response).to.have.property('data');\r\n    pm.expect(response.data).to.have.property('email');\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/leaves/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "leaves",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Leave Create",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let response = pm.response.json();\r\n\r\npm.test(\"User Created\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response).to.have.property('status', true);\r\n    pm.expect(response).to.have.property('data');\r\n    pm.expect(response.data).to.have.property('email');\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"employee_id\": 1,\r\n    \"department_id\": 1,\r\n    \"designation_id\": 1,\r\n    \"leave_category_id\": 1,\r\n    \"application_date\": \"2026-08-23\",\r\n    \"leave_from\": \"2026-08-23\",\r\n    \"leave_to\": \"2026-08-29\",\r\n    \"leave_reason\": \"Personal\",\r\n    \"status\": 1\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/leaves",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "leaves"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Leave Update",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let response = pm.response.json();\r\n\r\npm.test(\"User Created\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response).to.have.property('status', true);\r\n    pm.expect(response).to.have.property('data');\r\n    pm.expect(response.data).to.have.property('email');\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"employee_id\": 1,\r\n    \"department_id\": 1,\r\n    \"designation_id\": 1,\r\n    \"leave_category_id\": 1,\r\n    \"application_date\": \"2026-08-29\",\r\n    \"leave_from\": \"2026-08-29\",\r\n    \"leave_to\": \"2026-08-29\",\r\n    \"total_leave\": 1,\r\n    \"leave_limit\": 10,\r\n    \"previous_taken\": 0,\r\n    \"leave_balance\": 9,\r\n    \"leave_reason\": \"Personal\",\r\n    \"accepted_date\": \"2026-08-29\",\r\n    \"accepted_by\": 1,\r\n    \"forwared_date\": \"2026-08-29\",\r\n    \"forwared_by\": 1,\r\n    \"approved_date\": \"2026-08-29\",\r\n    \"approved_by\": 1,\r\n    \"status\": 1,\r\n    \"remarks\": \"\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/leaves/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "leaves",
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Leave Delete",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "let response = pm.response.json();\r\n\r\npm.test(\"User Created\", function () {\r\n    pm.response.to.have.status(201);\r\n    pm.expect(response).to.have.property('status', true);\r\n    pm.expect(response).to.have.property('data');\r\n    pm.expect(response.data).to.have.property('email');\r\n});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{bearer_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{base_url}}/hrm/leaves/1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "hrm",
+                    "leaves",
                     "1"
                   ]
                 }

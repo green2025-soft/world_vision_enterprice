@@ -5,10 +5,14 @@ namespace Modules\Accounting\Models;
 
 class AccountModule extends AccBaseModel
 {
-    protected $table = 'acc_module_entries';
-    protected $fillable = ['module_name', 'entry_type', 'description', 'status'];
+    protected $table    = 'acc_module_entries';
+    protected $fillable = ['module_key','feature_key','module_name', 'entry_type', 'description', 'status'];
 
     protected array $searchable = ['module_name', 'entry_type'];
+
+    protected $casts = [
+        'status' => 'boolean',
+    ];
 
 
     public function accounts()
@@ -26,4 +30,5 @@ class AccountModule extends AccBaseModel
             'account_head_id'      
         );
     }
+
 }

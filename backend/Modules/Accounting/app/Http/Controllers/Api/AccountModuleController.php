@@ -1,25 +1,32 @@
 <?php
 namespace Modules\Accounting\Http\Controllers\Api;
 
+use Illuminate\Http\Client\Request;
 use Modules\Core\Http\Controllers\Api\BaseApiController;
 use Modules\Accounting\Models\AccountModule;
 use Modules\Accounting\Http\Requests\AccountModuleRequest;
 use Modules\Accounting\Models\AuditLog;
 use Illuminate\Support\Facades\DB;
 
+use Modules\Accounting\Services\AccountingConfigService;
+
 class AccountModuleController extends BaseApiController
 {
     protected string $title = 'Account Module';
 
-    public function __construct()
+    public function __construct( protected AccountingConfigService $config)
     {
         $this->model = AccountModule::class;
     }
 
     public function index()
     {
-        $query = $this->indexQuery()->with('accountHeads', 'accounts');
-        return $this->listResponse($query->smartPaginate());
+
+    
+    // dd( $this->config->get('sales'));
+        // $query = $this->indexQuery()->with('accountHeads', 'accounts');
+        
+        return $this->listResponse($this->config->smartPaginate() );
     }
 
     public function store(AccountModuleRequest $request)
@@ -49,9 +56,11 @@ class AccountModuleController extends BaseApiController
         return $response;
     }
 
-    public function show($id)
+    public function show($key)
     {
-        return $this->showData($id, ['accounts', 'accountHeads']);
+
+        return $this->successResponse($this->config->get($key));
+        // return $this->showData($id, ['accounts', 'accountHeads']);
     }
 
     public function update(AccountModuleRequest $request, $id)
@@ -92,4 +101,32 @@ class AccountModuleController extends BaseApiController
 
         return $this->destroyData($id);
     }
+
+
+    public function getAvailableModules(Request $request, ?int $ignoreId = null)
+    {
+        $
+        
+        $modules = config('account_modules.inventory', []);
+
+        $query = $this->model::query();
+
+        if ($ignoreId) {
+            $query->where('id', '!=', $ignoreId);
+        }
+
+        $existingModuleKeys = $query
+            ->pluck('module_key')
+            ->toArray();
+
+          $collectData = collect($modules)
+        ->except($existingModuleKeys)
+       
+        ->values()
+        ->all();
+
+        return $this->successResponse($collectData);
+    }
+
+
 }

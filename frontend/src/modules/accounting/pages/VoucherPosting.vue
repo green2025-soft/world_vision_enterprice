@@ -34,7 +34,7 @@ const { form, reset } = useForm({
   narration: '',
   reference: '',
   lines: [
-    { account_head_id: null, debit: 0, credit: 0 }
+    { ledger_account_id: null, debit: 0, credit: 0 }
   ]
 })
 
@@ -50,7 +50,7 @@ async function openModal(item = null) {
     isEdit.value = true
   } else {
     isEdit.value = false
-    form.value.lines = [{ account_head_id: null, debit: 0, credit: 0 }]
+    form.value.lines = [{ ledger_account_id: null, debit: 0, credit: 0 }]
     form.value.reference = await customGet('accounting/generate-reference-no');
   }
 
@@ -60,7 +60,7 @@ async function openModal(item = null) {
 // Add/Remove Lines
 function addLine() {
   form.value.lines.push({
-    account_head_id: null,
+    ledger_account_id: null,
     debit: 0,
     credit: 0,
   })
@@ -147,7 +147,7 @@ onMounted(async () => {
 
   <!-- Main Table -->
   <div class="container-fluid">
-    <div class="container">
+    <div class="">
       <div class="card card-outline card-info">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h2 class="card-title"><i class="fas fa-box"></i> {{ title }}</h2>
@@ -205,6 +205,7 @@ onMounted(async () => {
   >
     <ValidationErrors :errors="errors" />
     
+    
 
     <div class="row">
       
@@ -220,6 +221,7 @@ onMounted(async () => {
             bUrl="accounting/voucher-types"
             placeholder="Select Voucher Type"
             valueField="name"
+             :isEdit="isEdit"
             :clearable="false"
           />
         </BaseFormGroup>
@@ -254,7 +256,7 @@ onMounted(async () => {
           <tr v-for="(line, index) in form.lines" :key="index" class="line-row">
             <td class="account-head-cell">
            <ResourceSelect
-              v-model="line.account_head_id"
+              v-model="line.ledger_account_id"
               bUrl="accounting/account-heads"
               :clearable="false"
               :labelField="(item) => `(${item.code}) ${item.name} (${item.type})`"
@@ -376,7 +378,7 @@ onMounted(async () => {
         <tbody>
           <tr v-for="(line, index) in viewItem?.details" :key="index">
             <td class="text-start">
-              ({{ line.account_head?.code }}) {{ line.account_head?.name }} ({{ line.account_head?.type }})
+              ({{ line.ledger_account?.code }}) {{ line.ledger_account?.name }} ({{ line.ledger_account?.type }})
             </td>
             <td>{{ line.debit>0 ?parseFloat(line.debit).toFixed(2):'-' }}</td>
             <td>{{ line.credit >0 ?parseFloat(line.credit).toFixed(2):'-' }}</td>

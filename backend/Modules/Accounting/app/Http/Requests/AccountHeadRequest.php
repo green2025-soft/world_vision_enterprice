@@ -17,7 +17,7 @@ class AccountHeadRequest extends BaseRequest
 
 
 
-       public function rules(): array
+    public function rules(): array
     {
         $rules = $this->rules;
 

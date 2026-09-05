@@ -7,7 +7,7 @@ use Modules\Inventory\Models\CustomerAdvance;
 use Modules\Inventory\Http\Requests\CustomerAdvanceRequest;
 use Illuminate\Http\Request;
 use Modules\Inventory\Models\CustomerLedger;
-use Modules\Inventory\Services\CustomerAdvanceService;
+use Modules\Inventory\Services\DueAdvance\CustomerAdvanceService;
 
 class CustomerAdvanceController extends BaseApiController
 {
@@ -40,7 +40,7 @@ class CustomerAdvanceController extends BaseApiController
             return $this->error("This customer has due. Advance cannot be given.", 422);
         }
         
-        $createData = $this->customerAdvanceService->createWithAccounting($request->all());
+        $createData = $this->customerAdvanceService->storeOrUpdate($request->all());
 
         return $this->createdResponse($createData);
     }
@@ -62,7 +62,7 @@ class CustomerAdvanceController extends BaseApiController
             return $this->error( "Already adjusted {$adjustedAmount}. You can't set advance lower than that.", 422);
         }
 
-        $updated = $this->customerAdvanceService->updateWithAccounting($customer_advance, $request->all());
+        $updated = $this->customerAdvanceService->storeOrUpdate($request->all(), $customer_advance->id);
 
         return $this->updatedResponse($updated);
     }
@@ -76,7 +76,7 @@ class CustomerAdvanceController extends BaseApiController
             return $this->error("Advance cannot be deleted because this supplier will become due.", 422);
         }
         
-        $this->customerAdvanceService->deleteWithAccounting($customer_advance);
+        $this->customerAdvanceService->delete($customer_advance);
         return $this->deletedResponse();
     }
     

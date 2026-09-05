@@ -11,12 +11,16 @@ abstract class CustomerAccountingService extends BaseAccountingService
 
     public function __construct()
     {
-         parent::__construct();
+        //  parent::__construct();
         $this->ledgerService = app(TransactionLedgerService::class);
     }
 
     protected function handleLedger(array $builderData, array $data, string $type)
     {
+        
+         if(empty($builderData)){
+          return  $this->ledgerService->supplier()->existingDelete($data);
+        }
         return $this->ledgerService
             ->customer()
             ->store($builderData);

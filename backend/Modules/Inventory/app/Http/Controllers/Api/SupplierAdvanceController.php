@@ -7,7 +7,7 @@ use Modules\Inventory\Models\SupplierAdvance;
 use Modules\Inventory\Http\Requests\SupplierAdvanceRequest;
 use Illuminate\Http\Request;
 use Modules\Inventory\Models\SupplierLedger;
-use Modules\Inventory\Services\SupplierAdvanceService;
+use Modules\Inventory\Services\DueAdvance\SupplierAdvanceService;
 
 class SupplierAdvanceController extends BaseApiController
 {
@@ -39,7 +39,7 @@ class SupplierAdvanceController extends BaseApiController
          if ($balance < 0) {
             return $this->error("This supplier has due. Advance cannot be given.", 422);
         }
-        $createData = $this->supplierAdvanceService->createWithAccounting($request->all());
+        $createData = $this->supplierAdvanceService->storeOrUpdate($request->all());
         return $this->createdResponse($createData);
         
     }
@@ -64,7 +64,7 @@ class SupplierAdvanceController extends BaseApiController
             return $this->error( "Already adjusted {$adjustedAmount}. You can't set advance lower than that.", 422);
         }
 
-        $updated = $this->supplierAdvanceService->updateWithAccounting($supplier_advance, $request->all());
+        $updated = $this->supplierAdvanceService->storeOrUpdate($request->all(), $supplier_advance->id);
 
         return $this->updatedResponse($updated);
     }
@@ -80,7 +80,7 @@ class SupplierAdvanceController extends BaseApiController
             return $this->error("Advance cannot be deleted because this supplier will become due.", 422);
         }
         
-        $this->supplierAdvanceService->deleteWithAccounting($supplier_advance);
+        $this->supplierAdvanceService->delete($supplier_advance);
         return $this->deletedResponse();
     }
 

@@ -20,11 +20,7 @@ class LedgerEntryBuilder
     /**
      * Create ledger entry
      */
-    protected function makeEntry(
-        string $type,
-        float|int $amount,
-        string $direction
-    ): array {
+    protected function makeEntry(string $type, float|int $amount, string $direction ): array {
         unset($this->data['items']);
         unset($this->data['date']);
         return array_merge($this->data, [
@@ -154,6 +150,19 @@ class LedgerEntryBuilder
             );
         }
 
+        return $entries;
+    }
+
+    public function buildEntries(array $data, string $type, $amount, $direction) {
+         $this->set($data, $type);
+        $entries = [];
+         if ($amount > 0) {
+            $entries[] = $this->makeEntry(
+                $type,
+                $amount,
+                $direction
+            );
+        }
         return $entries;
     }
 }

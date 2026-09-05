@@ -1,5 +1,6 @@
 {
     "Core": true,
     "Inventory": true,
-    "Accounting": true
+    "Accounting": true,
+    "Hrm": true
 }

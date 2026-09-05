@@ -12,11 +12,10 @@ class AccountsTypesSeeder extends Seeder
     public function run(): void
     {
         $types = [
-            ['code' => '1000', 'name' => 'Assets',     'type' => 'asset',    'is_debit' => true],
-            ['code' => '2000', 'name' => 'Liabilities','type' => 'liability','is_debit' => false],
-            ['code' => '3000', 'name' => 'Equity',     'type' => 'equity',   'is_debit' => false],
-            ['code' => '4000', 'name' => 'Income',     'type' => 'income',   'is_debit' => false],
-            ['code' => '5000', 'name' => 'Expenses',   'type' => 'expense',  'is_debit' => true],
+            ['code' => '100000', 'name' => 'Assets',     'type' => 'asset',    'is_debit' => true],
+            ['code' => '200000', 'name' => 'Equity & Liabilities','type' => 'equity_liability','is_debit' => false],
+            ['code' => '300000', 'name' => 'Income',     'type' => 'income',   'is_debit' => false],
+            ['code' => '400000', 'name' => 'Expenditure',   'type' => 'expense',  'is_debit' => true],
         ];
 
         foreach ($types as $type) {

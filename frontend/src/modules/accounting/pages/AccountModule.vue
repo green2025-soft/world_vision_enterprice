@@ -29,29 +29,43 @@ const errors = ref([])
 // Form Setup
 const { form, reset } = useForm({
   module_name: '',
+  feature:'',
   entry_type: '',
   description: '',
   status:1,
+  components:[],
   accounts: [
-    { account_head_id: null, component: '', description: '', is_debit:null }
+    { account_head_id: null, component: '', description: '', is_debit:false }
   ]
 })
 
 // Modal open for create/edit
-async function openModal(item = null) {
+async function openModal(item) {
   errors.value = []
   reset()
+  const resData = await  customGet('accounting/account-modules/'+item.feature)
+  form.value = {
+    module_name: resData.name,
+    entry_type: resData.entry_type,
+    feature: resData.feature,
+    feature_key: resData.feature,
+    module_key: resData.module_key,
 
-  if (item) {
-    
-    Object.assign(form.value, item)
-    form.value.accounts = JSON.parse(JSON.stringify(item.accounts || []))  
-    isEdit.value = true
-  } else {
-    isEdit.value = false
-    form.value.lines = [{ account_head_id: null, debit: 0, credit: 0 }]
-    form.value.reference = await customGet('accounting/generate-reference-no');
+      accounts: (resData.components ?? []).map(component => ({
+      ...component,
+      component:component.key,
+      account_head_id: component.account_head_id ?? null
+    }))
   }
+  // // form.value.accounts = 
+  if(resData.account){
+   isEdit.value = true 
+   form.value.id = resData.account.id
+  }else{
+    isEdit.value = false
+  }
+
+
 
   showModal.value = true
 }
@@ -138,13 +152,11 @@ onMounted(async () => {
 
   <!-- Main Table -->
   <div class="container-fluid">
-    <div class="container">
+    <div class="">
       <div class="card card-outline card-info">
         <div class="card-header d-flex justify-content-between align-items-center">
           <h2 class="card-title"><i class="fas fa-box"></i> {{ title }}</h2>
-          <BButton variant="primary" size="sm" @click="openModal()">
-            <i class="fas fa-plus"></i> Add New
-          </BButton>
+       
         </div>
 
         <div class="card-body table-responsive">
@@ -152,9 +164,10 @@ onMounted(async () => {
             ref="dataTableRef"
             :fields="[
               { key: 'sl', label: 'SL' },
-              { key: 'module_name', label: 'Module Name' },
-              { key: 'entry_type', label: 'Entry Type' },
-              { key: 'account_heads', label: 'Accounts', isChange: true, align: 'center'},
+              { key: 'feature', label: 'feature' },
+              { key: 'entry_type', label: 'Voucher Type' },
+              { key: 'name', label: 'Narration' },
+              { key: 'accountHeads', label: 'Accounts', isChange: true, align: 'center'},
               { key: 'status', label: 'Status', isChange: true, width: '140px',  align: 'center' },
               { key: 'actions', label: 'Actions' }
             ]"
@@ -162,15 +175,21 @@ onMounted(async () => {
             :isBranch="true"
           >
 
-           <template #cell-account_heads="{ item }">
+           <template #cell-accountHeads="{ item }">
             
-              <BBadge variant="primary"  v-for="account in item.account_heads" style="margin-right: 5px;" >
-                 ({{account?.code }}) {{ account?.name }} ({{ account?.type }})
+              <BBadge variant="primary"  v-for="account in (item.account?.account_heads || [])"   :key="account.id" style="margin-right: 5px;" >
+
+                ({{ account.code }}) {{ account.name }} ({{ account.type }})
               </BBadge>
                   
           </template>
             <template #cell-status="{ item }">
-              <StatusDisplay :value="item.status" />
+
+             <StatusDisplay v-if="item.account" :value="item.account.status ? 1 : 0" />
+
+              <BBadge v-else variant="warning">
+                 Not Added
+              </BBadge>
             </template>
 
             <template #actions="{ rowItem }">
@@ -198,6 +217,8 @@ onMounted(async () => {
     class="voucher-posting-modal"
   >
     <ValidationErrors :errors="errors" />
+
+    
     <BaseFormGroup label="Module Name" required>
   <BFormInput v-model="form.module_name" placeholder="e.g. Sales Invoice" />
 </BaseFormGroup>
@@ -220,19 +241,16 @@ onMounted(async () => {
   <table class="table table-bordered mb-0">
     <thead class="thead-light">
       <tr>
-        <th width="25%">Component</th>
+        <th>Name</th>
         <th>Account Head</th>
         <th style="width: 100px;" class="text-center">Is Debit</th>
         <th  width="25%">Description</th>
-        <th style="width: 50px;">Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="(acc, index) in form.accounts" :key="index" class="line-row">
-      
         <td>
-          <BFormInput v-model="acc.component" placeholder="Component name" />
-
+          {{acc.name}}
         </td>
         <td class="account-head-cell">
           <ResourceSelect
@@ -246,34 +264,13 @@ onMounted(async () => {
           />
         </td>
         <td class="text-center">
-          
-          <BFormCheckbox v-model="acc.is_debit" value="1"  switch />
+          <template v-if="acc.is_debit"> ✅ Yes</template>
+          <template v-else>❌ No</template>
         </td>
         <td>
           <BFormInput v-model="acc.description" placeholder="Line description" />
         </td>
-        <td class="text-center d-flex justify-content-center align-items-center">
-          <BButton
-            v-if="index === 0"
-            size="sm"
-            variant="success"
-            @click="addAccount"
-            title="Add Line"
-            class="d-block"
-          >
-            <i class="fas fa-plus"></i>
-          </BButton>
-          <BButton
-            v-else
-            size="sm"
-            variant="danger"
-            @click="removeAccount(index)"
-            title="Remove Line"
-            class="d-block"
-          >
-            <i class="fas fa-trash"></i>
-          </BButton>
-        </td>
+       
       </tr>
     </tbody>
   </table>

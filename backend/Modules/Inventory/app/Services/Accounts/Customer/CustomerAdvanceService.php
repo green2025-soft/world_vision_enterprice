@@ -13,14 +13,13 @@ abstract class CustomerAdvanceService extends CustomerAccountingService {
 
     public function getByilderData(array $data, string $type): array
     {
-        if (empty($data['reference_no'])) {
-            $data['reference_no'] = $this->generateReferenceNo('CAV-', 4);
-        }
+        return $this->ledgerBuilder->buildEntries($data,'advance', $data['amount'], 'in');
+        
         return $this->ledgerBuilder->buildReturn($data, $type);
     }
     protected function getAccountingType(string $type): array
     {
-        return  ['module' => 'Customer Advance', 'source' => 'Customer Advance'];
+        return  ['source' => 'customer_advance'];
     }
 
 }

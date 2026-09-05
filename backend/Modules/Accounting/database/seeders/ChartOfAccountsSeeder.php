@@ -13,21 +13,17 @@ class ChartOfAccountsSeeder extends Seeder
     public function run(): void
     {
         $accounts = [
+        ['code' => '110000', 'name' => 'Fixed Assets', 'type' => 'asset', 'is_debit' => true, 'parent_id' => 1],
+        ['code' => '120000', 'name' => 'Current Assets', 'type' => 'asset', 'is_debit' => true, 'parent_id' => 1],
 
-        ['code' => '1001', 'name' => 'Cash in Hand', 'type' => 'asset', 'is_debit' => true, 'parent_id' => 1],
-        ['code' => '1002', 'name' => 'Bank Account', 'type' => 'asset', 'is_debit' => true, 'parent_id' => 1],
+        ['code' => '210000', 'name' => 'Equity', 'type' => 'equity_liabilities', 'is_debit' => false, 'parent_id' => 2],
+        ['code' => '220000', 'name' => 'Liabilities', 'type' => 'equity_liabilities', 'is_debit' => false, 'parent_id' => 2],
 
-        ['code' => '2000', 'name' => 'Liabilities', 'type' => 'liability', 'is_debit' => false, 'parent_id' => null],
-        ['code' => '2001', 'name' => 'Accounts Payable', 'type' => 'liability', 'is_debit' => false, 'parent_id' => 4],
+        ['code' => '310000', 'name' => 'General Incom', 'type' => 'income', 'is_debit' => false, 'parent_id' => 3],
+        ['code' => '320000', 'name' => 'Financial Incom', 'type' => 'income', 'is_debit' => false, 'parent_id' => 3],
 
-        ['code' => '3000', 'name' => 'Equity', 'type' => 'equity', 'is_debit' => false, 'parent_id' => null],
-        ['code' => '3001', 'name' => 'Owner’s Capital', 'type' => 'equity', 'is_debit' => false, 'parent_id' => 6],
-
-        ['code' => '4000', 'name' => 'Income', 'type' => 'income', 'is_debit' => false, 'parent_id' => null],
-        ['code' => '4001', 'name' => 'Sales Revenue', 'type' => 'income', 'is_debit' => false, 'parent_id' => 8],
-
-        ['code' => '5000', 'name' => 'Expenses', 'type' => 'expense', 'is_debit' => true, 'parent_id' => null],
-        ['code' => '5001', 'name' => 'Salary Expense', 'type' => 'expense', 'is_debit' => true, 'parent_id' => 10],
+        ['code' => '410000', 'name' => 'General Expense', 'type' => 'expense', 'is_debit' => true, 'parent_id' => 4],
+        ['code' => '420000', 'name' => 'Financial Expense', 'type' => 'expense', 'is_debit' => true, 'parent_id' => 4],
     ];
 
     foreach ($accounts as $account) {

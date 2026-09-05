@@ -34,7 +34,8 @@
             "Database\\Seeders\\": "database/seeders/",
             "Modules\\Core\\": "Modules/Core/app/",
 			"Modules\\Inventory\\": "Modules/Inventory/app/",
-			"Modules\\Accounting\\": "Modules/Accounting/app/"
+			"Modules\\Accounting\\": "Modules/Accounting/app/",
+            "Modules\\Hrm\\": "Modules/Hrm/app/"
         }
     },
     "autoload-dev": {

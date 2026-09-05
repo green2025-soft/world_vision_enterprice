@@ -2,6 +2,7 @@
 
 namespace Modules\Accounting\Models;
 
+use Modules\Core\Models\Branch;
 
 class JournalEntry extends AccBaseModel
 {
@@ -25,5 +26,12 @@ class JournalEntry extends AccBaseModel
 
         return $prefix . '-' . str_pad($nextId, 6, '0', STR_PAD_LEFT);
     }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id');
+    }
+
+    
 
 }

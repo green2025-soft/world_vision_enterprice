@@ -30,6 +30,7 @@ const { form, reset } = useForm({
   parent_id: '',
   remarks: '',
   status: 1,
+  is_transaction:false
 })
 const errors = ref([])
 const showModal = ref(false)
@@ -65,7 +66,7 @@ async function saveItem() {
 <template>
      <ConfirmDelete ref="confirmDeleteModal"  @confirm="() => confirmDelete(() => dataTableRef.refresh())" />
      <div class="container-fluid">
-        <div class="container ">
+        <div class="">
     <div class="card card-outline card-info">
         <div class="card-header">
              <h2 class="card-title"><i class="fas fa-tasks"></i> {{ title }}</h2>
@@ -125,6 +126,15 @@ async function saveItem() {
   </BaseFormGroup>
   <BaseFormGroup label="Status" labelCols="3"  required>
        <StatusSelect v-model="form.status" />
+  </BaseFormGroup>
+  <BaseFormGroup label="Transaction" labelCols="3">
+    <BFormCheckbox
+      v-model="form.is_transaction"
+      :value="1"
+      :unchecked-value="null"
+    >
+      Use in Transactions
+    </BFormCheckbox>
   </BaseFormGroup>
 
 

@@ -8,7 +8,7 @@ use RuntimeException;
 class AccountHead extends AccBaseModel
 {
     protected $fillable = [
-        'name', 'code', 'parent_id', 'type', 'is_debit', 'remarks', 'branch_id', 'status'
+        'name', 'code', 'parent_id', 'type', 'is_debit', 'is_transaction','remarks', 'branch_id', 'status'
     ];
 
       protected $casts = [
@@ -144,6 +144,11 @@ class AccountHead extends AccBaseModel
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', true);
+    }
+
+    public function scopeLevelFive($query)
+    {
+        return $query->whereHas('parent.parent.parent.parent')->where('status',1)->search()->orderByDesc('id');
     }
     
 }

@@ -41,7 +41,7 @@ class TransactionLedgerService extends BaseLedgerService
      */
     public function store(array $data)
     {
-       
+        
         $this->existingDelete($data);
          if (isset($data[0])){
             $results = [];

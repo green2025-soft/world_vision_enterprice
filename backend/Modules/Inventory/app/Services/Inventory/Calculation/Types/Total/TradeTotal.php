@@ -16,7 +16,7 @@ class TradeTotal {
 
         $adjustment = $input['adjustment'] ?? 0;
 
-        $netTotal = ($subtotal - $discount) + $tax + $adjustment;
+        $netTotal = ($subtotal + $tax) - ($discount + $adjustment);
 
         $paid = $input['paid_amount'] ?? 0;
         $advance = $input['advance_adjusted'] ?? 0;

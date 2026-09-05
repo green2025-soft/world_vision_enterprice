@@ -6,6 +6,7 @@ import { useBranchStore } from '@/store/branch-store'
 import coreRoutes from "../modules/core/router";
 import inventoryRoutes, { posRoute } from "../modules/inventory/router";
 import accountingRoutes from "../modules/accounting/router";
+import hrmRouts from "../modules/hrm/router";
 
 
 // import Logout from "@/views/Logout.vue";
@@ -34,7 +35,8 @@ const routes = [
   coreRoutes,
   inventoryRoutes,
   posRoute,
-  accountingRoutes
+  accountingRoutes,
+  hrmRouts
 ];
 
 const router = createRouter({

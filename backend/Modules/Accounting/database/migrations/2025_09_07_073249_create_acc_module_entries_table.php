@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('acc_module_entries', function (Blueprint $table) {
             $table->id();
+            $table->string('module_key')->nullable();
+            $table->string('feature_key')->unique()->nullable();
             $table->string('module_name')->comment('Module name like sales, purchase, etc.');
             $table->string('entry_type')->comment('Entry type like invoice, bill, etc.');
             $table->string('description')->nullable();

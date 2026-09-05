@@ -10,7 +10,9 @@ class AccountModuleRequest extends BaseRequest
     protected array $rules = [
         'module_name'   => 'required|string|max:255|unique:acc_module_entries,module_name',
         'entry_type'    => 'required|string|max:255|unique:acc_module_entries,entry_type',
+        'feature_key'   => 'required|string|max:255|unique:acc_module_entries,feature_key',
         'description'   => 'nullable|string',
+        'module_key'    => 'nullable|string',
         'status'        => 'boolean',
 
         // Accounts validation (nested array)
@@ -37,6 +39,13 @@ class AccountModuleRequest extends BaseRequest
                 'string',
                 'max:255',
                 Rule::unique('acc_module_entries', 'entry_type')->ignore($id),
+            ];
+
+            $this->rules['feature_key']= [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('acc_module_entries', 'feature_key')->ignore($id),
             ];
 
         }

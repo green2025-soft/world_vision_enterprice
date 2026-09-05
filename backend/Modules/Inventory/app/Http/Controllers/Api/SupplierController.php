@@ -8,7 +8,7 @@ use Modules\Inventory\Http\Requests\SupplierRequest;
 use Illuminate\Http\Request;
 use Modules\Inventory\Models\SupplierLedger;
 use Modules\Inventory\Services\LedgerService;
-use Modules\Inventory\Services\SupplierPreviousDueService;
+use Modules\Inventory\Services\DueAdvance\SupplierPreviousDueService;
 
 class SupplierController extends BaseApiController
 {
@@ -34,7 +34,7 @@ class SupplierController extends BaseApiController
     {
         $request->validated();
         $request['previous_due'] = $request['previous_due']?$request['previous_due']:0.00;
-        $createData = $this->supplierPreviousDueService->createWithAccounting($request->all());
+        $createData = $this->supplierPreviousDueService->storeOrUpdate($request->all());
         return $this->createdResponse($createData);
     }
 
@@ -47,13 +47,13 @@ class SupplierController extends BaseApiController
     {
         $request->validated();
         
-        $updated = $this->supplierPreviousDueService->updateWithAccounting($supplier, $request->all());
+        $updated = $this->supplierPreviousDueService->storeOrUpdate($request->all(), $supplier->id);
         return $this->updatedResponse($updated);
     }
 
     public function destroy(Supplier $supplier)
     {
-        $this->supplierPreviousDueService->deleteWithAccounting($supplier);
+        $this->supplierPreviousDueService->delete($supplier);
         return $this->deletedResponse();
     }
 

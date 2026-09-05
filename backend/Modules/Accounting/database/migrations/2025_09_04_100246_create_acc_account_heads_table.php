@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('parent_id')->nullable();
             $table->enum('type', ['asset', 'liability', 'income', 'expense', 'equity'])->index();
             $table->boolean('is_debit')->default(true);
+            $table->boolean('is_transaction')->nullable()->default(null)->index();
             $table->text('remarks')->nullable();
             $table->foreignId('branch_id')->nullable()->constrained('branches')->onDelete('cascade');
             $table->boolean('status')->default(true);
