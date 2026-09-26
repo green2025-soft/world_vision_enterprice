@@ -21,6 +21,14 @@ const routes = {
    makeRoute("chart-of-accounts", lazy("ChartOfAccount"), "Chart Of Account", false),
    makeRoute("voucher-posting", lazy("VoucherPosting"), "Voucher Posting", false),
    makeRoute("account-modules", lazy("AccountModule"), "Account Module", false),
+   makeRoute("balance-sheet", lazy("BalanceSheet"), "Balance Sheet", false),
+   makeRoute("income-expenditure", lazy("IncomeExpenditure"), "Income & Expenditure", false),
+   makeRoute("trial-balance", lazy("TrialBalance"), "Trial Balance", false),
+   makeRoute("cash-flow-statement", lazy("CashFlowStatement"), "Cash Flow Statement", false),
+   makeRoute("cash-bank-book", lazy("CashBankBook"), "Cash & Bank Book", false),
+   makeRoute("changes-in-equity", lazy("ChangesInEquity"), "Changes in Equity", false),
+   makeRoute("ledger-report", lazy("LedgerReport"), "Ledger Report", false),
+   makeRoute("receipts-payments", lazy("ReceiptsPayments"), "Receipts & Payments", false),
     {
       path: ":catchAll(.*)",
       component: Page404

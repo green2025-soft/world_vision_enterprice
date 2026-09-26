@@ -20,8 +20,7 @@ class ChartOfAccountController extends BaseApiController
 
     public function index()
     {
-        $query = $this->model::whereNull('parent_id')
-            ->with('childrenRecursive');
+        $query = $this->model::whereNull('parent_id')->with('childrenRecursive');
             
         return $this->listItems($query->get(), "{$this->title} list fetched successfully.");
         

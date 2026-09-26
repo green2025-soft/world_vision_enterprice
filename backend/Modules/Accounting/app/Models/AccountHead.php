@@ -7,8 +7,10 @@ use RuntimeException;
 
 class AccountHead extends AccBaseModel
 {
+    public const INCOME_OVER_EXPENDITURE_KEY = 'income_over_expenditure';
+
     protected $fillable = [
-        'name', 'code', 'parent_id', 'type', 'is_debit', 'is_transaction','remarks', 'branch_id', 'status'
+        'name', 'code', 'parent_id', 'type', 'is_debit', 'is_transaction','remarks', 'branch_id', 'status', 'system_key', 'cash_flow_activity'
     ];
 
       protected $casts = [
@@ -35,8 +37,20 @@ class AccountHead extends AccBaseModel
         return $this->children()->with('childrenRecursive');
     }
 
+    public function scopeWithChildrenRecursiveShort(Builder $query, int $depth = 2): Builder
+    {
+        $relations = [];
+        $path = 'children';
 
-      /*
+        for ($i = 0; $i < $depth; $i++) {
+            $relations[$path] = fn($q) => $q->orderBy('code');
+            $path .= '.children';
+        }
+
+        return $query->with($relations);
+    }
+
+    /*
     |--------------------------------------------------------------------------
     | Main Account Types
     |--------------------------------------------------------------------------
@@ -45,10 +59,9 @@ class AccountHead extends AccBaseModel
 
     public const MAIN_CODES = [
         'asset'     => 100000,
-        'liability' => 200000,
-        'equity'    => 300000,
-        'income'    => 400000,
-        'expense'   => 500000,
+        'equity_liability' => 200000,
+        'income'    => 300000,
+        'expense'   => 400000,
     ];
 
 

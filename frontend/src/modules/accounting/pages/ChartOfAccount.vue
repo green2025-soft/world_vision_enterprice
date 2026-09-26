@@ -30,6 +30,8 @@ const { form, reset } = useForm({
   parent_id: '',
   remarks: '',
   status: 1,
+  system_key: null,
+  cash_flow_activity: null,
   is_transaction:false
 })
 const errors = ref([])
@@ -123,6 +125,26 @@ async function saveItem() {
   </BaseFormGroup>
   <BaseFormGroup label="Remarks" labelCols="3" >
     <BFormTextarea v-model="form.remarks" />
+  </BaseFormGroup>
+  <BaseFormGroup label="Report role" labelCols="3">
+    <BFormSelect v-model="form.system_key" :options="[
+      { value: null, text: 'None' },
+      { value: 'income_over_expenditure', text: 'Income over expenditure' },
+      { value: 'equity_funds', text: 'Equity / Funds (excluding liabilities)' },
+      { value: 'cash_in_hand', text: 'Cash in hand (including subaccounts)' },
+      { value: 'cash_at_bank', text: 'Cash at bank (including subaccounts)' },
+    ]" />
+    <small class="text-muted">Assign earnings under Funds &amp; Liabilities, or cash/bank roles under Assets. Subaccounts are included. Renaming or changing the code keeps the report mapping.</small>
+  </BaseFormGroup>
+  <BaseFormGroup label="Cash Flow Activity" labelCols="3">
+    <BFormSelect v-model="form.cash_flow_activity" :options="[
+      { value: null, text: 'Inherit from parent' },
+      { value: 'operating', text: 'Operating activities' },
+      { value: 'investing', text: 'Investing activities' },
+      { value: 'financing', text: 'Financing activities' },
+      { value: 'unclassified', text: 'Unclassified / requires review' },
+    ]" />
+    <small class="text-muted">Applies to cash transactions against this account and its descendants, unless overridden below.</small>
   </BaseFormGroup>
   <BaseFormGroup label="Status" labelCols="3"  required>
        <StatusSelect v-model="form.status" />
